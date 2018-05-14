@@ -285,6 +285,7 @@ public class CustomSQL extends SQLiteOpenHelper {
     public ArrayList<Lecture> getLectures() {
         ArrayList<Lecture> lectures = new ArrayList<>();
 
+        
         try {
             final String QUERY_LECTURE = "SELECT * FROM " + Tables.LECTURE.TABLE_NAME
                     + " a INNER JOIN " + Tables.LOCATION.TABLE_NAME + " b ON a." + Tables.LECTURE.COLUMN_LOCATION_ID + "=b._ID"

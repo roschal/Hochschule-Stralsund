@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Hochschule Stralsund</string>
+    <string name="timetable_title_hint">Vorlesung</string>
+    <string name="timetable_room_hint">Raum</string>
+    <string name="timetable_lecturer_hint">Dozent</string>
+    <string name="add_lecture_submit">Vorlesung hinzufügen</string>
+</resources>

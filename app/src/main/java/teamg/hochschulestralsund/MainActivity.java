@@ -13,12 +13,21 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import java.util.Calendar;
+
 import teamg.hochschulestralsund.connect.Parser;
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
 import teamg.hochschulestralsund.sql.LectureTime;
 
-public class MainActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener {
+
+    public static String CODE_SHOW_DAY = "CODE_SHOW_DAY";
+
+    private Calendar calendar;
+    private FragmentManager manager;
+    private FragmentTransaction transaction;
+    private ItemFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +45,13 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
     }
 
     @Override
-    // Create menubar
+    /* create menubar */
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.timetable, menu);
 
-        for(int i = 0; i < 3; i++) {
+        /* set the icon color for 3 menu icons */
+        for (int i = 0; i < 3; i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             drawable.mutate();
             drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
@@ -50,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
     }
 
     @Override
+    /* override click handler on menu */
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
@@ -74,36 +85,42 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
     }
 
     public void init() {
+        /* add default sql data */
         CustomSQL customSQL = new CustomSQL(this);
         customSQL.addDefaultData();
         customSQL.close();
+
+        calendar = Calendar.getInstance();
     }
+
     /* parse the website for lecturers */
-    public void parse()
-    {
+    public void parse() {
         Parser myParser = new Parser(this);
         myParser.execute();
     }
 
     /* show the fragment for the current day */
-    void showCurrentDay()
-    {
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        ItemFragment fragment = new ItemFragment();
+    void showCurrentDay() {
+        /* init */
+        manager = getFragmentManager();
+        transaction = manager.beginTransaction();
+        fragment = new ItemFragment();
 
-        transaction.add(R.id.timetable_container, fragment, "test");
+        /* put current day to bundle */
+        Bundle bundle = new Bundle();
+        bundle.putInt(CODE_SHOW_DAY, calendar.get(Calendar.DAY_OF_WEEK));
+        fragment.setArguments(bundle);
+
+        transaction.add(R.id.timetable_container, fragment, null);
         transaction.addToBackStack(null);
         transaction.commit();
     }
 
-    void showNextDay()
-    {
+    void showNextDay() {
 
     }
 
-    void showPreviosDay()
-    {
+    void showPreviosDay() {
 
     }
 

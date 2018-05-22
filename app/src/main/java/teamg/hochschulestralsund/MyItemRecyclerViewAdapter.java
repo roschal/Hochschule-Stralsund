@@ -46,7 +46,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             @Override
             public void onClick(View v) {
                 //Do delete Stuff
-                Long deleteValue = holder.customSQL.deleteLecture(holder.lecture);
+                holder.customSQL.deleteLecture(holder.lecture);
             }
         });
 

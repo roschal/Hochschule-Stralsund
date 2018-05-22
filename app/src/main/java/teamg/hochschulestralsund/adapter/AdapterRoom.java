@@ -1,12 +1,13 @@
 package teamg.hochschulestralsund.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.TextView;
 
@@ -17,7 +18,7 @@ import teamg.hochschulestralsund.R;
 import teamg.hochschulestralsund.sql.Lecture;
 import teamg.hochschulestralsund.sql.Location;
 
-public class AdapterRoom extends ArrayAdapter {
+public class AdapterRoom extends ArrayAdapter<Location> {
 
     private ArrayList<Location> locations;
     private ArrayList<Location> allLocations;
@@ -41,21 +42,23 @@ public class AdapterRoom extends ArrayAdapter {
     }
 
     @Override
-    public String getItem(int position) {
-        return locations.get(position).toString();
+    public Location getItem(int position) {
+        Location location = locations.get(position);
+        return location;
     }
 
     @Override
     public View getView(int position, View view, @NonNull ViewGroup parent) {
 
         if (view == null) {
-            view = LayoutInflater.from(parent.getContext())
-                    .inflate(itemLayout, parent, false);
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            view = inflater.inflate(itemLayout, parent, false);
         }
 
-        TextView strName = (TextView) view.findViewById(R.id.timetable_textView_Room);
-        strName.setText(getItem(position));
-        return view;
+        TextView textView = new TextView(getContext());
+        textView.setText(getItem(position).toString());
+
+        return textView;
     }
 
     @NonNull
@@ -84,11 +87,14 @@ public class AdapterRoom extends ArrayAdapter {
             } else {
                 final String searchStrLowerCase = prefix.toString().toLowerCase();
 
-                ArrayList<String> matchValues = new ArrayList<String>();
+                ArrayList<Location> matchValues = new ArrayList<Location>();
 
                 for (int i = 0; i < locations.size(); i++) {
-                    String room = locations.get(i).room;
-                    if (room.toLowerCase().startsWith(searchStrLowerCase)) {
+                    Location room = locations.get(i);
+                    if (room.room.toLowerCase().startsWith(searchStrLowerCase)) {
+                        matchValues.add(room);
+                    }
+                    else if (room.toString().toLowerCase().startsWith(searchStrLowerCase)) {
                         matchValues.add(room);
                     }
                 }

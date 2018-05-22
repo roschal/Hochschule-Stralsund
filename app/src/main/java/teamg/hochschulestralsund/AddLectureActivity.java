@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import teamg.hochschulestralsund.adapter.AdapterRoom;
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
 import teamg.hochschulestralsund.sql.LectureTime;
@@ -91,12 +92,12 @@ public class AddLectureActivity extends AppCompatActivity {
 
         ArrayAdapter<Lecturer> adapterLecture = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, lecturers);
-        ArrayAdapter<Location> adapterLocation = new ArrayAdapter<>(this,
-                android.R.layout.simple_dropdown_item_1line, locations);
+
         ArrayAdapter<LectureTime> adapterLectureTime = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, lectureTimes);
 
-        editText_location.setAdapter(adapterLocation);
+        editText_location.setAdapter(new AdapterRoom(this,
+                android.R.layout.simple_dropdown_item_1line, customSQL.getLocations()));
         editText_lecturer.setAdapter(adapterLecture);
         spinner.setAdapter(adapterLectureTime);
 

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import teamg.hochschulestralsund.R;
 import teamg.hochschulestralsund.sql.Lecture;
 import teamg.hochschulestralsund.sql.Location;
 
@@ -52,7 +53,7 @@ public class AdapterRoom extends ArrayAdapter {
                     .inflate(itemLayout, parent, false);
         }
 
-        TextView strName = (TextView) view.findViewById(R.id.textView);
+        TextView strName = (TextView) view.findViewById(R.id.timetable_textView_Room);
         strName.setText(getItem(position));
         return view;
     }
@@ -71,23 +72,24 @@ public class AdapterRoom extends ArrayAdapter {
             FilterResults results = new FilterResults();
             if (allLocations == null) {
                 synchronized (lock) {
-                    allLocations = new ArrayList<String>(locations);
+                    allLocations = new ArrayList<Location>(locations);
                 }
             }
 
             if (prefix == null || prefix.length() == 0) {
                 synchronized (lock) {
-                    results.values = dataListAllItems;
-                    results.count = dataListAllItems.size();
+                    results.values = allLocations;
+                    results.count = allLocations.size();
                 }
             } else {
                 final String searchStrLowerCase = prefix.toString().toLowerCase();
 
                 ArrayList<String> matchValues = new ArrayList<String>();
 
-                for (String dataItem : dataListAllItems) {
-                    if (dataItem.toLowerCase().startsWith(searchStrLowerCase)) {
-                        matchValues.add(dataItem);
+                for (int i = 0; i < locations.size(); i++) {
+                    String room = locations.get(i).room;
+                    if (room.toLowerCase().startsWith(searchStrLowerCase)) {
+                        matchValues.add(room);
                     }
                 }
 
@@ -101,9 +103,9 @@ public class AdapterRoom extends ArrayAdapter {
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             if (results.values != null) {
-                dataList = (ArrayList<String>)results.values;
+                locations = (ArrayList<Location>)results.values;
             } else {
-                dataList = null;
+                locations = null;
             }
             if (results.count > 0) {
                 notifyDataSetChanged();
@@ -111,6 +113,5 @@ public class AdapterRoom extends ArrayAdapter {
                 notifyDataSetInvalidated();
             }
         }
-
     }
 }

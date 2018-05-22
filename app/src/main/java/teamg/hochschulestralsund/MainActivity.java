@@ -133,7 +133,6 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
             public void onSwipeLeft() {
                 showDay(getPreviosDay(), false);
             }
-
             public boolean onTouch(View v, MotionEvent event) {
                 return gestureDetector.onTouchEvent(event);
             }

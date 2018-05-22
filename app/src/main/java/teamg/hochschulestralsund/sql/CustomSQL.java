@@ -273,6 +273,20 @@ public class CustomSQL extends SQLiteOpenHelper {
     /////////////////////////////////////////////////////////////////////////////////////////
     // delete
 
+    public long deleteLecture(Lecture lecture) {
+        try {
+            String selection = Tables.LECTURE._ID + " LIKE ?";
+            String[] selectionArgs = {Long.toString(lecture.id)};
+
+            return db.delete(Tables.LECTURE.TABLE_NAME, selection, selectionArgs);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return -1;
+    }
+
+
     public void deleteTablesIfExist() {
         try {
             db.execSQL(SQL_DELETE_TABLE_TIMETABLE);

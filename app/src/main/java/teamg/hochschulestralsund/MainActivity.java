@@ -12,6 +12,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -28,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
     private FragmentManager manager;
     private FragmentTransaction transaction;
     private ItemFragment fragment;
+
+    private int currentDay = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +96,9 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         customSQL.close();
 
         calendar = Calendar.getInstance();
+        currentDay = calendar.get(Calendar.DAY_OF_WEEK);
+        fragment = new ItemFragment();
+        manager = getFragmentManager();
     }
 
     /* parse the website for lecturers */
@@ -99,29 +107,58 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         myParser.execute();
     }
 
-    /* show the fragment for the current day */
-    void showCurrentDay() {
-        /* init */
-        manager = getFragmentManager();
-        transaction = manager.beginTransaction();
-        fragment = new ItemFragment();
-
-        /* put current day to bundle */
+    public void showDay(int day, boolean init) {
         Bundle bundle = new Bundle();
-        bundle.putInt(CODE_SHOW_DAY, calendar.get(Calendar.DAY_OF_WEEK));
+        bundle.putInt(CODE_SHOW_DAY, day);
+        fragment = new ItemFragment();
         fragment.setArguments(bundle);
 
-        transaction.add(R.id.timetable_container, fragment, null);
+        transaction = manager.beginTransaction();
+
+        if(init)
+            transaction.add(R.id.timetable_container, fragment, null);
+        else
+            transaction.replace(R.id.timetable_container, fragment, null);
+
         transaction.addToBackStack(null);
         transaction.commit();
     }
 
-    void showNextDay() {
+    /* show the fragment for the current day */
+    void showCurrentDay() {
+        this.findViewById(android.R.id.content).setOnTouchListener(new OnSwipeTouchListener(this) {
+            public void onSwipeRight() {
+                showDay(getNextDay(), false);
+            }
+            public void onSwipeLeft() {
+                showDay(getPreviosDay(), false);
+            }
 
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
+            }
+        });
+
+        showDay(currentDay, true);
     }
 
-    void showPreviosDay() {
+    private int getNextDay() {
+        currentDay = (currentDay + 1) % 8;
 
+        /* if next day is saturday show monday */
+        if(currentDay == 7)
+            currentDay = 1;
+
+        return currentDay;
     }
 
+    private int getPreviosDay() {
+        currentDay = (currentDay - 1) % 8;
+
+        /* if next day is sunday show friday */
+        if(currentDay == 1)
+            currentDay = 6;
+
+        return currentDay;
+    }
 }

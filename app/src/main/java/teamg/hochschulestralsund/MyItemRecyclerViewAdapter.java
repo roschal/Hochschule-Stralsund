@@ -1,7 +1,6 @@
 package teamg.hochschulestralsund;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,11 +10,9 @@ import android.widget.TextView;
 
 import teamg.hochschulestralsund.ItemFragment.OnListFragmentInteractionListener;
 import teamg.hochschulestralsund.sql.Lecture;
-import teamg.hochschulestralsund.sql.LectureTime;
 import teamg.hochschulestralsund.sql.CustomSQL;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 

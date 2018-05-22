@@ -153,7 +153,6 @@ public class AddLectureActivity extends AppCompatActivity {
     }
 
     public void submit(View view) {
-
         customSQL.addLecture(lecture);
         finish();
     }

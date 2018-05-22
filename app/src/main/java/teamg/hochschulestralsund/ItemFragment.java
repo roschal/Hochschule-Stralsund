@@ -56,7 +56,7 @@ public class ItemFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
 
         /* set the adapter */
-        ArrayList<Lecture> lectures = customSQL.getLectures();
+        ArrayList<Lecture> lectures = customSQL.getLectures(DAY_OF_WEEK);
 
         if (view instanceof RecyclerView) {
             Context context = view.getContext();

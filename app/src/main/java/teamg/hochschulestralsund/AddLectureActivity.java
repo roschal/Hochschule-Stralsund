@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import teamg.hochschulestralsund.adapter.AdapterLecturer;
 import teamg.hochschulestralsund.adapter.AdapterRoom;
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
@@ -86,19 +87,15 @@ public class AddLectureActivity extends AppCompatActivity {
 
     /* set the adapter */
     public void setAdapter() {
-        final ArrayList<Location> locations = customSQL.getLocations();
-        final ArrayList<Lecturer> lecturers = customSQL.getLecturers();
-        final ArrayList<LectureTime> lectureTimes = customSQL.getLectureTimes();
-
-        ArrayAdapter<Lecturer> adapterLecture = new ArrayAdapter<>(this,
-                android.R.layout.simple_dropdown_item_1line, lecturers);
-
-        ArrayAdapter<LectureTime> adapterLectureTime = new ArrayAdapter<>(this,
-                android.R.layout.simple_dropdown_item_1line, lectureTimes);
-
         editText_location.setAdapter(new AdapterRoom(this,
                 android.R.layout.simple_dropdown_item_1line, customSQL.getLocations()));
-        editText_lecturer.setAdapter(adapterLecture);
+
+        editText_lecturer.setAdapter(new AdapterLecturer(this,
+                android.R.layout.simple_dropdown_item_1line, customSQL.getLecturers()));
+
+        final ArrayList<LectureTime> lectureTimes = customSQL.getLectureTimes();
+        ArrayAdapter<LectureTime> adapterLectureTime = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line, lectureTimes);
         spinner.setAdapter(adapterLectureTime);
 
         /* override the click handler */

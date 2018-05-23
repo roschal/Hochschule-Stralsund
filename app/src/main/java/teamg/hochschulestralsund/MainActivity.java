@@ -7,8 +7,12 @@ import android.app.ListFragment;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
 
     public static String CODE_SHOW_DAY = "CODE_SHOW_DAY";
 
+    private Toolbar toolbar;
     private Calendar calendar;
     private FragmentManager manager;
     private FragmentTransaction transaction;
@@ -159,5 +164,9 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
             currentDay = 6;
 
         return currentDay;
+    }
+
+    private void setConstraint() {
+
     }
 }

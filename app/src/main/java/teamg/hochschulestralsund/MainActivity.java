@@ -133,10 +133,10 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
     void showCurrentDay() {
         this.findViewById(android.R.id.content).setOnTouchListener(new OnSwipeTouchListener(this) {
             public void onSwipeRight() {
-                showDay(getNextDay(), false);
+                showNextDay();
             }
             public void onSwipeLeft() {
-                showDay(getPreviosDay(), false);
+                showPreviosDay();
             }
             public boolean onTouch(View v, MotionEvent event) {
                 return gestureDetector.onTouchEvent(event);
@@ -145,6 +145,15 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
 
         showDay(currentDay, true);
     }
+
+    public void showPreviosDay() {
+        showDay(getPreviosDay(), false);
+    }
+
+    public void showNextDay() {
+        showDay(getNextDay(), false);
+    }
+
 
     private int getNextDay() {
         currentDay = (currentDay + 1) % 8;

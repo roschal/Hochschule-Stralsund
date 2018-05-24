@@ -4,21 +4,20 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
@@ -31,6 +30,10 @@ public class ItemFragment extends Fragment {
 
     private CustomSQL customSQL;
     private int DAY_OF_WEEK;
+
+    private TextView left;
+    private TextView center;
+    private TextView right;
 
     public ItemFragment() {
     }
@@ -60,12 +63,31 @@ public class ItemFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        final View view = inflater.inflate(R.layout.fragment_item_list, container, false);
 
         /* set the adapter */
         ArrayList<Lecture> lectures = customSQL.getLectures(DAY_OF_WEEK);
 
         if (view instanceof ConstraintLayout) {
+            /* left and right navigation */
+            left = view.findViewById(R.id.textview_toolbar_left);
+            center = view.findViewById(R.id.textview_toolbar_center);
+            right = view.findViewById(R.id.textview_toolbar_right);
+
+            left.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((MainActivity) getActivity()).showPreviosDay();
+                }
+            });
+
+            right.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((MainActivity) getActivity()).showNextDay();
+                }
+            });
+
             RecyclerView recyclerView = view.findViewById(R.id.list);
 
             Context context = recyclerView.getContext();
@@ -76,9 +98,23 @@ public class ItemFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             recyclerView.setAdapter(new MyItemRecyclerViewAdapter(lectures, mListener));
+
+            setDays();
         }
 
         return view;
+    }
+
+    private void setDays() {
+        left.setText(getDay(DAY_OF_WEEK - 1));
+        center.setText(getDay(DAY_OF_WEEK));
+        right.setText(getDay(DAY_OF_WEEK + 1));
+    }
+
+    private String getDay(int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_WEEK, day);
+        return calendar.getDisplayName( Calendar.DAY_OF_WEEK ,Calendar.LONG, Locale.getDefault());
     }
 
     @Override

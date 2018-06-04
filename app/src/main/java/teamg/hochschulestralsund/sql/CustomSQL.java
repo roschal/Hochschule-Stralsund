@@ -87,6 +87,9 @@ public class CustomSQL extends SQLiteOpenHelper {
     private static final String SQL_DELETE_TABLE_TIME =
             "DROP TABLE IF EXISTS " + Tables.TIME.TABLE_NAME;
 
+    public ArrayList<Lecture> lecturesOld;
+    public ArrayList<Lecture> lecturesNew;
+
     public Context context;
     public SQLiteDatabase db;
 
@@ -158,14 +161,14 @@ public class CustomSQL extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put(Tables.LECTURE.COLUMN_TITLE, lecture.title);
             values.put(Tables.LECTURE.COLUMN_LOCATION_ID, lecture.location.id);
-            values.put(Tables.LECTURE.COLUMN_LOCATION_ID, lecture.lecturer.id);
+            values.put(Tables.LECTURE.COLUMN_LECTURER_ID, lecture.lecturer.id);
             values.put(Tables.LECTURE.COLUMN_DAY_OF_WEEK, lecture.DAY_OF_WEEK);
             values.put(Tables.LECTURE.COLUMN_LECTURE_TIME_ID, lecture.lectureTime.id);
 
             Log.d("Adding new Lecture", "...");
             Log.d(Tables.LECTURE.COLUMN_TITLE, lecture.title);
             Log.d(Tables.LECTURE.COLUMN_LOCATION_ID, String.valueOf(lecture.location.id));
-            Log.d(Tables.LECTURE.COLUMN_LOCATION_ID, String.valueOf(lecture.lecturer.id));
+            Log.d(Tables.LECTURE.COLUMN_LECTURER_ID, String.valueOf(lecture.lecturer.id));
             Log.d(Tables.LECTURE.COLUMN_DAY_OF_WEEK, String.valueOf(lecture.DAY_OF_WEEK));
             Log.d(Tables.LECTURE.COLUMN_LECTURE_TIME_ID, String.valueOf(lecture.lectureTime.id));
 
@@ -315,8 +318,13 @@ public class CustomSQL extends SQLiteOpenHelper {
     /* get lecturers for a specific day */
     /* should be changed to sql query */
     public ArrayList<Lecture> getLectures(int day) {
-        ArrayList<Lecture> lecturesOld = getLectures();
-        ArrayList<Lecture> lecturesNew = new ArrayList<>();
+        lecturesOld = new ArrayList<>();
+        lecturesNew = new ArrayList<>();
+
+        lecturesOld.clear();
+        lecturesNew.clear();
+
+        lecturesOld = getLectures();
 
         for(int i = 0; i < lecturesOld.size(); i++) {
             if(lecturesOld.get(i).DAY_OF_WEEK == day) {
@@ -331,6 +339,8 @@ public class CustomSQL extends SQLiteOpenHelper {
         ArrayList<Lecture> lectures = new ArrayList<>();
 
         try {
+            Log.d("Getting lectures", "...");
+
             final String QUERY_LECTURE = "SELECT * FROM " + Tables.LECTURE.TABLE_NAME
                     + " a INNER JOIN " + Tables.LOCATION.TABLE_NAME + " b ON a." + Tables.LECTURE.COLUMN_LOCATION_ID + "=b._ID"
                     + " INNER JOIN " + Tables.LECTURER.TABLE_NAME + " c ON a." + Tables.LECTURE.COLUMN_LECTURER_ID + "=c._ID"
@@ -344,6 +354,10 @@ public class CustomSQL extends SQLiteOpenHelper {
                 lecture.id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE._ID));
                 lecture.title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_TITLE));
                 lecture.DAY_OF_WEEK = cursor.getInt(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_DAY_OF_WEEK));
+
+                Log.d(Tables.LECTURE._ID, String.valueOf(lecture.id));
+                Log.d(Tables.LECTURE.COLUMN_TITLE, lecture.title);
+                Log.d(Tables.LECTURE.COLUMN_DAY_OF_WEEK, String.valueOf(lecture.DAY_OF_WEEK));
 
                 /* location */
                 long location_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_LOCATION_ID));

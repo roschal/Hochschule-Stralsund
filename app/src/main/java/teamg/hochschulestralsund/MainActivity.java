@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
     private FragmentManager manager;
     private FragmentTransaction transaction;
     private ItemFragment fragment;
+    private Intent intent;
 
     private int currentDay;
 
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         switch (item.getItemId()) {
             /* show activity to add a new lecture */
             case R.id.action_add_lecture:
-                Intent intent = new Intent(this, AddLectureActivity.class);
+                intent = new Intent(this, AddLectureActivity.class);
                 startActivityForResult(intent, 0);
 
                 return true;

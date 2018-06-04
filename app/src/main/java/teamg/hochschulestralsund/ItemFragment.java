@@ -1,7 +1,9 @@
 package teamg.hochschulestralsund;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -97,12 +99,19 @@ public class ItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(lectures, mListener));
+            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(lectures, mListener, this));
 
             setDays();
         }
 
         return view;
+    }
+
+    /* update the list with lectures when lecture was edited or deleted*/
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
     }
 
     private void setDays() {

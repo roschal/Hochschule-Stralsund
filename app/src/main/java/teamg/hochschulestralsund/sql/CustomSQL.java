@@ -158,11 +158,25 @@ public class CustomSQL extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put(Tables.LECTURE.COLUMN_TITLE, lecture.title);
             values.put(Tables.LECTURE.COLUMN_LOCATION_ID, lecture.location.id);
-            values.put(Tables.LECTURE.COLUMN_LECTURER_ID, lecture.lecturer.id);
+            values.put(Tables.LECTURE.COLUMN_LOCATION_ID, lecture.lecturer.id);
             values.put(Tables.LECTURE.COLUMN_DAY_OF_WEEK, lecture.DAY_OF_WEEK);
             values.put(Tables.LECTURE.COLUMN_LECTURE_TIME_ID, lecture.lectureTime.id);
 
-            return db.insert(Tables.LECTURE.TABLE_NAME, null, values);
+            Log.d("Adding new Lecture", "...");
+            Log.d(Tables.LECTURE.COLUMN_TITLE, lecture.title);
+            Log.d(Tables.LECTURE.COLUMN_LOCATION_ID, String.valueOf(lecture.location.id));
+            Log.d(Tables.LECTURE.COLUMN_LOCATION_ID, String.valueOf(lecture.lecturer.id));
+            Log.d(Tables.LECTURE.COLUMN_DAY_OF_WEEK, String.valueOf(lecture.DAY_OF_WEEK));
+            Log.d(Tables.LECTURE.COLUMN_LECTURE_TIME_ID, String.valueOf(lecture.lectureTime.id));
+
+            long id = db.insert(Tables.LECTURE.TABLE_NAME, null, values);
+
+            /* if everything is fine */
+            if(id > 0) {
+                Log.d("Adding new lecture", "OK - id " + String.valueOf(id));
+            }
+            else
+                Log.e("Adding new lecture", "FAIL");
         } catch (Exception e) {
             e.printStackTrace();
         }

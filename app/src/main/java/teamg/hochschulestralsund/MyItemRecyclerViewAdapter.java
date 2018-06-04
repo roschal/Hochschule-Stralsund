@@ -1,27 +1,29 @@
 package teamg.hochschulestralsund;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
-import teamg.hochschulestralsund.ItemFragment.OnListFragmentInteractionListener;
-import teamg.hochschulestralsund.sql.Lecture;
-import teamg.hochschulestralsund.sql.CustomSQL;
-
 import java.util.ArrayList;
+
+import teamg.hochschulestralsund.ItemFragment.OnListFragmentInteractionListener;
+import teamg.hochschulestralsund.sql.CustomSQL;
+import teamg.hochschulestralsund.sql.Lecture;
 
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
     private final ArrayList<Lecture> lectures;
     private final OnListFragmentInteractionListener mListener;
+    private final ItemFragment itemFragment;
 
-    public MyItemRecyclerViewAdapter(ArrayList<Lecture> lectures, OnListFragmentInteractionListener listener) {
+    public MyItemRecyclerViewAdapter(ArrayList<Lecture> lectures, OnListFragmentInteractionListener listener, ItemFragment itemFragment) {
         this.lectures = lectures;
         mListener = listener;
+        this.itemFragment = itemFragment;
     }
 
     @Override
@@ -39,47 +41,14 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         holder.textView_room.setText(lectures.get(position).location.toString());
         holder.textView_lecturer.setText(lectures.get(position).lecturer.toString());
 
-        holder.button_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Do delete Stuff
-                holder.customSQL.deleteLecture(holder.lecture);
-            }
-        });
-
-        holder.button_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Do edit stuff
-            }
-        });
-
-        holder.view.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    if(holder.button_edit.getVisibility() == View.GONE
-                            && holder.button_delete.getVisibility() == View.GONE){
-                        holder.button_delete.setVisibility(View.VISIBLE);
-                        holder.button_edit.setVisibility(View.VISIBLE);
-                    } else {
-                        holder.button_delete.setVisibility(View.GONE);
-                        holder.button_edit.setVisibility(View.GONE);
-                    }
-
-                }
-                return true;
-            }
-        });
-
+        /* click on item opens a new activity */
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.lecture);
-                }
+                Intent intent = new Intent(itemFragment.getActivity().getApplicationContext(), LectureDetail.class);
+                intent.putExtra("ID", holder.lecture.id);
+
+                itemFragment.startActivityForResult(intent, 0);
             }
         });
     }
@@ -95,8 +64,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public final TextView textView_title;
         public final TextView textView_room;
         public final TextView textView_lecturer;
-        public final Button button_delete;
-        public final Button button_edit;
+
         public Lecture lecture;
         public CustomSQL customSQL;
 
@@ -107,8 +75,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             textView_title = view.findViewById(R.id.timetable_textView_title);
             textView_room = view.findViewById(R.id.timetable_textView_Room);
             textView_lecturer = view.findViewById(R.id.timetable_textView_Lecturer);
-            button_delete = view.findViewById(R.id.timetable_button_delete);
-            button_edit = view.findViewById(R.id.timetable_button_edit);
             customSQL = new CustomSQL(view.getContext());
         }
 

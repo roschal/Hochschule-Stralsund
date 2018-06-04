@@ -133,7 +133,27 @@ public class AddLectureActivity extends AppCompatActivity {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                lecture.DAY_OF_WEEK = checkedId + 2;
+                switch (checkedId) {
+                    case R.id.radioButton_add_lecture_mo:
+                        lecture.DAY_OF_WEEK = 2;
+                        break;
+                    case R.id.radioButton_add_lecture_di:
+                        lecture.DAY_OF_WEEK = 3;
+                        break;
+                    case R.id.radioButton_add_lecture_mi:
+                        lecture.DAY_OF_WEEK = 4;
+                        break;
+                    case R.id.radioButton_add_lecture_do:
+                        lecture.DAY_OF_WEEK = 5;
+                        break;
+                    case R.id.radioButton_add_lecture_fr:
+                        lecture.DAY_OF_WEEK = 6;
+                        break;
+                    /* just in case */
+                    default:
+                        lecture.DAY_OF_WEEK = 2;
+                        break;
+                }
             }
         });
 

@@ -18,7 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddLectureActivity"></activity>
+        <activity android:name=".AddLectureActivity" />
+        <activity android:name=".LectureDetail"></activity>
     </application>
 
 </manifest>

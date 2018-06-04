@@ -1,43 +1,35 @@
 package teamg.hochschulestralsund;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ListFragment;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.Calendar;
 
 import teamg.hochschulestralsund.connect.Parser;
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
-import teamg.hochschulestralsund.sql.LectureTime;
 
 public class MainActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener {
 
     public static String CODE_SHOW_DAY = "CODE_SHOW_DAY";
 
-    private Toolbar toolbar;
     private Calendar calendar;
     private FragmentManager manager;
     private FragmentTransaction transaction;
     private ItemFragment fragment;
 
-    private int currentDay = 2;
+    private int currentDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         inflater.inflate(R.menu.timetable, menu);
 
         /* set the icon color for 3 menu icons */
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 1; i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             drawable.mutate();
             drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
@@ -78,9 +70,6 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
             case R.id.action_add_lecture:
                 Intent intent = new Intent(this, AddLectureActivity.class);
                 startActivityForResult(intent, 0);
-
-                return true;
-            case R.id.action_add_alert:
 
                 return true;
             default:
@@ -120,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
 
         transaction = manager.beginTransaction();
 
-        if(init)
+        if (init)
             transaction.add(R.id.timetable_container, fragment, null);
         else
             transaction.replace(R.id.timetable_container, fragment, null);
@@ -135,9 +124,11 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
             public void onSwipeRight() {
                 showNextDay();
             }
+
             public void onSwipeLeft() {
                 showPreviosDay();
             }
+
             public boolean onTouch(View v, MotionEvent event) {
                 return gestureDetector.onTouchEvent(event);
             }
@@ -156,26 +147,32 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
 
 
     private int getNextDay() {
-        currentDay = (currentDay + 1) % 8;
-
-        /* if next day is saturday show monday */
-        if(currentDay == 7)
-            currentDay = 1;
+        switch (currentDay) {
+            case Calendar.MONDAY:
+            case Calendar.TUESDAY:
+            case Calendar.THURSDAY:
+            case Calendar.WEDNESDAY:
+                currentDay = currentDay + 1;
+                break;
+            default:
+                currentDay = Calendar.MONDAY;
+        }
 
         return currentDay;
     }
 
     private int getPreviosDay() {
-        currentDay = (currentDay - 1) % 8;
-
-        /* if next day is sunday show friday */
-        if(currentDay == 1)
-            currentDay = 6;
+        switch (currentDay) {
+            case Calendar.TUESDAY:
+            case Calendar.THURSDAY:
+            case Calendar.WEDNESDAY:
+            case Calendar.FRIDAY:
+                currentDay = currentDay - 1;
+                break;
+            default:
+                currentDay = Calendar.FRIDAY;
+        }
 
         return currentDay;
-    }
-
-    private void setConstraint() {
-
     }
 }

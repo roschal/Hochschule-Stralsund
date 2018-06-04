@@ -115,14 +115,16 @@ public class ItemFragment extends Fragment {
     }
 
     private void setDays() {
-        left.setText(getDay(DAY_OF_WEEK - 1));
+        left.setText(getDay(MainActivity.getPreviosDay(DAY_OF_WEEK)));
         center.setText(getDay(DAY_OF_WEEK));
-        right.setText(getDay(DAY_OF_WEEK + 1));
+        right.setText(getDay(MainActivity.getNextDay(DAY_OF_WEEK)));
     }
 
+    /* convert day of week from int to String */
     private String getDay(int day) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_WEEK, day);
+
         return calendar.getDisplayName( Calendar.DAY_OF_WEEK ,Calendar.LONG, Locale.getDefault());
     }
 

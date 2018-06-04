@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -116,6 +117,8 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
 
         transaction.addToBackStack(null);
         transaction.commit();
+
+        Log.d("Current day is", String.valueOf(currentDay));
     }
 
     /* show the fragment for the current day */
@@ -138,15 +141,17 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
     }
 
     public void showPreviosDay() {
-        showDay(getPreviosDay(), false);
+        currentDay = getPreviosDay(currentDay);
+        showDay(currentDay, false);
     }
 
     public void showNextDay() {
-        showDay(getNextDay(), false);
+        currentDay = getNextDay(currentDay);
+        showDay(currentDay, false);
     }
 
 
-    private int getNextDay() {
+    protected static int getNextDay(int currentDay) {
         switch (currentDay) {
             case Calendar.MONDAY:
             case Calendar.TUESDAY:
@@ -156,12 +161,13 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                 break;
             default:
                 currentDay = Calendar.MONDAY;
+                break;
         }
 
         return currentDay;
     }
 
-    private int getPreviosDay() {
+    protected static int getPreviosDay(int currentDay) {
         switch (currentDay) {
             case Calendar.TUESDAY:
             case Calendar.THURSDAY:
@@ -171,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                 break;
             default:
                 currentDay = Calendar.FRIDAY;
+                break;
         }
 
         return currentDay;

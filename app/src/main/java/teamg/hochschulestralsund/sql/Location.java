@@ -6,18 +6,21 @@ package teamg.hochschulestralsund.sql;
 
 public class Location {
     public long id;
-    public String house;
-    public String room;
+    public String house = "";
+    public String room = "";
+    public String name = "";
 
-    public Location(String house, String room) {
+    public Location(String house, String room, String name) {
         this.house = house;
         this.room = room;
+        this.name = name;
     }
 
-    public Location(long id, String house, String room) {
+    public Location(long id, String house, String room, String name) {
         this.id = id;
         this.house = house;
         this.room = room;
+        this.name = name;
     }
 
 
@@ -29,8 +32,14 @@ public class Location {
             text += house;
         }
 
-        if(!room.isEmpty())
+        if(!room.isEmpty()){
             text += "/" + room;
+        }
+
+        if(!name.isEmpty()){
+            text += " - " + name;
+        }
+
 
         return text;
     }

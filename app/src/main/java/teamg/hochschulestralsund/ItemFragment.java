@@ -30,6 +30,7 @@ public class ItemFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
+    private ArrayList<Lecture> lectures;
     private CustomSQL customSQL;
     private int DAY_OF_WEEK;
 
@@ -58,8 +59,6 @@ public class ItemFragment extends Fragment {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
             DAY_OF_WEEK = bundle.getInt(MainActivity.CODE_SHOW_DAY, Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
         }
-
-        init(getActivity());
     }
 
     @Override
@@ -68,7 +67,11 @@ public class ItemFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_item_list, container, false);
 
         /* set the adapter */
-        ArrayList<Lecture> lectures = customSQL.getLectures(DAY_OF_WEEK);
+        lectures = new ArrayList<>();
+        customSQL = new CustomSQL(getActivity());
+
+        lectures = customSQL.getLectures(DAY_OF_WEEK);
+        customSQL.close();
 
         if (view instanceof ConstraintLayout) {
             /* left and right navigation */
@@ -143,11 +146,6 @@ public class ItemFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    /* init the database */
-    public void init(Context context) {
-        customSQL = new CustomSQL(context);
     }
 
     public interface OnListFragmentInteractionListener {

@@ -37,7 +37,7 @@ public class CustomSQL extends SQLiteOpenHelper {
                     Tables.TIMETABLE.COLUMN_ID_TIME + " TEXT)";
     private static final String SQL_CREATE_TABLE_LECTURE =
             "CREATE TABLE IF NOT EXISTS " + Tables.LECTURE.TABLE_NAME + " (" +
-                    Tables.LECTURE._ID + " INTEGER PRIMARY KEY," +
+                    Tables.LECTURE._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                     Tables.LECTURE.COLUMN_TITLE + " TEXT," +
                     Tables.LECTURE.COLUMN_LOCATION_ID + " INTEGER," +
                     Tables.LECTURE.COLUMN_LECTURER_ID + " INTEGER," +
@@ -292,8 +292,11 @@ public class CustomSQL extends SQLiteOpenHelper {
 
     public void deleteLecture(Lecture lecture) {
         try {
-            db.execSQL("delete from " + Tables.LECTURE.TABLE_NAME +
-                              " where " + Tables.LECTURE._ID + "='"+ Long.toString(lecture.id) +"'");
+            Log.d("Deleting Lecture", "...");
+            Log.d("Lecture id", String.valueOf(lecture.id));
+
+            int count = db.delete(Tables.LECTURE.TABLE_NAME, Tables.LECTURE._ID + "=?", new String[] {Long.toString(lecture.id)});
+            Log.d("Deleted", Integer.toString(count) + " times");
         } catch (Exception e) {
             e.printStackTrace();
         }

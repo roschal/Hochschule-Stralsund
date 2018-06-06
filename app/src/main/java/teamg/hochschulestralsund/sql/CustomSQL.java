@@ -25,16 +25,9 @@ import teamg.hochschulestralsund.R;
 public class CustomSQL extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "hochschule.db";
 
-    private static final String SQL_CREATE_TABLE_TIMETABLE =
-            "CREATE TABLE IF NOT EXISTS " + Tables.TIMETABLE.TABLE_NAME + " (" +
-                    Tables.TIMETABLE._ID + " INTEGER PRIMARY KEY," +
-                    Tables.TIMETABLE.COLUMN_ID_LECTURE + " TEXT," +
-                    Tables.TIMETABLE.COLUMN_ID_LECTURER + " TEXT," +
-                    Tables.TIMETABLE.COLUMN_ID_LOCATION + " TEXT," +
-                    Tables.TIMETABLE.COLUMN_ID_TIME + " TEXT)";
     private static final String SQL_CREATE_TABLE_LECTURE =
             "CREATE TABLE IF NOT EXISTS " + Tables.LECTURE.TABLE_NAME + " (" +
                     Tables.LECTURE._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
@@ -63,7 +56,8 @@ public class CustomSQL extends SQLiteOpenHelper {
             "CREATE TABLE IF NOT EXISTS " + Tables.LOCATION.TABLE_NAME + " (" +
                     Tables.LOCATION._ID + " INTEGER PRIMARY KEY," +
                     Tables.LOCATION.COLUMN_HOUSE + " TEXT," +
-                    Tables.LOCATION.COLUMN_ROOM + " TEXT)";
+                    Tables.LOCATION.COLUMN_ROOM + " TEXT," +
+                    Tables.LOCATION.COLUMN_NAME + " TEXT)";
 
     private static final String SQL_CREATE_TABLE_TIME =
             "CREATE TABLE IF NOT EXISTS " + Tables.TIME.TABLE_NAME + " (" +
@@ -251,6 +245,7 @@ public class CustomSQL extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put(Tables.LOCATION.COLUMN_HOUSE, location.house);
             values.put(Tables.LOCATION.COLUMN_ROOM, location.room);
+            values.put(Tables.LOCATION.COLUMN_NAME, location.name);
 
             db.insert(Tables.LOCATION.TABLE_NAME, null, values);
         } catch (Exception e) {
@@ -276,7 +271,6 @@ public class CustomSQL extends SQLiteOpenHelper {
 
     public void createTablesIfNotExist() {
         try {
-            db.execSQL(SQL_CREATE_TABLE_TIMETABLE);
             db.execSQL(SQL_CREATE_TABLE_LECTURE);
             db.execSQL(SQL_CREATE_TABLE_LECTURER);
             db.execSQL(SQL_CREATE_TABLE_LECTURE_TIME);
@@ -366,8 +360,9 @@ public class CustomSQL extends SQLiteOpenHelper {
                 long location_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_LOCATION_ID));
                 String house = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LOCATION.COLUMN_HOUSE));
                 String room = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LOCATION.COLUMN_ROOM));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LOCATION.COLUMN_NAME));
 
-                lecture.location = new Location(location_id, house, room);
+                lecture.location = new Location(location_id, house, room, name);
 
                 /* lecturer */
                 long lecturer_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_LECTURER_ID));
@@ -565,12 +560,14 @@ public class CustomSQL extends SQLiteOpenHelper {
             String[] projection = {
                     Tables.LOCATION._ID,
                     Tables.LOCATION.COLUMN_HOUSE,
-                    Tables.LOCATION.COLUMN_ROOM
+                    Tables.LOCATION.COLUMN_ROOM,
+                    Tables.LOCATION.COLUMN_NAME
             };
 
             String selection = Tables.LOCATION.COLUMN_HOUSE + " = ? AND " +
-                    Tables.LOCATION.COLUMN_ROOM + " = ? ";
-            String[] selectionArgs = {location.house, location.room};
+                    Tables.LOCATION.COLUMN_ROOM + " = ? AND " +
+                    Tables.LOCATION.COLUMN_NAME + " = ? ";
+            String[] selectionArgs = {location.house, location.room, location.name};
 
             Cursor cursor = db.query(
                     Tables.LOCATION.TABLE_NAME,
@@ -600,7 +597,8 @@ public class CustomSQL extends SQLiteOpenHelper {
             String[] projection = {
                     Tables.LOCATION._ID,
                     Tables.LOCATION.COLUMN_HOUSE,
-                    Tables.LOCATION.COLUMN_ROOM
+                    Tables.LOCATION.COLUMN_ROOM,
+                    Tables.LOCATION.COLUMN_NAME
             };
 
             String sortOrder = Tables.LOCATION.COLUMN_HOUSE + " DESC";
@@ -619,8 +617,9 @@ public class CustomSQL extends SQLiteOpenHelper {
                 long id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LOCATION._ID));
                 String house = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LOCATION.COLUMN_HOUSE));
                 String room = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LOCATION.COLUMN_ROOM));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LOCATION.COLUMN_NAME));
 
-                locations.add(new Location(id, house, room));
+                locations.add(new Location(id, house, room, name));
             }
 
             cursor.close();

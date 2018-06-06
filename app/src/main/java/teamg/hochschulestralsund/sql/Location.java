@@ -5,7 +5,7 @@ package teamg.hochschulestralsund.sql;
  */
 
 public class Location {
-    public long id;
+    public long id = -1;
     public String house = "";
     public String room = "";
     public String name = "";
@@ -40,8 +40,6 @@ public class Location {
             text += " - " + name;
         }
 
-
         return text;
     }
-
 }

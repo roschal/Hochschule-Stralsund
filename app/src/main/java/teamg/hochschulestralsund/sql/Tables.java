@@ -43,6 +43,7 @@ public class Tables {
         public static final String TABLE_NAME = "Location";
         public static final String COLUMN_HOUSE = "house";
         public static final String COLUMN_ROOM = "room";
+        public static final String COLUMN_NAME = "name";
     }
 
     public static class TIME implements BaseColumns {

@@ -56,7 +56,7 @@ public class LectureDetail extends AppCompatActivity {
         inflater.inflate(R.menu.lecture, menu);
 
         /* set the icon color for 3 menu icons */
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             drawable.mutate();
             drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
@@ -69,6 +69,9 @@ public class LectureDetail extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             /* show activity to add a new lecture */
+            case R.id.action_add_termin:
+
+                break;
             case R.id.action_edit_lecture:
                 Intent intent = new Intent(this, AddLectureActivity.class);
                 startActivityForResult(intent, 0);

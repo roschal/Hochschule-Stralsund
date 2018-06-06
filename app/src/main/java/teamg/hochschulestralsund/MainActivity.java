@@ -118,8 +118,6 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
 
         transaction.addToBackStack(null);
         transaction.commit();
-
-        Log.d("Current day is", String.valueOf(currentDay));
     }
 
     /* show the fragment for the current day */

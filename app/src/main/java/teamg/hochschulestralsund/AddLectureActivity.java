@@ -30,6 +30,7 @@ public class AddLectureActivity extends AppCompatActivity {
     public AutoCompleteTextView editText_lecturer;
     public RadioGroup radioGroup;
     public Spinner spinner;
+    public Spinner spinner_type;
 
     public CustomSQL customSQL;
     public Lecture lecture;
@@ -52,6 +53,7 @@ public class AddLectureActivity extends AppCompatActivity {
         editText_lecturer = findViewById(R.id.editText_add_lecture_lecturer);
         radioGroup = findViewById(R.id.radioGroup_add_lecture_day);
         spinner = findViewById(R.id.spinner_add_lecture_time);
+        spinner_type = findViewById(R.id.spinner_add_lecture_type);
 
         customSQL = new CustomSQL(this);
         lecture = new Lecture();
@@ -97,6 +99,12 @@ public class AddLectureActivity extends AppCompatActivity {
         ArrayAdapter<LectureTime> adapterLectureTime = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, lectureTimes);
         spinner.setAdapter(adapterLectureTime);
+
+        String[] types = getResources().getStringArray(R.array.lecture_type);
+        ArrayAdapter<String> adapterLectureType = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line, types);
+        spinner_type.setAdapter(adapterLectureType);
+        spinner_type.setSelection(0);
 
         /* override the click handler */
         editText_title.addTextChangedListener(new TextWatcher() {
@@ -161,6 +169,18 @@ public class AddLectureActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 lecture.lectureTime = (LectureTime) parent.getItemAtPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinner_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                lecture.lectureType = (String) parent.getItemAtPosition(position);
             }
 
             @Override

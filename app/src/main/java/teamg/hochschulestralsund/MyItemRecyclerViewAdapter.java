@@ -37,7 +37,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.lecture = lectures.get(position);
         holder.textView_time.setText(lectures.get(position).lectureTime.toString());
-        holder.textView_title.setText(lectures.get(position).title);
+        holder.textView_title.setText(lectures.get(position).lectureType + " - " + lectures.get(position).title);
         holder.textView_room.setText(lectures.get(position).location.toString());
         holder.textView_lecturer.setText(lectures.get(position).lecturer.toString());
 

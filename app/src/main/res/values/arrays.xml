@@ -14,4 +14,11 @@
         <item>17:30</item>
         <item>19:00</item>
     </string-array>
+
+    <string-array name="lecture_type">
+        <item>Vorlesung</item>
+        <item>Übung</item>
+        <item>Labor</item>
+        <item>Tutorium</item>
+    </string-array>
 </resources>

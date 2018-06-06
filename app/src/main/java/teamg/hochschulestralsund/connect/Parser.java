@@ -68,8 +68,6 @@ public class Parser extends AsyncTask<Void, Integer, Boolean> {
         try {
             srcLecturers = this.getURL();
         } catch (IOException e) {
-            Log.e(TAG, e.getCause().toString(), e);
-
             throw e;
         }
 
@@ -135,12 +133,10 @@ public class Parser extends AsyncTask<Void, Integer, Boolean> {
             }
             catch (ParserException e)
             {
-                Log.e(TAG, e.getCause().toString(), e);
                 mail = "";
             }
             catch (Exception e)
             {
-                Log.e(TAG, e.getCause().toString(), e);
                 throw e;
             }
 
@@ -171,20 +167,12 @@ public class Parser extends AsyncTask<Void, Integer, Boolean> {
             }
             catch (ParserException e)
             {
-                Log.e(TAG, e.getCause().toString(), e);
                 telephone = "";
             }
             catch (Exception e)
             {
-                Log.e(TAG, e.getCause().toString(), e);
                 throw e;
             }
-
-            Log.d(TAG, forename);
-            Log.d(TAG, surname);
-            Log.d(TAG, academic_title);
-            Log.d(TAG, mail);
-            Log.d(TAG, telephone);
 
             srcLecturers = srcLecturers.substring(srcLecturers.indexOf("<div class=\"grid__column grid__column--xs-9 grid__column--sm-6 grid__column--md-6 grid__column--lg-6 contact-list__person-informations\">"));
             srcLecturers = srcLecturers.substring(srcLecturers.indexOf("</div></div></div></div>") + "</div></div></div></div>".length());

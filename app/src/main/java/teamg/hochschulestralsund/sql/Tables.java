@@ -31,6 +31,7 @@ public class Tables {
         public static final String COLUMN_LECTURER_ID = "lecturer_id";
         public static final String COLUMN_DAY_OF_WEEK = "day_of_week";
         public static final String COLUMN_LECTURE_TIME_ID = "lecture_time_id";
+        public static final String COLUMN_LECTURE_TYPE = "lecture_type";
     }
 
     public static class LECTURE_TIME implements BaseColumns {

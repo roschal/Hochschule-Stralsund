@@ -35,7 +35,8 @@ public class CustomSQL extends SQLiteOpenHelper {
                     Tables.LECTURE.COLUMN_LOCATION_ID + " INTEGER," +
                     Tables.LECTURE.COLUMN_LECTURER_ID + " INTEGER," +
                     Tables.LECTURE.COLUMN_DAY_OF_WEEK + " INTEGER," +
-                    Tables.LECTURE.COLUMN_LECTURE_TIME_ID + " INTEGER)";
+                    Tables.LECTURE.COLUMN_LECTURE_TIME_ID + " INTEGER," +
+                    Tables.LECTURE.COLUMN_LECTURE_TYPE + " TEXT)";
 
     private static final String SQL_CREATE_TABLE_LECTURER =
             "CREATE TABLE IF NOT EXISTS " + Tables.LECTURER.TABLE_NAME + " (" +
@@ -158,6 +159,7 @@ public class CustomSQL extends SQLiteOpenHelper {
             values.put(Tables.LECTURE.COLUMN_LECTURER_ID, lecture.lecturer.id);
             values.put(Tables.LECTURE.COLUMN_DAY_OF_WEEK, lecture.DAY_OF_WEEK);
             values.put(Tables.LECTURE.COLUMN_LECTURE_TIME_ID, lecture.lectureTime.id);
+            values.put(Tables.LECTURE.COLUMN_LECTURE_TYPE, lecture.lectureType);
 
             Log.d("Adding new Lecture", "...");
             Log.d(Tables.LECTURE.COLUMN_TITLE, lecture.title);
@@ -350,6 +352,7 @@ public class CustomSQL extends SQLiteOpenHelper {
 
                 lecture.id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE._ID));
                 lecture.title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_TITLE));
+                lecture.lectureType = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_LECTURE_TYPE));
                 lecture.DAY_OF_WEEK = cursor.getInt(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_DAY_OF_WEEK));
 
                 Log.d(Tables.LECTURE._ID, String.valueOf(lecture.id));

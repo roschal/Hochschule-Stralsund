@@ -20,6 +20,7 @@ public class LectureDetail extends AppCompatActivity {
 
     private Lecture lecture;
     private CustomSQL customSQL;
+    private ArrayList<Lecture> lectures;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public class LectureDetail extends AppCompatActivity {
         if (getIntent().hasExtra("ID")) {
             long id = getIntent().getLongExtra("ID", -1);
 
-            ArrayList<Lecture> lectures = customSQL.getLectures();
+            lectures = customSQL.getLectures();
 
             for (int i = 0; i < lectures.size(); i++) {
                 if(lectures.get(i).id == id) {
@@ -75,7 +76,9 @@ public class LectureDetail extends AppCompatActivity {
                 return true;
             case R.id.action_delete_lecture:
                 customSQL.deleteLecture(lecture);
+                customSQL.close();
 
+                setResult(0);
                 finish();
 
                 return true;
@@ -86,6 +89,7 @@ public class LectureDetail extends AppCompatActivity {
 
     private void init() {
         lecture = new Lecture();
+        lectures =  new ArrayList<>();
         customSQL = new CustomSQL(this);
     }
 }

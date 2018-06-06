@@ -71,7 +71,7 @@ public class LectureDetail extends AppCompatActivity {
             /* show activity to add a new lecture */
             case R.id.action_add_termin:
 
-                break;
+                return true;
             case R.id.action_edit_lecture:
                 Intent intent = new Intent(this, AddLectureActivity.class);
                 startActivityForResult(intent, 0);

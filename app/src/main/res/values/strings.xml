@@ -3,7 +3,7 @@
     <string name="timetable_title_hint">Vorlesung</string>
     <string name="timetable_room_hint">Raum</string>
     <string name="timetable_lecturer_hint">Dozent</string>
-    <string name="add_lecture_submit">Vorlesung hinzufügen</string>
+    <string name="add_lecture_submit">Veranstaltung hinzufügen</string>
     <string name="delete_lecture">Löschen</string>
     <string name="edit_lecture">Bearbeiten</string>
 </resources>

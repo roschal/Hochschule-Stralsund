@@ -18,6 +18,8 @@ public class DefaultSQLData {
 
         initLocations();
         addDefaultLocations();
+
+        customSQL.close();
     }
 
     /**
@@ -97,7 +99,7 @@ public class DefaultSQLData {
     }
 
     /**
-     * Fügt die Räume aus der Raumliste der Datenbank hinzu, falls sie noch nicht exisitieren
+     * Fügt die Räume aus der Raumliste der Datenbank hinzu, falls sie noch nicht existieren
      */
     public void addDefaultLocations() {
         for(int i = 0; i < locations.size(); i++) {

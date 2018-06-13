@@ -11,13 +11,27 @@
         android:id="@+id/textView_meeting_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="08.00 - 09.30"
+        android:layout_marginTop="8dp"
+        android:text="08:00"
         android:textColor="@color/colorPrimary"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView_meeting_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_meeting_date" />
+
+    <TextView
+        android:id="@+id/textView_meeting_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="24.11.99"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,12 +40,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:gravity="left|start"
-        android:hint="@string/timetable_title_hint"
+        android:hint="@string/meeting_title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_meeting_time"
+        app:layout_constraintStart_toEndOf="@+id/textView_meeting_date"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -39,24 +54,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:gravity="left|start"
-        android:hint="@string/timetable_room_hint"
+        android:hint="@string/meeting_description"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_meeting_time"
+        app:layout_constraintStart_toEndOf="@+id/textView_meeting_date"
         app:layout_constraintTop_toBottomOf="@+id/textView_meeting_title" />
-
-    <TextView
-        android:id="@+id/timetable_textView_Lecturer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:hint="@string/timetable_lecturer_hint"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_meeting_time"
-        app:layout_constraintTop_toBottomOf="@+id/textView_meeting_description" />
 
 </android.support.constraint.ConstraintLayout>

@@ -1,16 +1,18 @@
-package teamg.hochschulestralsund;
+package teamg.hochschulestralsund.adapter;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import teamg.hochschulestralsund.ItemFragment;
 import teamg.hochschulestralsund.ItemFragment.OnListFragmentInteractionListener;
+import teamg.hochschulestralsund.LectureDetail;
+import teamg.hochschulestralsund.R;
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
 
@@ -36,17 +38,17 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.lecture = lectures.get(position);
-        holder.textView_time.setText(lectures.get(position).lectureTime.toString());
-        holder.textView_title.setText(lectures.get(position).lectureType + " - " + lectures.get(position).title);
-        holder.textView_room.setText(lectures.get(position).location.toString());
-        holder.textView_lecturer.setText(lectures.get(position).lecturer.toString());
+        holder.textView_time.setText(lectures.get(position).lecture_time.toString());
+        holder.textView_title.setText(lectures.get(position).lecture_type + " - " + lectures.get(position).event_title);
+        holder.textView_room.setText(lectures.get(position).event_location.toString());
+        holder.textView_lecturer.setText(lectures.get(position).event_person.toString());
 
         /* click on item opens a new activity */
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(itemFragment.getActivity().getApplicationContext(), LectureDetail.class);
-                intent.putExtra("ID", holder.lecture.id);
+                intent.putExtra("ID", holder.lecture.event_id);
 
                 itemFragment.startActivityForResult(intent, 0);
             }
@@ -71,9 +73,9 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public ViewHolder(View view) {
             super(view);
             this.view = view;
-            textView_time = view.findViewById(R.id.timetable_texView_Time);
-            textView_title = view.findViewById(R.id.timetable_textView_title);
-            textView_room = view.findViewById(R.id.timetable_textView_Room);
+            textView_time = view.findViewById(R.id.textView_meeting_time);
+            textView_title = view.findViewById(R.id.textView_meeting_title);
+            textView_room = view.findViewById(R.id.textView_meeting_description);
             textView_lecturer = view.findViewById(R.id.timetable_textView_Lecturer);
             customSQL = new CustomSQL(view.getContext());
         }

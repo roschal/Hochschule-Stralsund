@@ -11,20 +11,19 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import teamg.hochschulestralsund.sql.Lecturer;
-import teamg.hochschulestralsund.sql.Location;
+import teamg.hochschulestralsund.sql.Person;
 
-public class AdapterLecturer extends ArrayAdapter<Lecturer> {
+public class AdapterLecturer extends ArrayAdapter<Person> {
 
-    private ArrayList<Lecturer> lecturers;
-    private ArrayList<Lecturer> allLecturers;
+    private ArrayList<Person> lecturers;
+    private ArrayList<Person> allLecturers;
 
     private Context context;
     private int resource;
 
     private ListFilter listFilter = new ListFilter();
 
-    public AdapterLecturer(Context context, int resource, ArrayList<Lecturer> lecturers) {
+    public AdapterLecturer(Context context, int resource, ArrayList<Person> lecturers) {
         super(context, resource, lecturers);
         this.lecturers = lecturers;
         this.context = context;
@@ -37,8 +36,8 @@ public class AdapterLecturer extends ArrayAdapter<Lecturer> {
     }
 
     @Override
-    public Lecturer getItem(int position) {
-        Lecturer lecturer = lecturers.get(position);
+    public Person getItem(int position) {
+        Person lecturer = lecturers.get(position);
         return lecturer;
     }
 
@@ -70,7 +69,7 @@ public class AdapterLecturer extends ArrayAdapter<Lecturer> {
             FilterResults results = new FilterResults();
             if (allLecturers == null) {
                 synchronized (lock) {
-                    allLecturers = new ArrayList<Lecturer>(lecturers);
+                    allLecturers = new ArrayList<Person>(lecturers);
                 }
             }
 
@@ -82,10 +81,10 @@ public class AdapterLecturer extends ArrayAdapter<Lecturer> {
             } else {
                 final String searchStrLowerCase = prefix.toString().toLowerCase();
 
-                ArrayList<Lecturer> matchValues = new ArrayList<Lecturer>();
+                ArrayList<Person> matchValues = new ArrayList<Person>();
 
                 for (int i = 0; i < lecturers.size(); i++) {
-                    Lecturer lecturer = lecturers.get(i);
+                    Person lecturer = lecturers.get(i);
                     /* search for surname and forename and full name */
                     if (lecturer.forename.toLowerCase().startsWith(searchStrLowerCase)) {
                         matchValues.add(lecturer);
@@ -108,7 +107,7 @@ public class AdapterLecturer extends ArrayAdapter<Lecturer> {
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             if (results.values != null) {
-                lecturers = (ArrayList<Lecturer>)results.values;
+                lecturers = (ArrayList<Person>)results.values;
             } else {
                 lecturers = null;
             }

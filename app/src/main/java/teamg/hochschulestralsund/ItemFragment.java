@@ -9,18 +9,16 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
+import teamg.hochschulestralsund.adapter.MyItemRecyclerViewAdapter;
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
 
@@ -32,7 +30,7 @@ public class ItemFragment extends Fragment {
 
     private ArrayList<Lecture> lectures;
     private CustomSQL customSQL;
-    private int DAY_OF_WEEK;
+    private Calendar calendar;
 
     private TextView left;
     private TextView center;
@@ -41,23 +39,17 @@ public class ItemFragment extends Fragment {
     public ItemFragment() {
     }
 
-    public static ItemFragment newInstance(int columnCount) {
-        ItemFragment fragment = new ItemFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
 
+        calendar = Calendar.getInstance();
+
         /* get the day to show */
         if (bundle != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-            DAY_OF_WEEK = bundle.getInt(MainActivity.CODE_SHOW_DAY, Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
+            calendar.setTimeInMillis(bundle.getLong(MainActivity.CODE_SHOW_DAY, Calendar.getInstance().getTimeInMillis()));
         }
     }
 
@@ -70,7 +62,7 @@ public class ItemFragment extends Fragment {
         lectures = new ArrayList<>();
         customSQL = new CustomSQL(getActivity());
 
-        lectures = customSQL.getLectures(DAY_OF_WEEK);
+        lectures = customSQL.getLectures(calendar.get(Calendar.DAY_OF_WEEK));
         customSQL.close();
 
         if (view instanceof ConstraintLayout) {
@@ -118,9 +110,9 @@ public class ItemFragment extends Fragment {
     }
 
     private void setDays() {
-        left.setText(getDay(MainActivity.getPreviosDay(DAY_OF_WEEK)));
-        center.setText(getDay(DAY_OF_WEEK));
-        right.setText(getDay(MainActivity.getNextDay(DAY_OF_WEEK)));
+        left.setText(getDayAndDate(MainActivity.getPreviosDay(calendar)));
+        center.setText(getDayAndDate(calendar));
+        right.setText(getDayAndDate(MainActivity.getNextDay(calendar)));
     }
 
     /* convert day of week from int to String */
@@ -128,7 +120,23 @@ public class ItemFragment extends Fragment {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_WEEK, day);
 
-        return calendar.getDisplayName( Calendar.DAY_OF_WEEK ,Calendar.LONG, Locale.getDefault());
+        return calendar.getDisplayName( Calendar.DAY_OF_WEEK ,Calendar.SHORT, Locale.getDefault());
+    }
+
+    /* convert day of week and Date from int to String */
+    private String getDayAndDate(Calendar calendar) {
+        String display = "";
+        Calendar calendarToday = Calendar.getInstance();
+
+        if(calendar.get(Calendar.DATE) == calendarToday.get(Calendar.DATE)) {
+            display += "(" + getString(R.string.today) + ") ";
+        }
+
+        display += calendar.getDisplayName( Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()) +
+                         ", " +
+                         MainActivity.parseDate(calendar);
+
+        return display;
     }
 
     @Override
@@ -149,7 +157,6 @@ public class ItemFragment extends Fragment {
     }
 
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onListFragmentInteraction(Lecture lecture);
     }
 }

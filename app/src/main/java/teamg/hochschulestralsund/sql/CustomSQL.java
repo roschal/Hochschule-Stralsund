@@ -2,19 +2,17 @@ package teamg.hochschulestralsund.sql;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.BaseColumns;
 import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import teamg.hochschulestralsund.R;
 
@@ -23,20 +21,30 @@ import teamg.hochschulestralsund.R;
  */
 
 public class CustomSQL extends SQLiteOpenHelper {
-
-    // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 5;
     public static final String DATABASE_NAME = "hochschule.db";
+
+    private static final String SQL_CREATE_TABLE_MEETING =
+            "CREATE TABLE IF NOT EXISTS " + Tables.MEETING.TABLE_NAME + " (" +
+                    Tables.MEETING._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                    Tables.MEETING.COLUMN_TITLE + " TEXT," +
+                    Tables.MEETING.COLUMN_DESCRIPTION + " TEXT," +
+                    Tables.MEETING.COLUMN_CALENDAR + " BIGINT)";
 
     private static final String SQL_CREATE_TABLE_LECTURE =
             "CREATE TABLE IF NOT EXISTS " + Tables.LECTURE.TABLE_NAME + " (" +
                     Tables.LECTURE._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                     Tables.LECTURE.COLUMN_TITLE + " TEXT," +
+                    Tables.LECTURE.COLUMN_TYPE + " TEXT," +
+                    Tables.LECTURE.COLUMN_REPEAT + " INTEGER," +
+                    Tables.LECTURE.COLUMN_BEGIN + " BIGINT," +
+                    Tables.LECTURE.COLUMN_END + " BIGINT," +
+                    Tables.LECTURE.COLUMN_DEFAULT_LOCATION + " INTEGER," +
+                    Tables.LECTURE.COLUMN_DEFAULT_PERSON + " INTEGER," +
+                    Tables.LECTURE.COLUMN_DEFAULT_TIME + " INTEGER," +
                     Tables.LECTURE.COLUMN_LOCATION_ID + " INTEGER," +
                     Tables.LECTURE.COLUMN_LECTURER_ID + " INTEGER," +
-                    Tables.LECTURE.COLUMN_DAY_OF_WEEK + " INTEGER," +
-                    Tables.LECTURE.COLUMN_LECTURE_TIME_ID + " INTEGER," +
-                    Tables.LECTURE.COLUMN_LECTURE_TYPE + " TEXT)";
+                    Tables.LECTURE.COLUMN_LECTURE_TIME_ID + " INTEGER)";
 
     private static final String SQL_CREATE_TABLE_LECTURER =
             "CREATE TABLE IF NOT EXISTS " + Tables.LECTURER.TABLE_NAME + " (" +
@@ -60,17 +68,7 @@ public class CustomSQL extends SQLiteOpenHelper {
                     Tables.LOCATION.COLUMN_ROOM + " TEXT," +
                     Tables.LOCATION.COLUMN_NAME + " TEXT)";
 
-    private static final String SQL_CREATE_TABLE_TIME =
-            "CREATE TABLE IF NOT EXISTS " + Tables.TIME.TABLE_NAME + " (" +
-                    Tables.TIME._ID + " INTEGER PRIMARY KEY," +
-                    Tables.TIME.COLUMN_BEGIN_HOUR + " TEXT," +
-                    Tables.TIME.COLUMN_BEGIN_MINUTE + " TEXT," +
-                    Tables.TIME.COLUMN_END_HOUR + " TEXT," +
-                    Tables.TIME.COLUMN_END_MINUTE + " TEXT)";
-
     /* SQL delete */
-    private static final String SQL_DELETE_TABLE_TIMETABLE =
-            "DROP TABLE IF EXISTS " + Tables.TIMETABLE.TABLE_NAME;
     private static final String SQL_DELETE_TABLE_LECTURE =
             "DROP TABLE IF EXISTS " + Tables.LECTURE.TABLE_NAME;
     private static final String SQL_DELETE_TABLE_LECTURER =
@@ -79,8 +77,8 @@ public class CustomSQL extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS " + Tables.LECTURE_TIME.TABLE_NAME;
     private static final String SQL_DELETE_TABLE_LOCATION =
             "DROP TABLE IF EXISTS " + Tables.LOCATION.TABLE_NAME;
-    private static final String SQL_DELETE_TABLE_TIME =
-            "DROP TABLE IF EXISTS " + Tables.TIME.TABLE_NAME;
+    private static final String SQL_DELETE_TABLE_MEETING =
+            "DROP TABLE IF EXISTS " + Tables.MEETING.TABLE_NAME;
 
     public ArrayList<Lecture> lecturesOld;
     public ArrayList<Lecture> lecturesNew;
@@ -151,40 +149,64 @@ public class CustomSQL extends SQLiteOpenHelper {
     /////////////////////////////////////////////////////////////////////////////////////////
     /* add */
 
+    /**Adds a Lecture object to the database
+     *
+     * @param lecture
+     * @return id
+     */
     public long addLecture(Lecture lecture) {
+        long id = -1;
+
         try {
+            db = getWritableDatabase();
+
             ContentValues values = new ContentValues();
-            values.put(Tables.LECTURE.COLUMN_TITLE, lecture.title);
-            values.put(Tables.LECTURE.COLUMN_LOCATION_ID, lecture.location.id);
-            values.put(Tables.LECTURE.COLUMN_LECTURER_ID, lecture.lecturer.id);
-            values.put(Tables.LECTURE.COLUMN_DAY_OF_WEEK, lecture.DAY_OF_WEEK);
-            values.put(Tables.LECTURE.COLUMN_LECTURE_TIME_ID, lecture.lectureTime.id);
-            values.put(Tables.LECTURE.COLUMN_LECTURE_TYPE, lecture.lectureType);
+            values.put(Tables.LECTURE.COLUMN_TITLE, lecture.event_title);
+            values.put(Tables.LECTURE.COLUMN_TYPE, lecture.lecture_type);
+            values.put(Tables.LECTURE.COLUMN_REPEAT, lecture.lecture_repeat);
+            values.put(Tables.LECTURE.COLUMN_BEGIN, lecture.event_begin.getTimeInMillis());
+            values.put(Tables.LECTURE.COLUMN_END, lecture.event_end.getTimeInMillis());
+
+            values.put(Tables.LECTURE.COLUMN_DEFAULT_LOCATION, lecture.lecture_default_location);
+            values.put(Tables.LECTURE.COLUMN_DEFAULT_PERSON, lecture.lecture_default_person);
+            values.put(Tables.LECTURE.COLUMN_DEFAULT_TIME, lecture.lecture_default_time);
+
+            values.put(Tables.LECTURE.COLUMN_LOCATION_ID, lecture.event_location.id);
+            values.put(Tables.LECTURE.COLUMN_LECTURER_ID, lecture.event_person.id);
+            values.put(Tables.LECTURE.COLUMN_LECTURE_TIME_ID, lecture.lecture_time.id);
 
             Log.d("Adding new Lecture", "...");
-            Log.d(Tables.LECTURE.COLUMN_TITLE, lecture.title);
-            Log.d(Tables.LECTURE.COLUMN_LOCATION_ID, String.valueOf(lecture.location.id));
-            Log.d(Tables.LECTURE.COLUMN_LECTURER_ID, String.valueOf(lecture.lecturer.id));
-            Log.d(Tables.LECTURE.COLUMN_DAY_OF_WEEK, String.valueOf(lecture.DAY_OF_WEEK));
-            Log.d(Tables.LECTURE.COLUMN_LECTURE_TIME_ID, String.valueOf(lecture.lectureTime.id));
 
-            long id = db.insert(Tables.LECTURE.TABLE_NAME, null, values);
+            Log.i(Tables.LECTURE.COLUMN_TITLE, lecture.event_title);
+            Log.i(Tables.LECTURE.COLUMN_TYPE, lecture.lecture_type);
+            Log.i(Tables.LECTURE.COLUMN_REPEAT, Integer.toString(lecture.lecture_repeat));
+            Log.i(Tables.LECTURE.COLUMN_BEGIN, Long.toString(lecture.event_begin.getTimeInMillis()));
+            Log.i(Tables.LECTURE.COLUMN_END, Long.toString(lecture.event_end.getTimeInMillis()));
+
+            Log.i(Tables.LECTURE.COLUMN_DEFAULT_LOCATION, Integer.toString(lecture.lecture_default_location));
+            Log.i(Tables.LECTURE.COLUMN_DEFAULT_PERSON, Integer.toString(lecture.lecture_default_person));
+            Log.i(Tables.LECTURE.COLUMN_DEFAULT_TIME, Integer.toString(lecture.lecture_default_time));
+
+            Log.i(Tables.LECTURE.COLUMN_LOCATION_ID, Long.toString(lecture.event_location.id));
+            Log.i(Tables.LECTURE.COLUMN_LECTURER_ID, Long.toString(lecture.event_person.id));
+            Log.i(Tables.LECTURE.COLUMN_LECTURE_TIME_ID, Long.toString(lecture.lecture_time.id));
+
+            id = db.insert(Tables.LECTURE.TABLE_NAME, null, values);
 
             /* if everything is fine */
-            if(id > 0) {
+            if(id > 0)
                 Log.d("Adding new lecture", "OK - id " + String.valueOf(id));
-            }
             else
                 Log.e("Adding new lecture", "FAIL");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return -1;
+        return id;
     }
 
     /* add a lecture object to sql database without checking if it is already existing */
-    public long addLecturer(Lecturer lecturer) {
+    public long addLecturer(Person lecturer) {
        try {
            ContentValues values = new ContentValues();
            values.put(Tables.LECTURER.COLUMN_FORENAME, lecturer.forename);
@@ -202,7 +224,7 @@ public class CustomSQL extends SQLiteOpenHelper {
     }
 
     /* add a lecture object to sql database but only if it is not already existing */
-    public void addLecturerIfNotExist(Lecturer lecturer) {
+    public void addLecturerIfNotExist(Person lecturer) {
         try {
             Boolean exists = existsLecturer(lecturer);
 
@@ -267,6 +289,41 @@ public class CustomSQL extends SQLiteOpenHelper {
         }
     }
 
+    /**Adds a Lecture object to the database
+     *
+     * @param meeting
+     * @return id
+     */
+    public long addMeeting(Meeting meeting) {
+        long id = -1;
+
+        try {
+            db = getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            values.put(Tables.MEETING.COLUMN_TITLE, meeting.meeting_title);
+            values.put(Tables.MEETING.COLUMN_DESCRIPTION, meeting.meeting_description);
+            values.put(Tables.MEETING.COLUMN_CALENDAR, meeting.meeting_calendar.getTimeInMillis());
+
+            Log.d("Adding new Meeting", "...");
+
+            Log.i(Tables.MEETING.COLUMN_TITLE, meeting.meeting_title);
+            Log.i(Tables.MEETING.COLUMN_DESCRIPTION, meeting.meeting_description);
+            Log.i(Tables.MEETING.COLUMN_CALENDAR, Long.toString(meeting.meeting_calendar.getTimeInMillis()));
+
+            id = db.insert(Tables.MEETING.TABLE_NAME, null, values);
+
+            /* if everything is fine */
+            if(id > 0)
+                Log.d("Adding new Meeting", "OK - id " + String.valueOf(id));
+            else
+                Log.e("Adding new Meeting", "FAIL");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return id;
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // create
@@ -277,7 +334,7 @@ public class CustomSQL extends SQLiteOpenHelper {
             db.execSQL(SQL_CREATE_TABLE_LECTURER);
             db.execSQL(SQL_CREATE_TABLE_LECTURE_TIME);
             db.execSQL(SQL_CREATE_TABLE_LOCATION);
-            db.execSQL(SQL_CREATE_TABLE_TIME);
+            db.execSQL(SQL_CREATE_TABLE_MEETING);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -289,9 +346,9 @@ public class CustomSQL extends SQLiteOpenHelper {
     public void deleteLecture(Lecture lecture) {
         try {
             Log.d("Deleting Lecture", "...");
-            Log.d("Lecture id", String.valueOf(lecture.id));
+            Log.d("Lecture id", String.valueOf(lecture.event_id));
 
-            int count = db.delete(Tables.LECTURE.TABLE_NAME, Tables.LECTURE._ID + "=?", new String[] {Long.toString(lecture.id)});
+            int count = db.delete(Tables.LECTURE.TABLE_NAME, Tables.LECTURE._ID + "=?", new String[] {Long.toString(lecture.event_id)});
             Log.d("Deleted", Integer.toString(count) + " times");
         } catch (Exception e) {
             e.printStackTrace();
@@ -300,12 +357,11 @@ public class CustomSQL extends SQLiteOpenHelper {
 
     public void deleteTablesIfExist() {
         try {
-            db.execSQL(SQL_DELETE_TABLE_TIMETABLE);
             db.execSQL(SQL_DELETE_TABLE_LECTURE);
             db.execSQL(SQL_DELETE_TABLE_LECTURER);
             db.execSQL(SQL_DELETE_TABLE_LECTURE_TIME);
             db.execSQL(SQL_DELETE_TABLE_LOCATION);
-            db.execSQL(SQL_DELETE_TABLE_TIME);
+            db.execSQL(SQL_DELETE_TABLE_MEETING);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -326,7 +382,7 @@ public class CustomSQL extends SQLiteOpenHelper {
         lecturesOld = getLectures();
 
         for(int i = 0; i < lecturesOld.size(); i++) {
-            if(lecturesOld.get(i).DAY_OF_WEEK == day) {
+            if(lecturesOld.get(i).event_begin.get(Calendar.DAY_OF_WEEK) == day) {
                lecturesNew.add(lecturesOld.get(i));
             }
         }
@@ -350,14 +406,15 @@ public class CustomSQL extends SQLiteOpenHelper {
             while (cursor.moveToNext()) {
                 Lecture lecture = new Lecture();
 
-                lecture.id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE._ID));
-                lecture.title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_TITLE));
-                lecture.lectureType = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_LECTURE_TYPE));
-                lecture.DAY_OF_WEEK = cursor.getInt(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_DAY_OF_WEEK));
-
-                Log.d(Tables.LECTURE._ID, String.valueOf(lecture.id));
-                Log.d(Tables.LECTURE.COLUMN_TITLE, lecture.title);
-                Log.d(Tables.LECTURE.COLUMN_DAY_OF_WEEK, String.valueOf(lecture.DAY_OF_WEEK));
+                lecture.event_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE._ID));
+                lecture.event_title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_TITLE));
+                lecture.lecture_type = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_TYPE));
+                lecture.lecture_repeat = cursor.getInt(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_REPEAT));
+                lecture.event_begin.setTimeInMillis(cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_BEGIN)));
+                lecture.event_end.setTimeInMillis(cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_END)));
+                lecture.lecture_default_location = cursor.getInt(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_DEFAULT_LOCATION));
+                lecture.lecture_default_person = cursor.getInt(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_DEFAULT_PERSON));
+                lecture.lecture_default_time = cursor.getInt(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_DEFAULT_TIME));
 
                 /* location */
                 long location_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_LOCATION_ID));
@@ -365,7 +422,7 @@ public class CustomSQL extends SQLiteOpenHelper {
                 String room = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LOCATION.COLUMN_ROOM));
                 String name = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LOCATION.COLUMN_NAME));
 
-                lecture.location = new Location(location_id, house, room, name);
+                lecture.event_location = new Location(location_id, house, room, name);
 
                 /* lecturer */
                 long lecturer_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_LECTURER_ID));
@@ -375,14 +432,14 @@ public class CustomSQL extends SQLiteOpenHelper {
                 String mail = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_MAIL));
                 String telephone = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_TELEPHONE));
 
-                lecture.lecturer = (new Lecturer(lecturer_id, forename, surname, academic_title, mail, telephone));
+                lecture.event_person = (new Person(lecturer_id, forename, surname, academic_title, mail, telephone));
 
                 /* lecture_time */
                 long lecture_time_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_LECTURE_TIME_ID));
                 long begin = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE_TIME.COLUMN_BEGIN));
                 long end = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE_TIME.COLUMN_END));
 
-                lecture.lectureTime = new LectureTime(lecture_time_id, begin, end);
+                lecture.lecture_time = new LectureTime(lecture_time_id, begin, end);
 
                 lectures.add(lecture);
             }
@@ -395,12 +452,12 @@ public class CustomSQL extends SQLiteOpenHelper {
         }
 
         for(int i = 0; i < lectures.size(); i++)
-            Log.e("BLA", lectures.get(i).title);
+            Log.e("BLA", lectures.get(i).event_title);
         return lectures;
     }
 
     /* check if an Lecturer is already saved in the database */
-    public Boolean existsLecturer(Lecturer lecturer) {
+    public Boolean existsLecturer(Person lecturer) {
         try {
             String[] projection = {
                     Tables.LECTURER._ID,
@@ -436,8 +493,8 @@ public class CustomSQL extends SQLiteOpenHelper {
         return false;
     }
 
-    public ArrayList<Lecturer> getLecturers() {
-        ArrayList lecturers = new ArrayList<Lecturer>();
+    public ArrayList<Person> getLecturers() {
+        ArrayList lecturers = new ArrayList<Person>();
 
         try {
             String[] projection = {
@@ -464,14 +521,13 @@ public class CustomSQL extends SQLiteOpenHelper {
             while (cursor.moveToNext()) {
                 long id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURER._ID));
                 String forename = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_FORENAME));
-                Log.e("bla2", forename);
 
                 String surname = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_SURNAME));
                 String academic_title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_ACADEMIC_TITLE));
                 String mail = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_MAIL));
                 String telephone = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_TELEPHONE));
 
-                lecturers.add(new Lecturer(id, forename, surname, academic_title, mail, telephone));
+                lecturers.add(new Person(id, forename, surname, academic_title, mail, telephone));
             }
 
             cursor.close();
@@ -633,4 +689,52 @@ public class CustomSQL extends SQLiteOpenHelper {
         return locations;
     }
 
+    /**get a list with all saved meetings
+     *
+     *
+     * @return
+     */
+    public ArrayList<Meeting> getMeetings() {
+        ArrayList meetings = new ArrayList<Meeting>();
+
+        try {
+            String[] projection = {
+                    Tables.MEETING._ID,
+                    Tables.MEETING.COLUMN_TITLE,
+                    Tables.MEETING.COLUMN_DESCRIPTION,
+                    Tables.MEETING.COLUMN_CALENDAR
+            };
+
+            //* get the oldest meeting first
+            String sortOrder = Tables.MEETING.COLUMN_CALENDAR + " ASC";
+
+            Cursor cursor = db.query(
+                    Tables.MEETING.TABLE_NAME,
+                    projection,
+                    null,
+                    null,
+                    null,
+                    null,
+                    sortOrder
+            );
+
+
+            while (cursor.moveToNext()) {
+                Meeting meeting = new Meeting();
+
+                meeting.meeting_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.MEETING._ID));
+                meeting.meeting_title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.MEETING.COLUMN_TITLE));
+                meeting.meeting_description = cursor.getString(cursor.getColumnIndexOrThrow(Tables.MEETING.COLUMN_DESCRIPTION));
+                meeting.meeting_calendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndexOrThrow(Tables.MEETING.COLUMN_CALENDAR)));
+
+                meetings.add(meeting);
+            }
+
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return meetings;
+    }
 }

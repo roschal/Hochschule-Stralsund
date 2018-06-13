@@ -7,16 +7,16 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import teamg.hochschulestralsund.adapter.OnSwipeTouchListener;
 import teamg.hochschulestralsund.connect.Parser;
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
@@ -31,14 +31,13 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
     private ItemFragment fragment;
     private Intent intent;
 
-    private int currentDay;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         init();
+        setAdapter();
         parse();
         showCurrentDay();
     }
@@ -52,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
     /* create menubar */
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.timetable, menu);
+        inflater.inflate(R.menu.main, menu);
 
         /* set the icon color for 3 menu icons */
         for (int i = 0; i < 1; i++) {
@@ -69,11 +68,32 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         // Handle item selection
         switch (item.getItemId()) {
             /* show activity to add a new lecture */
-            case R.id.action_add_lecture:
-                intent = new Intent(this, AddLectureActivity.class);
+            case R.id.action_lectures:
+                intent = new Intent(this, LectureActivity.class);
                 startActivityForResult(intent, 0);
 
                 return true;
+            case R.id.action_exams:
+                intent = new Intent(this, ExamActivity.class);
+                startActivityForResult(intent, 0);
+
+                return true;
+                
+            case R.id.action_meetings:
+                intent = new Intent(this, MeetingActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt(MeetingActivity.CODE_MEETING, MeetingActivity.CODE_MEETING_SHOW_ALL);
+                intent.putExtras(bundle);
+                startActivityForResult(intent, 0);
+
+                return true;
+
+            case R.id.action_show_settings:
+                intent = new Intent(this, SettingsActivity.class);
+                startActivityForResult(intent, 0);
+
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -92,9 +112,23 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         customSQL.close();
 
         calendar = Calendar.getInstance();
-        currentDay = calendar.get(Calendar.DAY_OF_WEEK);
-        fragment = new ItemFragment();
         manager = getFragmentManager();
+    }
+
+    public void setAdapter() {
+        this.findViewById(android.R.id.content).setOnTouchListener(new OnSwipeTouchListener(this) {
+            public void onSwipeRight() {
+                showPreviosDay();
+            }
+
+            public void onSwipeLeft() {
+                showNextDay();
+            }
+
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
+            }
+        });
     }
 
     /* parse the website for lecturers */
@@ -103,18 +137,27 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         myParser.execute();
     }
 
-    public void showDay(int day, boolean init) {
+    public void showDay(String direction) {
         Bundle bundle = new Bundle();
-        bundle.putInt(CODE_SHOW_DAY, day);
+        bundle.putLong(CODE_SHOW_DAY, calendar.getTimeInMillis());
         fragment = new ItemFragment();
         fragment.setArguments(bundle);
 
         transaction = manager.beginTransaction();
 
-        if (init)
-            transaction.add(R.id.timetable_container, fragment, null);
-        else
-            transaction.replace(R.id.timetable_container, fragment, null);
+        switch (direction) {
+            case "left":
+                transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+                transaction.replace(R.id.timetable_container, fragment, null);
+                break;
+            case "right":
+                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+                transaction.replace(R.id.timetable_container, fragment, null);
+                break;
+            default:
+                transaction.add(R.id.timetable_container, fragment, null);
+                break;
+        }
 
         transaction.addToBackStack(null);
         transaction.commit();
@@ -122,63 +165,46 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
 
     /* show the fragment for the current day */
     void showCurrentDay() {
-        this.findViewById(android.R.id.content).setOnTouchListener(new OnSwipeTouchListener(this) {
-            public void onSwipeRight() {
-                showNextDay();
-            }
-
-            public void onSwipeLeft() {
-                showPreviosDay();
-            }
-
-            public boolean onTouch(View v, MotionEvent event) {
-                return gestureDetector.onTouchEvent(event);
-            }
-        });
-
-        showDay(currentDay, true);
+        showDay("none");
     }
 
     public void showPreviosDay() {
-        currentDay = getPreviosDay(currentDay);
-        showDay(currentDay, false);
+        calendar = getPreviosDay(calendar);
+        showDay("left");
     }
 
     public void showNextDay() {
-        currentDay = getNextDay(currentDay);
-        showDay(currentDay, false);
+        calendar = getNextDay(calendar);
+        showDay("right");
     }
 
+    public static Calendar getNextDay(Calendar calendar) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(calendar.getTime());
+        c.add(Calendar.DATE, 1);
 
-    protected static int getNextDay(int currentDay) {
-        switch (currentDay) {
-            case Calendar.MONDAY:
-            case Calendar.TUESDAY:
-            case Calendar.THURSDAY:
-            case Calendar.WEDNESDAY:
-                currentDay = currentDay + 1;
-                break;
-            default:
-                currentDay = Calendar.MONDAY;
-                break;
-        }
-
-        return currentDay;
+        return c;
     }
 
-    protected static int getPreviosDay(int currentDay) {
-        switch (currentDay) {
-            case Calendar.TUESDAY:
-            case Calendar.THURSDAY:
-            case Calendar.WEDNESDAY:
-            case Calendar.FRIDAY:
-                currentDay = currentDay - 1;
-                break;
-            default:
-                currentDay = Calendar.FRIDAY;
-                break;
-        }
+    public static Calendar getPreviosDay(Calendar calendar) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(calendar.getTime());
+        c.add(Calendar.DATE, -1);
 
-        return currentDay;
+        return c;
+    }
+
+    public static String parseDate(Calendar calendar) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        String formatted = simpleDateFormat.format(calendar.getTime());
+
+        return formatted;
+    }
+
+    public static String parseTime(Calendar calendar) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
+        String formatted = simpleDateFormat.format(calendar.getTime());
+
+        return formatted;
     }
 }

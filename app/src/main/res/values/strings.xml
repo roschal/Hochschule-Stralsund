@@ -3,7 +3,35 @@
     <string name="timetable_title_hint">Vorlesung</string>
     <string name="timetable_room_hint">Raum</string>
     <string name="timetable_lecturer_hint">Dozent</string>
-    <string name="add_lecture_submit">Vorlesung hinzufügen</string>
-    <string name="delete_lecture">Löschen</string>
-    <string name="edit_lecture">Bearbeiten</string>
+
+    <!-- menu main activity -->
+    <string name="menu_main_lecture">Vorlesungen</string>
+    <string name="menu_main_exam">Prüfungen</string>
+    <string name="menu_main_meeting">Termine</string>
+
+    <!-- menu -->
+    <string name="add_lecture">Vorlesung hinzufügen</string>
+    <string name="add_exam">Prüfung hinzufügen</string>
+    <string name="add_meeting">Termin hinzufügen</string>
+
+    <string name="delete_lecture">Vorlesung Löschen</string>
+    <string name="edit_lecture">Vorlesung bearbeiten</string>
+    <string name="delete_exam">Prüfung löschen</string>
+    <string name="edit_exam">Prüfung bearbeiten</string>
+    <string name="meeting_add">Termin hinzufügen</string>
+    <string name="delete_meeting">Termin löschen</string>
+    <string name="edit_meeting">Termin bearbeiten</string>
+
+    <!-- meeting -->
+    <string name="meeting_title">Name</string>
+    <string name="meeting_description">Beschreibung</string>
+
+
+    <string name="yesterday">Gestern</string>
+    <string name="today">Heute</string>
+    <string name="tomorrow">Morgen</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

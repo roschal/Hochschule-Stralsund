@@ -1,4 +1,4 @@
-package teamg.hochschulestralsund;
+package teamg.hochschulestralsund.adapter;
 
 import android.content.Context;
 import android.view.GestureDetector;

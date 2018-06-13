@@ -1,4 +1,4 @@
-package teamg.hochschulestralsund.exception;
+package teamg.hochschulestralsund.connect;
 
 /**
  * Created by ghostgate on 01.10.17.

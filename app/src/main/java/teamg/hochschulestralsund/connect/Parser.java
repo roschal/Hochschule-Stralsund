@@ -2,7 +2,6 @@ package teamg.hochschulestralsund.connect;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,8 +9,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-import teamg.hochschulestralsund.exception.ParserException;
-import teamg.hochschulestralsund.sql.Lecturer;
+import teamg.hochschulestralsund.sql.Person;
 import teamg.hochschulestralsund.sql.CustomSQL;
 
 /**
@@ -177,7 +175,7 @@ public class Parser extends AsyncTask<Void, Integer, Boolean> {
             srcLecturers = srcLecturers.substring(srcLecturers.indexOf("<div class=\"grid__column grid__column--xs-9 grid__column--sm-6 grid__column--md-6 grid__column--lg-6 contact-list__person-informations\">"));
             srcLecturers = srcLecturers.substring(srcLecturers.indexOf("</div></div></div></div>") + "</div></div></div></div>".length());
 
-            Lecturer lecturer = new Lecturer(forename, surname, academic_title, mail, telephone);
+            Person lecturer = new Person(forename, surname, academic_title, mail, telephone);
             customSQL.addLecturerIfNotExist(lecturer);
         }
 

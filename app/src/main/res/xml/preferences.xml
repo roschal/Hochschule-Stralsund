@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:defaultValue="Deutsch"
+        android:dialogTitle="Sprache einstellen"
+        android:entries="@array/languages"
+        android:entryValues="@array/languages"
+        android:key="pref_syncConnectionType"
+        android:title="Sprache" />
+</PreferenceScreen>

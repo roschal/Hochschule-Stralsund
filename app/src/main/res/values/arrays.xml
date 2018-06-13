@@ -21,4 +21,9 @@
         <item>Labor</item>
         <item>Tutorium</item>
     </string-array>
+
+    <string-array name="languages">
+        <item>Deutsch</item>
+        <item>English</item>
+    </string-array>
 </resources>

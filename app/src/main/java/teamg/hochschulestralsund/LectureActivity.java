@@ -4,7 +4,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,10 +20,10 @@ import teamg.hochschulestralsund.adapter.AdapterRoom;
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
 import teamg.hochschulestralsund.sql.LectureTime;
-import teamg.hochschulestralsund.sql.Lecturer;
+import teamg.hochschulestralsund.sql.Person;
 import teamg.hochschulestralsund.sql.Location;
 
-public class AddLectureActivity extends AppCompatActivity {
+public class LectureActivity extends AppCompatActivity {
     public EditText editText_title;
     public AutoCompleteTextView editText_location;
     public AutoCompleteTextView editText_lecturer;
@@ -38,7 +37,7 @@ public class AddLectureActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_lecture);
+        setContentView(R.layout.activity_lecture);
 
         init();
         setDay();
@@ -55,7 +54,6 @@ public class AddLectureActivity extends AppCompatActivity {
         spinner = findViewById(R.id.spinner_add_lecture_time);
         spinner_type = findViewById(R.id.spinner_add_lecture_type);
 
-        customSQL = new CustomSQL(this);
         lecture = new Lecture();
     }
 
@@ -63,7 +61,9 @@ public class AddLectureActivity extends AppCompatActivity {
     public void setDay() {
         Calendar calendar = Calendar.getInstance();
         int DAY_OF_WEEK = calendar.get(Calendar.DAY_OF_WEEK);
-        lecture.DAY_OF_WEEK = DAY_OF_WEEK;
+
+        lecture.event_begin = Calendar.getInstance();
+        lecture.event_begin.setTime(calendar.getTime());
 
         switch (DAY_OF_WEEK) {
             case 2:
@@ -89,6 +89,8 @@ public class AddLectureActivity extends AppCompatActivity {
 
     /* set the adapter */
     public void setAdapter() {
+        customSQL = new CustomSQL(this);
+
         editText_location.setAdapter(new AdapterRoom(this,
                 android.R.layout.simple_dropdown_item_1line, customSQL.getLocations()));
 
@@ -115,7 +117,7 @@ public class AddLectureActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                lecture.title = editText_title.getText().toString();
+                lecture.event_title = editText_title.getText().toString();
             }
 
             @Override
@@ -127,14 +129,14 @@ public class AddLectureActivity extends AppCompatActivity {
         editText_location.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                lecture.location = (Location) parent.getItemAtPosition(position);
+                lecture.event_location = (Location) parent.getItemAtPosition(position);
             }
         });
 
         editText_lecturer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                lecture.lecturer = (Lecturer) parent.getItemAtPosition(position);
+                lecture.event_person = (Person) parent.getItemAtPosition(position);
             }
         });
 
@@ -143,23 +145,23 @@ public class AddLectureActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.radioButton_add_lecture_mo:
-                        lecture.DAY_OF_WEEK = 2;
+                        lecture.event_begin.set(Calendar.DAY_OF_WEEK, 2);
                         break;
                     case R.id.radioButton_add_lecture_di:
-                        lecture.DAY_OF_WEEK = 3;
+                        lecture.event_begin.set(Calendar.DAY_OF_WEEK, 3);
                         break;
                     case R.id.radioButton_add_lecture_mi:
-                        lecture.DAY_OF_WEEK = 4;
+                        lecture.event_begin.set(Calendar.DAY_OF_WEEK, 4);
                         break;
                     case R.id.radioButton_add_lecture_do:
-                        lecture.DAY_OF_WEEK = 5;
+                        lecture.event_begin.set(Calendar.DAY_OF_WEEK, 5);
                         break;
                     case R.id.radioButton_add_lecture_fr:
-                        lecture.DAY_OF_WEEK = 6;
+                        lecture.event_begin.set(Calendar.DAY_OF_WEEK, 6);
                         break;
                     /* just in case */
                     default:
-                        lecture.DAY_OF_WEEK = 2;
+                        lecture.event_begin.set(Calendar.DAY_OF_WEEK, 2);
                         break;
                 }
             }
@@ -168,7 +170,7 @@ public class AddLectureActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                lecture.lectureTime = (LectureTime) parent.getItemAtPosition(position);
+                lecture.lecture_time = (LectureTime) parent.getItemAtPosition(position);
             }
 
             @Override
@@ -180,7 +182,7 @@ public class AddLectureActivity extends AppCompatActivity {
         spinner_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                lecture.lectureType = (String) parent.getItemAtPosition(position);
+                lecture.lecture_type = (String) parent.getItemAtPosition(position);
             }
 
             @Override
@@ -188,9 +190,12 @@ public class AddLectureActivity extends AppCompatActivity {
 
             }
         });
+
+    customSQL.close();
     }
 
     public void submit(View view) {
+        customSQL = new CustomSQL(this);
         customSQL.addLecture(lecture);
         customSQL.close();
 

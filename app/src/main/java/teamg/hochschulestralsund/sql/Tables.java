@@ -7,12 +7,11 @@ import android.provider.BaseColumns;
  */
 
 public class Tables {
-    public static class TIMETABLE implements BaseColumns {
-        public static final String TABLE_NAME = "Timetable";
-        public static final String COLUMN_ID_LECTURE = "id_lecture";
-        public static final String COLUMN_ID_LECTURER = "id_lecturer";
-        public static final String COLUMN_ID_LOCATION = "id_location";
-        public static final String COLUMN_ID_TIME = "id_time";
+    public static class MEETING implements BaseColumns {
+        public static final String TABLE_NAME = "Meeting";
+        public static final String COLUMN_TITLE = "meeting_title";
+        public static final String COLUMN_DESCRIPTION = "meeting_description";
+        public static final String COLUMN_CALENDAR = "meeting_calendar";
     }
 
     public static class LECTURER implements BaseColumns {
@@ -26,12 +25,17 @@ public class Tables {
 
     public static class LECTURE implements BaseColumns {
         public static final String TABLE_NAME = "Lecture";
-        public static final String COLUMN_TITLE = "title";
-        public static final String COLUMN_LOCATION_ID = "location_id";
-        public static final String COLUMN_LECTURER_ID = "lecturer_id";
-        public static final String COLUMN_DAY_OF_WEEK = "day_of_week";
+        public static final String COLUMN_TITLE = "lecture_title";
+        public static final String COLUMN_TYPE = "lecture_type";
+        public static final String COLUMN_REPEAT = "lecture_repeat";
+        public static final String COLUMN_BEGIN = "lecture_begin";
+        public static final String COLUMN_END = "lecture_end";
+        public static final String COLUMN_DEFAULT_LOCATION = "lecture_default_location";
+        public static final String COLUMN_DEFAULT_PERSON = "lecture_default_person";
+        public static final String COLUMN_DEFAULT_TIME = "lecture_default_time";
+        public static final String COLUMN_LOCATION_ID = "lecture_location_id";
+        public static final String COLUMN_LECTURER_ID = "lecture_person_id";
         public static final String COLUMN_LECTURE_TIME_ID = "lecture_time_id";
-        public static final String COLUMN_LECTURE_TYPE = "lecture_type";
     }
 
     public static class LECTURE_TIME implements BaseColumns {
@@ -45,13 +49,5 @@ public class Tables {
         public static final String COLUMN_HOUSE = "house";
         public static final String COLUMN_ROOM = "room";
         public static final String COLUMN_NAME = "name";
-    }
-
-    public static class TIME implements BaseColumns {
-        public static final String TABLE_NAME = "Time";
-        public static final String COLUMN_BEGIN_HOUR = "begin_hour";
-        public static final String COLUMN_BEGIN_MINUTE = "begin_minute";
-        public static final String COLUMN_END_HOUR = "end_hour";
-        public static final String COLUMN_END_MINUTE = "end_minute";
     }
 }

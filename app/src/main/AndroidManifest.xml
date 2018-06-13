@@ -17,8 +17,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddLectureActivity" />
-        <activity android:name=".LectureDetail"></activity>
+        <activity
+            android:name=".LectureActivity"
+            android:label="@string/menu_main_lecture" />
+        <activity android:name=".LectureDetail" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".ExamActivity"
+            android:label="@string/menu_main_exam" />
+        <activity
+            android:name=".MeetingActivity"
+            android:label="@string/menu_main_meeting" />
+        <activity android:name=".ContactActivity"></activity>
     </application>
 
 </manifest>

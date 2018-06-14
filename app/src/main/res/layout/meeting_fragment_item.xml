@@ -8,7 +8,7 @@
     android:background="@drawable/fragment_item_border">
 
     <TextView
-        android:id="@+id/textView_exam_time"
+        android:id="@+id/textView_lecture_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -36,7 +36,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView_exam_title"
+        android:id="@+id/textView_lecture_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -50,7 +50,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView_exam_location"
+        android:id="@+id/textView_lecture_location"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -61,6 +61,6 @@
         android:hint="@string/meeting_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView_exam_date"
-        app:layout_constraintTop_toBottomOf="@+id/textView_exam_title" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_lecture_title" />
 
 </android.support.constraint.ConstraintLayout>

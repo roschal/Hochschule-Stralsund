@@ -1,12 +1,15 @@
 package teamg.hochschulestralsund.sql;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Calendar;
 
 /**
  * Created by ghostgate on 11.05.18.
  */
 
-public class Lecture extends Event {
+public class Lecture extends Event implements Parcelable {
     public String lecture_type; /* lecture type */
     public int lecture_repeat = 7;      /* 7 oder 14 days */
 
@@ -46,5 +49,41 @@ public class Lecture extends Event {
         this.event_person = lecture_person;
         this.lecture_time = lecture_time;
     }
-}
 
+    protected Lecture(Parcel in) {
+        lecture_type = in.readString();
+        lecture_repeat = in.readInt();
+        lecture_default_location = in.readInt();
+        lecture_default_person = in.readInt();
+        lecture_default_time = in.readInt();
+        lecture_time = (LectureTime) in.readValue(LectureTime.class.getClassLoader());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(lecture_type);
+        dest.writeInt(lecture_repeat);
+        dest.writeInt(lecture_default_location);
+        dest.writeInt(lecture_default_person);
+        dest.writeInt(lecture_default_time);
+        dest.writeValue(lecture_time);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Lecture> CREATOR = new Parcelable.Creator<Lecture>() {
+        @Override
+        public Lecture createFromParcel(Parcel in) {
+            return new Lecture(in);
+        }
+
+        @Override
+        public Lecture[] newArray(int size) {
+            return new Lecture[size];
+        }
+    };
+}

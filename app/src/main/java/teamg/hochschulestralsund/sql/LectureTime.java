@@ -1,12 +1,15 @@
 package teamg.hochschulestralsund.sql;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Calendar;
 
 /**
  * Created by ghostgate on 11.05.18.
  */
 
-public class LectureTime {
+public class LectureTime implements Parcelable {
     public long id;
 
     public Calendar begin = Calendar.getInstance();
@@ -62,4 +65,35 @@ public class LectureTime {
 
         return beginHour + ":" + beginMinute + " - " + endHour + ":" + endMinute;
     }
+
+    protected LectureTime(Parcel in) {
+        id = in.readLong();
+        begin = (Calendar) in.readValue(Calendar.class.getClassLoader());
+        end = (Calendar) in.readValue(Calendar.class.getClassLoader());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeValue(begin);
+        dest.writeValue(end);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<LectureTime> CREATOR = new Parcelable.Creator<LectureTime>() {
+        @Override
+        public LectureTime createFromParcel(Parcel in) {
+            return new LectureTime(in);
+        }
+
+        @Override
+        public LectureTime[] newArray(int size) {
+            return new LectureTime[size];
+        }
+    };
 }

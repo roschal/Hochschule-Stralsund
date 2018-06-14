@@ -31,12 +31,9 @@
     <string name="meeting_title">Name</string>
     <string name="meeting_description">Beschreibung</string>
 
-
     <string name="yesterday">Gestern</string>
     <string name="today">Heute</string>
     <string name="tomorrow">Morgen</string>
     <string name="title_activity_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

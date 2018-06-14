@@ -76,10 +76,10 @@ public class MeetingMyItemRecyclerViewAdapter extends RecyclerView.Adapter<Meeti
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            textView_meeting_title = view.findViewById(R.id.textView_exam_title);
-            textView_meeting_description = view.findViewById(R.id.textView_exam_location);
+            textView_meeting_title = view.findViewById(R.id.textView_lecture_title);
+            textView_meeting_description = view.findViewById(R.id.textView_lecture_location);
             textView_meeting_date = view.findViewById(R.id.textView_exam_date);
-            textView_meeting_time = view.findViewById(R.id.textView_exam_time);
+            textView_meeting_time = view.findViewById(R.id.textView_lecture_time);
         }
     }
 }

@@ -10,4 +10,4 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".LectureItemFragment"
-    tools:listitem="@layout/lecturefragment_item" />
+    tools:listitem="@layout/lecture_fragment_item" />

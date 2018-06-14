@@ -71,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
             /* show activity to add a new lecture */
             case R.id.action_lectures:
                 intent = new Intent(this, LectureActivity.class);
+                bundle = new Bundle();
+                bundle.putInt(LectureActivity.CODE_LECTURE, LectureActivity.CODE_LECTURE_SHOW_ALL);
+                intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
 
                 return true;

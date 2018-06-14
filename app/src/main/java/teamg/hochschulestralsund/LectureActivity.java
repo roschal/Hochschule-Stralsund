@@ -1,205 +1,153 @@
 package teamg.hochschulestralsund;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-
-import teamg.hochschulestralsund.adapter.AdapterLecturer;
-import teamg.hochschulestralsund.adapter.AdapterRoom;
-import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
-import teamg.hochschulestralsund.sql.LectureTime;
-import teamg.hochschulestralsund.sql.Person;
-import teamg.hochschulestralsund.sql.Location;
+import teamg.hochschulestralsund.sql.Lecture;
 
-public class LectureActivity extends AppCompatActivity {
-    public EditText editText_title;
-    public AutoCompleteTextView editText_location;
-    public AutoCompleteTextView editText_lecturer;
-    public RadioGroup radioGroup;
-    public Spinner spinner;
-    public Spinner spinner_type;
+public class LectureActivity extends AppCompatActivity implements LectureItemFragment.OnListFragmentInteractionListener{
+    public static final String CODE_LECTURE = "CODE_LECTURE";
+    public static final int CODE_LECTURE_ADD = 0;
+    public static final int CODE_LECTURE_EDIT = 1;
+    public static final int CODE_LECTURE_DELETE = 2;
+    public static final int CODE_LECTURE_SHOW_ALL = 3;
+    public static final String CODE_LECTURE_PARCELABLE = "CODE_LECTURE_PARCELABLE";
 
-    public CustomSQL customSQL;
-    public Lecture lecture;
+
+    private LectureItemFragment itemFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lecture);
 
-        init();
-        setDay();
-        setAdapter();
+        parseBundle();
     }
 
-    /* init the view */
-    public void init()
-    {
-        editText_title = findViewById(R.id.editText_add_Lecture_title);
-        editText_location = findViewById(R.id.editText_add_lecture_location);
-        editText_lecturer = findViewById(R.id.editText_add_lecture_lecturer);
-        radioGroup = findViewById(R.id.radioGroup_add_lecture_day);
-        spinner = findViewById(R.id.spinner_add_lecture_time);
-        spinner_type = findViewById(R.id.spinner_add_lecture_type);
+    @Override
+    /**create the menu
+     *
+     * @return boolean
+     */
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.lecture, menu);
 
-        lecture = new Lecture();
+        menu.getItem(1).setVisible(false);
+        menu.getItem(2).setVisible(false);
+
+        /* set the icon color for 3 menu icons */
+        for (int i = 0; i < 3; i++) {
+            Drawable drawable = menu.getItem(i).getIcon();
+            drawable.mutate();
+            drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
+        }
+
+        return true;
     }
 
-    /* set the current day on the radiogroup */
-    public void setDay() {
-        Calendar calendar = Calendar.getInstance();
-        int DAY_OF_WEEK = calendar.get(Calendar.DAY_OF_WEEK);
+    @Override
+    /**override click handler on menu
+     *
+     * @return boolean
+     */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            /* show activity to add a new lecture */
+            case R.id.action_add_lecture:
+                addLecture(getFragmentManager());
 
-        lecture.event_begin = Calendar.getInstance();
-        lecture.event_begin.setTime(calendar.getTime());
+                return true;
+            case R.id.action_edit_lecture:
+                editLecture(null, null);
 
-        switch (DAY_OF_WEEK) {
-            case 2:
-                radioGroup.check(R.id.radioButton_add_lecture_mo);
-                break;
-            case 3:
-                radioGroup.check(R.id.radioButton_add_lecture_di);
-                break;
-            case 4:
-                radioGroup.check(R.id.radioButton_add_lecture_mi);
-                break;
-            case 5:
-                radioGroup.check(R.id.radioButton_add_lecture_do);
-                break;
-            case 6:
-                radioGroup.check(R.id.radioButton_add_lecture_fr);
-                break;
+                return true;
+            case R.id.action_delete_lecture:
+                deleteLecture();
+
+                return true;
+
             default:
-                radioGroup.check(R.id.radioButton_add_lecture_mo);
-                break;
+                return super.onOptionsItemSelected(item);
         }
     }
 
-    /* set the adapter */
-    public void setAdapter() {
-        customSQL = new CustomSQL(this);
-
-        editText_location.setAdapter(new AdapterRoom(this,
-                android.R.layout.simple_dropdown_item_1line, customSQL.getLocations()));
-
-        editText_lecturer.setAdapter(new AdapterLecturer(this,
-                android.R.layout.simple_dropdown_item_1line, customSQL.getLecturers()));
-
-        final ArrayList<LectureTime> lectureTimes = customSQL.getLectureTimes();
-        ArrayAdapter<LectureTime> adapterLectureTime = new ArrayAdapter<>(this,
-                android.R.layout.simple_dropdown_item_1line, lectureTimes);
-        spinner.setAdapter(adapterLectureTime);
-
-        String[] types = getResources().getStringArray(R.array.lecture_type);
-        ArrayAdapter<String> adapterLectureType = new ArrayAdapter<>(this,
-                android.R.layout.simple_dropdown_item_1line, types);
-        spinner_type.setAdapter(adapterLectureType);
-        spinner_type.setSelection(0);
-
-        /* override the click handler */
-        editText_title.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                lecture.event_title = editText_title.getText().toString();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        editText_location.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                lecture.event_location = (Location) parent.getItemAtPosition(position);
-            }
-        });
-
-        editText_lecturer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                lecture.event_person = (Person) parent.getItemAtPosition(position);
-            }
-        });
-
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.radioButton_add_lecture_mo:
-                        lecture.event_begin.set(Calendar.DAY_OF_WEEK, 2);
-                        break;
-                    case R.id.radioButton_add_lecture_di:
-                        lecture.event_begin.set(Calendar.DAY_OF_WEEK, 3);
-                        break;
-                    case R.id.radioButton_add_lecture_mi:
-                        lecture.event_begin.set(Calendar.DAY_OF_WEEK, 4);
-                        break;
-                    case R.id.radioButton_add_lecture_do:
-                        lecture.event_begin.set(Calendar.DAY_OF_WEEK, 5);
-                        break;
-                    case R.id.radioButton_add_lecture_fr:
-                        lecture.event_begin.set(Calendar.DAY_OF_WEEK, 6);
-                        break;
-                    /* just in case */
-                    default:
-                        lecture.event_begin.set(Calendar.DAY_OF_WEEK, 2);
-                        break;
-                }
-            }
-        });
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                lecture.lecture_time = (LectureTime) parent.getItemAtPosition(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        spinner_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                lecture.lecture_type = (String) parent.getItemAtPosition(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-    customSQL.close();
+    @Override
+    public void onListFragmentInteraction(Lecture lecture) {
+        Log.e("hi", "hi");
+        editLecture(getFragmentManager(), lecture);
     }
 
-    public void submit(View view) {
-        customSQL = new CustomSQL(this);
-        customSQL.addLecture(lecture);
-        customSQL.close();
+    private void parseBundle() {
 
-        setResult(0);
-        finish();
+        if(getIntent().hasExtra(CODE_LECTURE)) {
+            int code = getIntent().getIntExtra(CODE_LECTURE, CODE_LECTURE_SHOW_ALL);
+
+            switch (code) {
+                case CODE_LECTURE_SHOW_ALL:
+                    showLectures(getFragmentManager(), true);
+                    break;
+            }
+
+        }
+    }
+
+    /**show all Lectures
+     *
+     */
+    protected static void showLectures(FragmentManager manager, boolean firstTime) {
+        LectureItemFragment lectureItemFragment = new LectureItemFragment();
+        FragmentTransaction transaction;
+
+        transaction = manager.beginTransaction();
+
+        if (firstTime)
+            transaction.add(R.id.lecture_container, lectureItemFragment, null);
+        else
+            transaction.replace(R.id.lecture_container, lectureItemFragment, null);
+
+        transaction.commit();
+    }
+
+    protected static void addLecture(FragmentManager manager) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(CODE_LECTURE, CODE_LECTURE_ADD);
+        LectureAddEditFragment fragment = new LectureAddEditFragment();
+        fragment.setArguments(bundle);
+
+        FragmentTransaction transaction;
+        transaction = manager.beginTransaction();
+        transaction.replace(R.id.lecture_container, fragment, null);
+        transaction.commit();
+    }
+
+    private static void editLecture(FragmentManager manager, Lecture lecture) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(CODE_LECTURE, CODE_LECTURE_EDIT);
+        bundle.putParcelable(CODE_LECTURE_PARCELABLE, lecture);
+
+        LectureAddEditFragment fragment = new LectureAddEditFragment();
+        fragment.setArguments(bundle);
+
+        FragmentTransaction transaction;
+        transaction = manager.beginTransaction();
+        transaction.replace(R.id.lecture_container, fragment, null);
+        transaction.commit();
+    }
+
+    private void deleteLecture() {
+
     }
 }

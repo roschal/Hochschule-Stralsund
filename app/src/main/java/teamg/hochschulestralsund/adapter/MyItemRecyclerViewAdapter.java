@@ -1,6 +1,5 @@
 package teamg.hochschulestralsund.adapter;
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,9 +71,9 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public ViewHolder(View view) {
             super(view);
             this.view = view;
-            textView_time = view.findViewById(R.id.textView_exam_time);
-            textView_title = view.findViewById(R.id.textView_exam_title);
-            textView_room = view.findViewById(R.id.textView_exam_location);
+            textView_time = view.findViewById(R.id.textView_lecture_time);
+            textView_title = view.findViewById(R.id.textView_lecture_title);
+            textView_room = view.findViewById(R.id.textView_lecture_location);
             textView_lecturer = view.findViewById(R.id.timetable_textView_Lecturer);
             customSQL = new CustomSQL(view.getContext());
         }

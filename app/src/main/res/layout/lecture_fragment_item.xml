@@ -48,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView_lecture_title" />
 
     <TextView
-        android:id="@+id/timetable_textView_Lecturer"
+        android:id="@+id/textView_lecture_person"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"

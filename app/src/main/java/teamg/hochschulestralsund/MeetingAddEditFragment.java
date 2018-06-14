@@ -192,6 +192,6 @@ public class MeetingAddEditFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Meeting meeting);
     }
 }

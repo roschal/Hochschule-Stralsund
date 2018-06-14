@@ -50,7 +50,6 @@ public class LectureAddEditFragment extends Fragment {
     public Spinner spinner_type;
     public Button button_lecture_submit;
 
-    private OnFragmentInteractionListener mListener;
     private Lecture lecture = new Lecture();
 
     public LectureAddEditFragment() {
@@ -65,23 +64,6 @@ public class LectureAddEditFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_lecture_add, container, false);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     /**init the view elements

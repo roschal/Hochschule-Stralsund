@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import teamg.hochschulestralsund.MainActivity;
+import teamg.hochschulestralsund.MeetingActivity;
 import teamg.hochschulestralsund.MeetingItemFragment;
 import teamg.hochschulestralsund.MeetingItemFragment.OnListFragmentInteractionListener;
 import teamg.hochschulestralsund.R;
@@ -50,11 +51,7 @@ public class MeetingMyItemRecyclerViewAdapter extends RecyclerView.Adapter<Meeti
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("hi", "hi");
-                if (null != mListener) {
-                    Log.e("hi", "hi");
-                    mListener.onListFragmentInteraction(holder.meeting);
-                }
+                MeetingActivity.editMeeting(itemFragment.getFragmentManager(), holder.meeting);
             }
         });
     }

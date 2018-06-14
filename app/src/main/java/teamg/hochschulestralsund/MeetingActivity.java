@@ -107,7 +107,7 @@ public class MeetingActivity extends AppCompatActivity implements MeetingItemFra
     /**show all Meetings
      *
      */
-    protected static void showMeetings(FragmentManager manager, boolean firstTime) {
+    public static void showMeetings(FragmentManager manager, boolean firstTime) {
         MeetingItemFragment meetingItemFragment = new MeetingItemFragment();
         FragmentTransaction transaction;
 
@@ -121,7 +121,7 @@ public class MeetingActivity extends AppCompatActivity implements MeetingItemFra
         transaction.commit();
     }
 
-    protected static void addMeeting(FragmentManager manager) {
+    public static void addMeeting(FragmentManager manager) {
         Bundle bundle = new Bundle();
         bundle.putInt(CODE_MEETING, CODE_MEETING_ADD);
         MeetingAddEditFragment fragment = new MeetingAddEditFragment();
@@ -133,7 +133,7 @@ public class MeetingActivity extends AppCompatActivity implements MeetingItemFra
         transaction.commit();
     }
 
-    private static void editMeeting(FragmentManager manager, Meeting meeting) {
+    public static void editMeeting(FragmentManager manager, Meeting meeting) {
         Bundle bundle = new Bundle();
         bundle.putInt(CODE_MEETING, CODE_MEETING_EDIT);
         bundle.putParcelable(CODE_MEETING_PARCELABLE, meeting);

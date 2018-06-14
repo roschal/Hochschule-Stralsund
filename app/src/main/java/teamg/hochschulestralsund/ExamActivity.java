@@ -106,7 +106,7 @@ public class ExamActivity extends AppCompatActivity implements ExamItemFragment.
     /**show all Exams
      *
      */
-    protected static void showExams(FragmentManager manager, boolean firstTime) {
+    public static void showExams(FragmentManager manager, boolean firstTime) {
         ExamItemFragment examItemFragment = new ExamItemFragment();
         FragmentTransaction transaction;
 
@@ -120,7 +120,7 @@ public class ExamActivity extends AppCompatActivity implements ExamItemFragment.
         transaction.commit();
     }
 
-    protected static void addExam(FragmentManager manager) {
+    public static void addExam(FragmentManager manager) {
         Bundle bundle = new Bundle();
         bundle.putInt(CODE_EXAM, CODE_EXAM_ADD);
         ExamAddEditFragment fragment = new ExamAddEditFragment();
@@ -132,7 +132,7 @@ public class ExamActivity extends AppCompatActivity implements ExamItemFragment.
         transaction.commit();
     }
 
-    private static void editExam(FragmentManager manager, Exam exam) {
+    public static void editExam(FragmentManager manager, Exam exam) {
         Bundle bundle = new Bundle();
         bundle.putInt(CODE_EXAM, CODE_EXAM_EDIT);
         bundle.putParcelable(CODE_EXAM_PARCELABLE, exam);

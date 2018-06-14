@@ -107,7 +107,7 @@ public class LectureActivity extends AppCompatActivity implements LectureItemFra
     /**show all Lectures
      *
      */
-    protected static void showLectures(FragmentManager manager, boolean firstTime) {
+    public static void showLectures(FragmentManager manager, boolean firstTime) {
         LectureItemFragment lectureItemFragment = new LectureItemFragment();
         FragmentTransaction transaction;
 
@@ -121,7 +121,7 @@ public class LectureActivity extends AppCompatActivity implements LectureItemFra
         transaction.commit();
     }
 
-    protected static void addLecture(FragmentManager manager) {
+    public static void addLecture(FragmentManager manager) {
         Bundle bundle = new Bundle();
         bundle.putInt(CODE_LECTURE, CODE_LECTURE_ADD);
         LectureAddEditFragment fragment = new LectureAddEditFragment();
@@ -133,7 +133,7 @@ public class LectureActivity extends AppCompatActivity implements LectureItemFra
         transaction.commit();
     }
 
-    private static void editLecture(FragmentManager manager, Lecture lecture) {
+    public static void editLecture(FragmentManager manager, Lecture lecture) {
         Bundle bundle = new Bundle();
         bundle.putInt(CODE_LECTURE, CODE_LECTURE_EDIT);
         bundle.putParcelable(CODE_LECTURE_PARCELABLE, lecture);

@@ -2,6 +2,7 @@ package teamg.hochschulestralsund.sql;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -21,15 +22,20 @@ import teamg.hochschulestralsund.R;
  */
 
 public class CustomSQL extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 6;
     public static final String DATABASE_NAME = "hochschule.db";
 
-    private static final String SQL_CREATE_TABLE_MEETING =
-            "CREATE TABLE IF NOT EXISTS " + Tables.MEETING.TABLE_NAME + " (" +
-                    Tables.MEETING._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                    Tables.MEETING.COLUMN_TITLE + " TEXT," +
-                    Tables.MEETING.COLUMN_DESCRIPTION + " TEXT," +
-                    Tables.MEETING.COLUMN_CALENDAR + " BIGINT)";
+    private static final String SQL_CREATE_TABLE_EXAM =
+            "CREATE TABLE IF NOT EXISTS " + Tables.EXAM.TABLE_NAME + " (" +
+                    Tables.EXAM._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                    Tables.EXAM.COLUMN_TITLE + " TEXT," +
+                    Tables.EXAM.COLUMN_BEGIN + " BIGINT," +
+                    Tables.EXAM.COLUMN_END + " BIGINT," +
+                    Tables.EXAM.COLUMN_LOCATION_ID + " INTEGER," +
+                    Tables.EXAM.COLUMN_LECTURER_ID + " INTEGER," +
+                    Tables.EXAM.COLUMN_DEFAULT_LOCATION + " INTEGER," +
+                    Tables.EXAM.COLUMN_DEFAULT_PERSON + " INTEGER," +
+                    Tables.EXAM.COLUMN_TYPE + " TEXT)";
 
     private static final String SQL_CREATE_TABLE_LECTURE =
             "CREATE TABLE IF NOT EXISTS " + Tables.LECTURE.TABLE_NAME + " (" +
@@ -68,7 +74,16 @@ public class CustomSQL extends SQLiteOpenHelper {
                     Tables.LOCATION.COLUMN_ROOM + " TEXT," +
                     Tables.LOCATION.COLUMN_NAME + " TEXT)";
 
+    private static final String SQL_CREATE_TABLE_MEETING =
+            "CREATE TABLE IF NOT EXISTS " + Tables.MEETING.TABLE_NAME + " (" +
+                    Tables.MEETING._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                    Tables.MEETING.COLUMN_TITLE + " TEXT," +
+                    Tables.MEETING.COLUMN_DESCRIPTION + " TEXT," +
+                    Tables.MEETING.COLUMN_CALENDAR + " BIGINT)";
+
     /* SQL delete */
+    private static final String SQL_DELETE_TABLE_EXAM =
+            "DROP TABLE IF EXISTS " + Tables.EXAM.TABLE_NAME;
     private static final String SQL_DELETE_TABLE_LECTURE =
             "DROP TABLE IF EXISTS " + Tables.LECTURE.TABLE_NAME;
     private static final String SQL_DELETE_TABLE_LECTURER =
@@ -148,6 +163,52 @@ public class CustomSQL extends SQLiteOpenHelper {
 
     /////////////////////////////////////////////////////////////////////////////////////////
     /* add */
+
+    /**Adds a Exam object to the database
+     *
+     * @param exam
+     * @return id
+     */
+    public long addExam(Exam exam) {
+        long id = -1;
+
+        try {
+            db = getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            values.put(Tables.EXAM.COLUMN_TITLE, exam.exam_title);
+            values.put(Tables.EXAM.COLUMN_BEGIN, exam.exam_begin.getTimeInMillis());
+            values.put(Tables.EXAM.COLUMN_END, exam.exam_end.getTimeInMillis());
+            values.put(Tables.EXAM.COLUMN_TYPE, exam.exam_type);
+            values.put(Tables.EXAM.COLUMN_LOCATION_ID, exam.exam_location.id);
+            values.put(Tables.EXAM.COLUMN_LECTURER_ID, exam.exam_person.id);
+            values.put(Tables.EXAM.COLUMN_DEFAULT_LOCATION, exam.exam_default_location);
+            values.put(Tables.EXAM.COLUMN_DEFAULT_PERSON, exam.exam_default_person);
+
+            Log.d("Adding new exam", "...");
+
+            Log.i(Tables.EXAM.COLUMN_TITLE, exam.exam_title);
+            Log.i(Tables.EXAM.COLUMN_BEGIN, Long.toString(exam.exam_begin.getTimeInMillis()));
+            Log.i(Tables.EXAM.COLUMN_END, Long.toString(exam.exam_end.getTimeInMillis()));
+            Log.i(Tables.EXAM.COLUMN_TYPE, exam.exam_type);
+            Log.i(Tables.EXAM.COLUMN_LOCATION_ID, Long.toString(exam.exam_location.id));
+            Log.i(Tables.EXAM.COLUMN_LECTURER_ID, Long.toString(exam.exam_person.id));
+            Log.i(Tables.EXAM.COLUMN_DEFAULT_LOCATION, Integer.toString(exam.exam_default_location));
+            Log.i(Tables.EXAM.COLUMN_DEFAULT_PERSON, Integer.toString(exam.exam_default_person));
+
+            id = db.insert(Tables.EXAM.TABLE_NAME, null, values);
+
+            /* if everything is fine */
+            if(id > 0)
+                Log.d("Adding new exam", "OK - id " + String.valueOf(id));
+            else
+                Log.e("Adding new exam", "FAIL");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return id;
+    }
 
     /**Adds a Lecture object to the database
      *
@@ -330,6 +391,7 @@ public class CustomSQL extends SQLiteOpenHelper {
 
     public void createTablesIfNotExist() {
         try {
+            db.execSQL(SQL_CREATE_TABLE_EXAM);
             db.execSQL(SQL_CREATE_TABLE_LECTURE);
             db.execSQL(SQL_CREATE_TABLE_LECTURER);
             db.execSQL(SQL_CREATE_TABLE_LECTURE_TIME);
@@ -369,6 +431,63 @@ public class CustomSQL extends SQLiteOpenHelper {
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // get
+
+    public ArrayList<Exam> getExams() {
+        ArrayList<Exam> exams = new ArrayList<>();
+
+        try {
+            Log.d("Getting exams", "...");
+
+            final String QUERY_EXAM = "SELECT * FROM " + Tables.EXAM.TABLE_NAME
+                    + " a INNER JOIN " + Tables.LOCATION.TABLE_NAME + " b ON a." + Tables.EXAM.COLUMN_LOCATION_ID + "=b._ID"
+                    + " INNER JOIN " + Tables.LECTURER.TABLE_NAME + " c ON a." + Tables.EXAM.COLUMN_LECTURER_ID + "=c._ID";
+
+            Cursor cursor = db.rawQuery(QUERY_EXAM, null);
+
+            while (cursor.moveToNext()) {
+                Exam exam = new Exam();
+
+                exam.exam_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.EXAM._ID));
+                exam.exam_title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.EXAM.COLUMN_TITLE));
+                exam.exam_begin.setTimeInMillis(cursor.getLong(cursor.getColumnIndexOrThrow(Tables.EXAM.COLUMN_BEGIN)));
+                exam.exam_end.setTimeInMillis(cursor.getLong(cursor.getColumnIndexOrThrow(Tables.EXAM.COLUMN_END)));
+                exam.exam_type = cursor.getString(cursor.getColumnIndexOrThrow(Tables.EXAM.COLUMN_TYPE));
+                exam.exam_default_location = cursor.getInt(cursor.getColumnIndexOrThrow(Tables.EXAM.COLUMN_DEFAULT_LOCATION));
+                exam.exam_default_person = cursor.getInt(cursor.getColumnIndexOrThrow(Tables.EXAM.COLUMN_DEFAULT_PERSON));
+
+                /* location */
+                long location_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.EXAM.COLUMN_LOCATION_ID));
+                String house = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LOCATION.COLUMN_HOUSE));
+                String room = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LOCATION.COLUMN_ROOM));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LOCATION.COLUMN_NAME));
+
+                exam.exam_location = new Location(location_id, house, room, name);
+
+                /* lecturer */
+                long lecturer_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.EXAM.COLUMN_LECTURER_ID));
+                String forename = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_FORENAME));
+                String surname = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_SURNAME));
+                String academic_title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_ACADEMIC_TITLE));
+                String mail = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_MAIL));
+                String telephone = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_TELEPHONE));
+
+                exam.exam_person = (new Person(lecturer_id, forename, surname, academic_title, mail, telephone));
+
+                exams.add(exam);
+            }
+
+            cursor.close();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        for(int i = 0; i < exams.size(); i++)
+            Log.e("BLA", exams.get(i).exam_title);
+
+        return exams;
+    }
 
     /* get lecturers for a specific day */
     /* should be changed to sql query */

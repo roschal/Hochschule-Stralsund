@@ -118,7 +118,6 @@ public class MeetingActivity extends AppCompatActivity implements MeetingItemFra
         else
             transaction.replace(R.id.meeting_container, meetingItemFragment, null);
 
-        transaction.addToBackStack(null);
         transaction.commit();
     }
 

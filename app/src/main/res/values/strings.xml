@@ -22,6 +22,11 @@
     <string name="delete_meeting">Termin löschen</string>
     <string name="edit_meeting">Termin bearbeiten</string>
 
+    <!-- exam -->
+    <string name="exam_title">Name</string>
+    <string name="exam_person">Prüfer</string>
+    <string name="exam_location">Prüfungsort</string>
+
     <!-- meeting -->
     <string name="meeting_title">Name</string>
     <string name="meeting_description">Beschreibung</string>

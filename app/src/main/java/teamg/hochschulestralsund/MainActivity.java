@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
     private FragmentTransaction transaction;
     private ItemFragment fragment;
     private Intent intent;
+    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,13 +76,16 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                 return true;
             case R.id.action_exams:
                 intent = new Intent(this, ExamActivity.class);
+                bundle = new Bundle();
+                bundle.putInt(ExamActivity.CODE_EXAM, ExamActivity.CODE_EXAM_SHOW_ALL);
+                intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
 
                 return true;
                 
             case R.id.action_meetings:
                 intent = new Intent(this, MeetingActivity.class);
-                Bundle bundle = new Bundle();
+                bundle = new Bundle();
                 bundle.putInt(MeetingActivity.CODE_MEETING, MeetingActivity.CODE_MEETING_SHOW_ALL);
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);

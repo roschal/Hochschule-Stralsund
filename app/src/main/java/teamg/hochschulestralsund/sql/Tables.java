@@ -7,11 +7,16 @@ import android.provider.BaseColumns;
  */
 
 public class Tables {
-    public static class MEETING implements BaseColumns {
-        public static final String TABLE_NAME = "Meeting";
-        public static final String COLUMN_TITLE = "meeting_title";
-        public static final String COLUMN_DESCRIPTION = "meeting_description";
-        public static final String COLUMN_CALENDAR = "meeting_calendar";
+    public static class EXAM implements BaseColumns {
+        public static final String TABLE_NAME = "Exam";
+        public static final String COLUMN_TITLE = "exam_title";
+        public static final String COLUMN_BEGIN = "exam_begin";
+        public static final String COLUMN_END = "exam_end";
+        public static final String COLUMN_TYPE = "exam_type";
+        public static final String COLUMN_LOCATION_ID = "exam_location_id";
+        public static final String COLUMN_LECTURER_ID = "exam_person_id";
+        public static final String COLUMN_DEFAULT_LOCATION = "exam_default_location";
+        public static final String COLUMN_DEFAULT_PERSON = "exam_default_person";
     }
 
     public static class LECTURER implements BaseColumns {
@@ -49,5 +54,12 @@ public class Tables {
         public static final String COLUMN_HOUSE = "house";
         public static final String COLUMN_ROOM = "room";
         public static final String COLUMN_NAME = "name";
+    }
+
+    public static class MEETING implements BaseColumns {
+        public static final String TABLE_NAME = "Meeting";
+        public static final String COLUMN_TITLE = "meeting_title";
+        public static final String COLUMN_DESCRIPTION = "meeting_description";
+        public static final String COLUMN_CALENDAR = "meeting_calendar";
     }
 }

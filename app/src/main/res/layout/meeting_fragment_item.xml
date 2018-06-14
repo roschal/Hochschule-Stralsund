@@ -8,7 +8,7 @@
     android:background="@drawable/fragment_item_border">
 
     <TextView
-        android:id="@+id/textView_meeting_time"
+        android:id="@+id/textView_exam_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -19,12 +19,12 @@
         android:text="08:00"
         android:textColor="@color/colorPrimary"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView_meeting_date"
+        app:layout_constraintEnd_toEndOf="@+id/textView_exam_date"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_meeting_date" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_exam_date" />
 
     <TextView
-        android:id="@+id/textView_meeting_date"
+        android:id="@+id/textView_exam_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -36,7 +36,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView_meeting_title"
+        android:id="@+id/textView_exam_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -46,11 +46,11 @@
         android:gravity="left|start"
         android:hint="@string/meeting_title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_meeting_date"
+        app:layout_constraintStart_toEndOf="@+id/textView_exam_date"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView_meeting_description"
+        android:id="@+id/textView_exam_location"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -60,7 +60,7 @@
         android:gravity="left|start"
         android:hint="@string/meeting_description"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_meeting_date"
-        app:layout_constraintTop_toBottomOf="@+id/textView_meeting_title" />
+        app:layout_constraintStart_toEndOf="@+id/textView_exam_date"
+        app:layout_constraintTop_toBottomOf="@+id/textView_exam_title" />
 
 </android.support.constraint.ConstraintLayout>

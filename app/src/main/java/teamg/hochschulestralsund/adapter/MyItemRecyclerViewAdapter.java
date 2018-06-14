@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 import teamg.hochschulestralsund.ItemFragment;
 import teamg.hochschulestralsund.ItemFragment.OnListFragmentInteractionListener;
-import teamg.hochschulestralsund.LectureDetail;
 import teamg.hochschulestralsund.R;
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
@@ -47,10 +46,10 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(itemFragment.getActivity().getApplicationContext(), LectureDetail.class);
-                intent.putExtra("ID", holder.lecture.event_id);
+                // Intent intent = new Intent(itemFragment.getActivity().getApplicationContext(), );
+                // intent.putExtra("ID", holder.lecture.event_id);
 
-                itemFragment.startActivityForResult(intent, 0);
+                // itemFragment.startActivityForResult(intent, 0);
             }
         });
     }
@@ -73,9 +72,9 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public ViewHolder(View view) {
             super(view);
             this.view = view;
-            textView_time = view.findViewById(R.id.textView_meeting_time);
-            textView_title = view.findViewById(R.id.textView_meeting_title);
-            textView_room = view.findViewById(R.id.textView_meeting_description);
+            textView_time = view.findViewById(R.id.textView_exam_time);
+            textView_title = view.findViewById(R.id.textView_exam_title);
+            textView_room = view.findViewById(R.id.textView_exam_location);
             textView_lecturer = view.findViewById(R.id.timetable_textView_Lecturer);
             customSQL = new CustomSQL(view.getContext());
         }

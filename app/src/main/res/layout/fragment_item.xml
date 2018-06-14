@@ -8,7 +8,7 @@
     android:background="@drawable/fragment_item_border">
 
     <TextView
-        android:id="@+id/textView_meeting_time"
+        android:id="@+id/textView_exam_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView_meeting_title"
+        android:id="@+id/textView_exam_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -31,11 +31,11 @@
         android:gravity="left|start"
         android:hint="@string/timetable_title_hint"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_meeting_time"
+        app:layout_constraintStart_toEndOf="@+id/textView_exam_time"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView_meeting_description"
+        android:id="@+id/textView_exam_location"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -44,19 +44,21 @@
         android:gravity="left|start"
         android:hint="@string/timetable_room_hint"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_meeting_time"
-        app:layout_constraintTop_toBottomOf="@+id/textView_meeting_title" />
+        app:layout_constraintStart_toEndOf="@+id/textView_exam_time"
+        app:layout_constraintTop_toBottomOf="@+id/textView_exam_title" />
 
     <TextView
         android:id="@+id/timetable_textView_Lecturer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:hint="@string/timetable_lecturer_hint"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_meeting_time"
-        app:layout_constraintTop_toBottomOf="@+id/textView_meeting_description" />
+        app:layout_constraintStart_toEndOf="@+id/textView_exam_time"
+        app:layout_constraintTop_toBottomOf="@+id/textView_exam_location" />
 
 </android.support.constraint.ConstraintLayout>

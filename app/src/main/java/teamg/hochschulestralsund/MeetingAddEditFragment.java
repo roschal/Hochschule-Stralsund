@@ -1,7 +1,5 @@
 package teamg.hochschulestralsund;
 
-import android.annotation.TargetApi;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,25 +10,15 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
-import teamg.hochschulestralsund.adapter.AdapterLecturer;
-import teamg.hochschulestralsund.adapter.AdapterRoom;
 import teamg.hochschulestralsund.sql.CustomSQL;
-import teamg.hochschulestralsund.sql.LectureTime;
-import teamg.hochschulestralsund.sql.Location;
 import teamg.hochschulestralsund.sql.Meeting;
-import teamg.hochschulestralsund.sql.Person;
 
 
 /**
@@ -89,10 +77,10 @@ public class MeetingAddEditFragment extends Fragment {
      */
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        editText_meeting_title = getView().findViewById(R.id.editText_meeting_title);
-        editText_meeting_description = getView().findViewById(R.id.editText_meeting_description);
-        timePicker_meeting = getView().findViewById(R.id.timePicker_meeting);
-        datePicker_meeting = getView().findViewById(R.id.datePicker_meeting);
+        editText_meeting_title = getView().findViewById(R.id.editText_exam_title);
+        editText_meeting_description = getView().findViewById(R.id.editText_exam_location);
+        timePicker_meeting = getView().findViewById(R.id.timePicker_exam);
+        datePicker_meeting = getView().findViewById(R.id.datePicker_exam);
         button_meeting_submit = getView().findViewById(R.id.button_meeting_submit);
 
         setAdapter();

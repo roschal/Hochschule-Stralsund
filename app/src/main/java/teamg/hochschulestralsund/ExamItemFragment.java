@@ -2,18 +2,21 @@ package teamg.hochschulestralsund;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import teamg.hochschulestralsund.dummy.DummyContent;
-import teamg.hochschulestralsund.dummy.DummyContent.DummyItem;
+import java.util.ArrayList;
+import java.util.Calendar;
 
-import java.util.List;
+import teamg.hochschulestralsund.adapter.ExamMyItemRecyclerViewAdapter;
+import teamg.hochschulestralsund.sql.CustomSQL;
+import teamg.hochschulestralsund.sql.Exam;
 
 /**
  * A fragment representing a list of Items.
@@ -22,12 +25,11 @@ import java.util.List;
  * interface.
  */
 public class ExamItemFragment extends Fragment {
-
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    private ExamItemFragment.OnListFragmentInteractionListener mListener;
+
+    private ArrayList<Exam> exams;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -60,6 +62,13 @@ public class ExamItemFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.exam_fragment_item_list, container, false);
 
+        //* get the exams from sql
+        exams = new ArrayList<>();
+        CustomSQL customSQL = new CustomSQL(getActivity());
+
+        exams = customSQL.getExams();
+        customSQL.close();
+
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -69,7 +78,7 @@ public class ExamItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new ExamMyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new ExamMyItemRecyclerViewAdapter(exams, mListener, this));
         }
         return view;
     }
@@ -104,6 +113,6 @@ public class ExamItemFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Exam exam);
     }
 }

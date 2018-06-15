@@ -133,7 +133,7 @@ public class MeetingAddEditFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_meeting_add, container, false);
     }
 
-    @Override
+    /*@Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
@@ -142,7 +142,7 @@ public class MeetingAddEditFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-    }
+    }*/
 
     @Override
     public void onDetach() {

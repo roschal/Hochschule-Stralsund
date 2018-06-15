@@ -30,6 +30,9 @@
                 android:title="@string/menu_main_meeting"
                 app:showAsAction="never">
             </item>
+            <item
+                android:id="@+id/action_alarm"
+                android:title="Alarm" />
         </menu>
     </item>
 

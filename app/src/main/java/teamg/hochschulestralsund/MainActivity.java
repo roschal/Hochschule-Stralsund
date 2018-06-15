@@ -1,7 +1,9 @@
 package teamg.hochschulestralsund;
 
+import android.app.AlarmManager;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -18,6 +20,7 @@ import java.util.Calendar;
 
 import teamg.hochschulestralsund.adapter.OnSwipeTouchListener;
 import teamg.hochschulestralsund.connect.Parser;
+import teamg.hochschulestralsund.helper.AlarmHelper;
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
 
@@ -107,6 +110,12 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
                 intent = new Intent(this, SettingsActivity.class);
                 startActivityForResult(intent, 0);
 
+                return true;
+
+            case R.id.action_alarm:
+                AlarmHelper alarmHelper = new AlarmHelper(getApplicationContext(),
+                        (AlarmManager)getSystemService(Context.ALARM_SERVICE));
+                alarmHelper.createAlarm(15000, "Erinnerung Prüfung");
                 return true;
 
             default:

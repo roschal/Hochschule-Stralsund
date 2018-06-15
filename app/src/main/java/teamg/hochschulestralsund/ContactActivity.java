@@ -4,11 +4,13 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,6 +24,7 @@ public class ContactActivity extends AppCompatActivity implements ContactItemFra
     public static final int CODE_CONTACT_DELETE = 2;
     public static final int CODE_CONTACT_SHOW_ALL = 3;
     public static final String CODE_CONTACT_PARCELABLE = "CODE_CONTACT_PARCELABLE";
+    public static final String CODE_CONTACT_SEARCH_QUERY = "CODE_CONTACT_SEARCH_QUERY";
 
     private ContactItemFragment itemFragment;
 
@@ -88,7 +91,12 @@ public class ContactActivity extends AppCompatActivity implements ContactItemFra
                     showContacts(getFragmentManager(), true);
                     break;
             }
+        }
 
+        //* if a search string was committed
+        if (Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
+            String query = getIntent().getStringExtra(SearchManager.QUERY);
+            showContactsFiltered(getFragmentManager(), query);
         }
     }
 
@@ -97,14 +105,30 @@ public class ContactActivity extends AppCompatActivity implements ContactItemFra
      */
     public static void showContacts(FragmentManager manager, boolean firstTime) {
         ContactItemFragment contactItemFragment = new ContactItemFragment();
-        FragmentTransaction transaction;
-
-        transaction = manager.beginTransaction();
+        FragmentTransaction transaction = manager.beginTransaction();
 
         if (firstTime)
             transaction.add(R.id.contact_container, contactItemFragment, null);
         else
             transaction.replace(R.id.contact_container, contactItemFragment, null);
+
+        transaction.commit();
+    }
+
+    /**
+     * filter contacts for query
+     */
+    public static void showContactsFiltered(FragmentManager manager, String query) {
+        Bundle bundle = new Bundle();
+        bundle.putString(CODE_CONTACT_SEARCH_QUERY, query);
+
+        ContactItemFragment contactItemFragment = new ContactItemFragment();
+        contactItemFragment.setArguments(bundle);
+
+        FragmentTransaction transaction;
+
+        transaction = manager.beginTransaction();
+        transaction.replace(R.id.contact_container, contactItemFragment, null);
 
         transaction.commit();
     }

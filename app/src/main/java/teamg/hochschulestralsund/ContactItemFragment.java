@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.function.Predicate;
 
 import teamg.hochschulestralsund.adapter.ContactMyItemRecyclerViewAdapter;
 import teamg.hochschulestralsund.sql.CustomSQL;
@@ -27,6 +30,8 @@ public class ContactItemFragment extends Fragment {
     private int mColumnCount = 1;
     private ContactItemFragment.OnListFragmentInteractionListener mListener;
 
+    private ArrayList persons;
+    private CustomSQL customSQL;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -38,22 +43,14 @@ public class ContactItemFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
+        getPersons();
+        parseBundle();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.contact_fragment_item_list, container, false);
-
-        //* get the persons from sql
-        ArrayList persons = new ArrayList<>();
-        CustomSQL customSQL = new CustomSQL(getActivity());
-
-        persons = customSQL.getLecturers();
-        customSQL.close();
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -85,6 +82,31 @@ public class ContactItemFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void parseBundle() {
+        if (getArguments() != null) {
+            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+
+            //* if a search query was committed
+            if (getArguments().containsKey(ContactActivity.CODE_CONTACT_SEARCH_QUERY)) {
+                String query = getArguments().getString(ContactActivity.CODE_CONTACT_SEARCH_QUERY, "");
+
+                for (Iterator<Person> it = persons.iterator(); it.hasNext();) {
+                    if (!it.next().toString().contains(query))
+                        it.remove();
+                }
+            }
+        }
+    }
+
+    private void getPersons() {
+        //* get the persons from sql
+        persons = new ArrayList<>();
+        customSQL = new CustomSQL(getActivity());
+
+        persons = customSQL.getLecturers();
+        customSQL.close();
     }
 
     public interface OnListFragmentInteractionListener {

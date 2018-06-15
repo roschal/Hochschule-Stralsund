@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
         inflater.inflate(R.menu.main, menu);
 
         /* set the icon color for 3 menu icons */
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             drawable.mutate();
             drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);

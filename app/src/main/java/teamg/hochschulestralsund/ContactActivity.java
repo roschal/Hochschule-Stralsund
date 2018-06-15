@@ -40,7 +40,7 @@ public class ContactActivity extends AppCompatActivity implements ContactItemFra
         inflater.inflate(R.menu.contact, menu);
 
         /* set the icon color for 2 menu icons */
-        for (int i = 0; i < 0; i++) {
+        for (int i = 0; i < 1; i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             drawable.mutate();
             drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
@@ -56,6 +56,9 @@ public class ContactActivity extends AppCompatActivity implements ContactItemFra
      */
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_search_contact:
+
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -26,6 +26,9 @@ public class Tables {
         public static final String COLUMN_ACADEMIC_TITLE = "academic_title";
         public static final String COLUMN_TELEPHONE = "telephone";
         public static final String COLUMN_MAIL = "mail";
+        public static final String COLUMN_PICTURE1_PATH = "picture1_path";
+        public static final String COLUMN_PICTURE2_PATH = "picture2_path";
+        public static final String COLUMN_PICTURE3_PATH = "picture3_path";
     }
 
     public static class LECTURE implements BaseColumns {

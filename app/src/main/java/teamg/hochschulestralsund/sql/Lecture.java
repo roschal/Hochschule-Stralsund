@@ -16,8 +16,8 @@ public class Lecture implements Parcelable {
     public Calendar event_begin = Calendar.getInstance();
     public Calendar event_end = Calendar.getInstance();
 
-    public Location event_location;
-    public Person event_person;
+    public Location event_location = new Location();
+    public Person event_person = new Person();
 
     public String lecture_type; /* lecture type */
     public int lecture_repeat = 7;      /* 7 oder 14 days */

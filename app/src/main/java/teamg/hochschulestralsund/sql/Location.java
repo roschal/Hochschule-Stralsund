@@ -10,6 +10,10 @@ public class Location {
     public String room = "";
     public String name = "";
 
+    public Location() {
+
+    }
+
     public Location(String house, String room, String name) {
         this.house = house;
         this.room = room;

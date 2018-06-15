@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
         inflater.inflate(R.menu.main, menu);
 
         /* set the icon color for 3 menu icons */
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 2; i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             drawable.mutate();
             drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
@@ -68,7 +68,15 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            /* show activity to add a new lecture */
+            case R.id.action_show_contacts:
+                intent = new Intent(this, ContactActivity.class);
+                bundle = new Bundle();
+                bundle.putInt(ContactActivity.CODE_CONTACT, ContactActivity.CODE_CONTACT_SHOW_ALL);
+                intent.putExtras(bundle);
+                startActivityForResult(intent, 0);
+
+                return true;
+
             case R.id.action_lectures:
                 intent = new Intent(this, LectureActivity.class);
                 bundle = new Bundle();

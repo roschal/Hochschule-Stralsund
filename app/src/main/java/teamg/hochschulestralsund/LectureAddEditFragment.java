@@ -270,7 +270,7 @@ public class LectureAddEditFragment extends Fragment {
             }
         });
 
-
+        setDay();
         button_lecture_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -279,7 +279,6 @@ public class LectureAddEditFragment extends Fragment {
         });
 
         customSQL.close();
-
     }
 
     /**determine if add or edit meeting
@@ -300,20 +299,41 @@ public class LectureAddEditFragment extends Fragment {
                     editText_location.setText(lecture.event_location.toString());
                     editText_lecturer.setText(lecture.event_person.toString());
 
+                    if (lecture.lecture_time.toString().isEmpty() == false) {
+                        spinner.setSelection(getIndex(spinner, lecture.lecture_time.toString()));
+                    }
+
+                    if (lecture.lecture_type.isEmpty() == false) {
+                        spinner_type.setSelection(getIndex(spinner_type, lecture.lecture_type));
+                    }
+
+                    setDay();
+
+                    break;
+
+                default:
+
                     break;
             }
         }
     }
 
-    /* set the current day on the radiogroup */
+    //private method of your class
+    private int getIndex(Spinner spinner, String myString){
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+                return i;
+            }
+        }
+
+        return 0;
+    }
+
+    /**sets the day on the radioGroup
+     *
+     */
     public void setDay() {
-        Calendar calendar = Calendar.getInstance();
-        int DAY_OF_WEEK = calendar.get(Calendar.DAY_OF_WEEK);
-
-        lecture.event_begin = Calendar.getInstance();
-        lecture.event_begin.setTime(calendar.getTime());
-
-        switch (DAY_OF_WEEK) {
+        switch (lecture.event_begin.get(Calendar.DAY_OF_WEEK)) {
             case 2:
                 radioGroup.check(R.id.radioButton_add_lecture_mo);
                 break;

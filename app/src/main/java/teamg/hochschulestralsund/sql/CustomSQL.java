@@ -22,7 +22,7 @@ import teamg.hochschulestralsund.R;
  */
 
 public class CustomSQL extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 7;
     public static final String DATABASE_NAME = "hochschule.db";
 
     private static final String SQL_CREATE_TABLE_EXAM =
@@ -59,7 +59,10 @@ public class CustomSQL extends SQLiteOpenHelper {
                     Tables.LECTURER.COLUMN_SURNAME + " TEXT," +
                     Tables.LECTURER.COLUMN_ACADEMIC_TITLE + " TEXT," +
                     Tables.LECTURER.COLUMN_TELEPHONE + " TEXT," +
-                    Tables.LECTURER.COLUMN_MAIL + " TEXT)";
+                    Tables.LECTURER.COLUMN_MAIL + " TEXT," +
+                    Tables.LECTURER.COLUMN_PICTURE1_PATH + " TEXT," +
+                    Tables.LECTURER.COLUMN_PICTURE2_PATH + " TEXT," +
+                    Tables.LECTURER.COLUMN_PICTURE3_PATH + " TEXT)";
 
     private static final String SQL_CREATE_TABLE_LECTURE_TIME =
             "CREATE TABLE IF NOT EXISTS " + Tables.LECTURE_TIME.TABLE_NAME + " (" +
@@ -283,6 +286,9 @@ public class CustomSQL extends SQLiteOpenHelper {
            values.put(Tables.LECTURER.COLUMN_ACADEMIC_TITLE, lecturer.academic_title);
            values.put(Tables.LECTURER.COLUMN_MAIL, lecturer.mail);
            values.put(Tables.LECTURER.COLUMN_TELEPHONE, lecturer.telephone);
+           values.put(Tables.LECTURER.COLUMN_PICTURE1_PATH, lecturer.person_picture1_path);
+           values.put(Tables.LECTURER.COLUMN_PICTURE2_PATH, lecturer.person_picture2_path);
+           values.put(Tables.LECTURER.COLUMN_PICTURE3_PATH, lecturer.person_picture3_path);
 
            return db.insert(Tables.LECTURER.TABLE_NAME, null, values);
         } catch (Exception e) {
@@ -731,6 +737,7 @@ public class CustomSQL extends SQLiteOpenHelper {
 
             while (cursor.moveToNext()) {
                 Lecture lecture = new Lecture();
+                Person person = new Person();
 
                 lecture.event_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE._ID));
                 lecture.event_title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_TITLE));
@@ -751,14 +758,15 @@ public class CustomSQL extends SQLiteOpenHelper {
                 lecture.event_location = new Location(location_id, house, room, name);
 
                 /* lecturer */
-                long lecturer_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_LECTURER_ID));
-                String forename = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_FORENAME));
-                String surname = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_SURNAME));
-                String academic_title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_ACADEMIC_TITLE));
-                String mail = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_MAIL));
-                String telephone = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_TELEPHONE));
-
-                lecture.event_person = (new Person(lecturer_id, forename, surname, academic_title, mail, telephone));
+                lecture.event_person.id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_LECTURER_ID));
+                lecture.event_person.forename = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_FORENAME));
+                lecture.event_person.surname = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_SURNAME));
+                lecture.event_person.academic_title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_ACADEMIC_TITLE));
+                lecture.event_person.mail = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_MAIL));
+                lecture.event_person.telephone = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_TELEPHONE));
+                lecture.event_person.person_picture1_path = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_PICTURE1_PATH));
+                lecture.event_person.person_picture2_path = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_PICTURE2_PATH));
+                lecture.event_person.person_picture3_path = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_PICTURE3_PATH));
 
                 /* lecture_time */
                 long lecture_time_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_LECTURE_TIME_ID));
@@ -829,7 +837,10 @@ public class CustomSQL extends SQLiteOpenHelper {
                     Tables.LECTURER.COLUMN_SURNAME,
                     Tables.LECTURER.COLUMN_ACADEMIC_TITLE,
                     Tables.LECTURER.COLUMN_MAIL,
-                    Tables.LECTURER.COLUMN_TELEPHONE
+                    Tables.LECTURER.COLUMN_TELEPHONE,
+                    Tables.LECTURER.COLUMN_PICTURE1_PATH,
+                    Tables.LECTURER.COLUMN_PICTURE2_PATH,
+                    Tables.LECTURER.COLUMN_PICTURE3_PATH
             };
 
             String sortOrder = Tables.LECTURER.COLUMN_SURNAME + " DESC";
@@ -845,15 +856,19 @@ public class CustomSQL extends SQLiteOpenHelper {
             );
 
             while (cursor.moveToNext()) {
-                long id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURER._ID));
-                String forename = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_FORENAME));
+                Person person = new Person();
 
-                String surname = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_SURNAME));
-                String academic_title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_ACADEMIC_TITLE));
-                String mail = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_MAIL));
-                String telephone = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_TELEPHONE));
+                person.id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURER._ID));
+                person.forename = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_FORENAME));
+                person.surname = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_SURNAME));
+                person.academic_title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_ACADEMIC_TITLE));
+                person.mail = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_MAIL));
+                person.telephone = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_TELEPHONE));
+                person.person_picture1_path = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_PICTURE1_PATH));
+                person.person_picture2_path = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_PICTURE2_PATH));
+                person.person_picture3_path = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_PICTURE3_PATH));
 
-                lecturers.add(new Person(id, forename, surname, academic_title, mail, telephone));
+                lecturers.add(person);
             }
 
             cursor.close();

@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
 import teamg.hochschulestralsund.sql.Meeting;
 
@@ -24,9 +25,6 @@ public class MeetingActivity extends AppCompatActivity implements MeetingItemFra
     public static final int CODE_MEETING_DELETE = 2;
     public static final int CODE_MEETING_SHOW_ALL = 3;
     public static final String CODE_MEETING_PARCELABLE = "CODE_MEETING_PARCELABLE";
-
-
-    private MeetingItemFragment itemFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +43,8 @@ public class MeetingActivity extends AppCompatActivity implements MeetingItemFra
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.meeting, menu);
 
-        menu.getItem(1).setVisible(false);
-        menu.getItem(2).setVisible(false);
-
-        /* set the icon color for 3 menu icons */
-        for (int i = 0; i < 3; i++) {
+        //* set the icon color for 2 menu icons
+        for (int i = 0; i < 2; i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             drawable.mutate();
             drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
@@ -70,12 +65,13 @@ public class MeetingActivity extends AppCompatActivity implements MeetingItemFra
                 addMeeting(getFragmentManager());
 
                 return true;
-            case R.id.action_edit_meeting:
-                editMeeting(null, null);
 
-                return true;
-            case R.id.action_delete_meeting:
-                deleteMeeting();
+            case R.id.action_delete_meetings:
+                CustomSQL customSQL = new CustomSQL(this);
+                customSQL.deleteMeetings();
+                customSQL.close();
+
+                showMeetings(getFragmentManager(), false);
 
                 return true;
 
@@ -86,12 +82,10 @@ public class MeetingActivity extends AppCompatActivity implements MeetingItemFra
 
     @Override
     public void onListFragmentInteraction(Meeting meeting) {
-        Log.e("hi", "hi");
         editMeeting(getFragmentManager(), meeting);
     }
 
     private void parseBundle() {
-
         if(getIntent().hasExtra(CODE_MEETING)) {
             int code = getIntent().getIntExtra(CODE_MEETING, CODE_MEETING_SHOW_ALL);
 
@@ -107,7 +101,7 @@ public class MeetingActivity extends AppCompatActivity implements MeetingItemFra
     /**show all Meetings
      *
      */
-    public static void showMeetings(FragmentManager manager, boolean firstTime) {
+    public static void showMeetings(FragmentManager manager, boolean firstTime, ) {
         MeetingItemFragment meetingItemFragment = new MeetingItemFragment();
         FragmentTransaction transaction;
 

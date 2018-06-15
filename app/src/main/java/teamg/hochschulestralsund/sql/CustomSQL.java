@@ -81,7 +81,15 @@ public class CustomSQL extends SQLiteOpenHelper {
                     Tables.MEETING.COLUMN_DESCRIPTION + " TEXT," +
                     Tables.MEETING.COLUMN_CALENDAR + " BIGINT)";
 
-    /* SQL delete */
+    //* sql delete all from table statements
+    private static final String SQL_DELETE_EXAMS = "DELETE * FROM " + Tables.EXAM.TABLE_NAME;
+    private static final String SQL_DELETE_LECTURES = "DELETE * FROM " + Tables.LECTURE.TABLE_NAME;
+    private static final String SQL_DELETE_LECTURERS = "DELETE * FROM " + Tables.LECTURER.TABLE_NAME;
+    private static final String SQL_DELETE_LECTURE_TIMES = "DELETE * FROM " + Tables.LECTURE_TIME.TABLE_NAME;
+    private static final String SQL_DELETE_LOCATIONS = "DELETE * FROM " + Tables.LOCATION.TABLE_NAME;
+    private static final String SQL_DELETE_MEETINGS = "DELETE * FROM " + Tables.MEETING.TABLE_NAME;
+
+    //* SQL delete tables statements
     private static final String SQL_DELETE_TABLE_EXAM =
             "DROP TABLE IF EXISTS " + Tables.EXAM.TABLE_NAME;
     private static final String SQL_DELETE_TABLE_LECTURE =
@@ -405,6 +413,106 @@ public class CustomSQL extends SQLiteOpenHelper {
     /////////////////////////////////////////////////////////////////////////////////////////
     // delete
 
+    public boolean deleteExams() {
+        try {
+            Log.d("Deleting all exams", "...");
+
+            db = getWritableDatabase();
+            db.execSQL(SQL_DELETE_EXAMS);
+
+            Log.d("Deleting all exams", "OK");
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        db.close();
+        Log.e("Deleting all exams", "FAIL");
+
+        return false;
+    }
+
+    public boolean deleteLectures() {
+        try {
+            Log.d("Deleting all lectures", "...");
+
+            db = getWritableDatabase();
+            db.execSQL(SQL_DELETE_LECTURES);
+
+            Log.d("Deleting all lectures", "OK");
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        db.close();
+        Log.e("Deleting all lectures", "FAIL");
+
+        return false;
+    }
+
+    public boolean deleteLecturers() {
+        try {
+            Log.d("Deleting all lecturers", "...");
+
+            db = getWritableDatabase();
+            db.execSQL(SQL_DELETE_LECTURERS);
+
+            Log.d("Deleting all lecturers", "OK");
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        db.close();
+        Log.e("Deleting all lecturers", "FAIL");
+
+        return false;
+    }
+
+    public boolean deleteLocations() {
+        try {
+            Log.d("Deleting all locations", "...");
+
+            db = getWritableDatabase();
+            db.execSQL(SQL_DELETE_LOCATIONS);
+
+            Log.d("Deleting all locations", "OK");
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        db.close();
+        Log.e("Deleting all locations", "FAIL");
+
+        return false;
+    }
+
+    public boolean deleteMeetings() {
+        try {
+            Log.d("Deleting all meetings", "...");
+
+            db = getWritableDatabase();
+            db.execSQL(SQL_DELETE_MEETINGS);
+
+            Log.d("Deleting all meetings", "OK");
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        db.close();
+        Log.e("Deleting all meetings", "FAIL");
+
+        return false;
+    }
+
     public void deleteLecture(Lecture lecture) {
         try {
             Log.d("Deleting Lecture", "...");
@@ -419,6 +527,7 @@ public class CustomSQL extends SQLiteOpenHelper {
 
     public void deleteTablesIfExist() {
         try {
+            db.execSQL(SQL_DELETE_TABLE_EXAM);
             db.execSQL(SQL_DELETE_TABLE_LECTURE);
             db.execSQL(SQL_DELETE_TABLE_LECTURER);
             db.execSQL(SQL_DELETE_TABLE_LECTURE_TIME);

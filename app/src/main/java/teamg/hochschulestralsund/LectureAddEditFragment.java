@@ -1,6 +1,8 @@
 package teamg.hochschulestralsund;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -8,6 +10,9 @@ import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -58,6 +63,81 @@ public class LectureAddEditFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+
+    @Override
+    /**creates the menu
+     *
+     * @return boolean
+     */
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if (getArguments() != null) {
+            int code = getArguments().getInt(LectureActivity.CODE_LECTURE, LectureActivity.CODE_LECTURE_ADD);
+
+            switch (code) {
+                case LectureActivity.CODE_LECTURE_ADD:
+                    inflater.inflate(R.menu.lecture_add, menu);
+
+                    break;
+
+
+                case LectureActivity.CODE_LECTURE_EDIT:
+                    inflater.inflate(R.menu.lecture_edit, menu);
+
+                    break;
+            }
+
+            //* set the icon color for 2 menu icons
+            for (int i = 0; i < 2; i++) {
+                Drawable drawable = menu.getItem(i).getIcon();
+                drawable.mutate();
+                drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
+            }
+        }
+    }
+
+    @Override
+    /**overrides the click handler on menu
+     *
+     * @return boolean
+     */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            /* show activity to add a new lecture */
+            case R.id.action_save_edited_lecture:
+                submit();
+
+                return true;
+
+            case R.id.action_delete_lecture:
+                CustomSQL customSQL = new CustomSQL(getActivity());
+
+                // TODO
+                // customSQL.deleteLecture(Lecture lecture);
+                customSQL.close();
+                goBack();
+
+                return true;
+
+            case R.id.action_abort_edit_lecture:
+                goBack();
+
+                return true;
+
+            case R.id.action_save_new_lecture:
+                submit();
+
+                return true;
+
+            case R.id.action_abort_add_lecture:
+                goBack();
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -261,10 +341,15 @@ public class LectureAddEditFragment extends Fragment {
         customSQL.addLecture(lecture);
         customSQL.close();
 
-        //* go back to all lectures
-        LectureActivity.showLectures(getFragmentManager(), false);
+        goBack();
     }
 
+    /**go back to activity
+     *
+     */
+    private void goBack() {
+        LectureActivity.showLectures(getFragmentManager(), false);
+    }
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }

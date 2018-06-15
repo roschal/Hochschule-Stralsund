@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
 import teamg.hochschulestralsund.sql.Exam;
 
@@ -44,10 +45,7 @@ public class ExamActivity extends AppCompatActivity implements ExamItemFragment.
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.exam, menu);
 
-        menu.getItem(1).setVisible(false);
-        menu.getItem(2).setVisible(false);
-
-        /* set the icon color for 3 menu icons */
+        /* set the icon color for 2 menu icons */
         for (int i = 0; i < 3; i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             drawable.mutate();
@@ -69,12 +67,13 @@ public class ExamActivity extends AppCompatActivity implements ExamItemFragment.
                 addExam(getFragmentManager());
 
                 return true;
-            case R.id.action_edit_exam:
-                editExam(null, null);
 
-                return true;
-            case R.id.action_delete_exam:
-                deleteExam();
+            case R.id.action_delete_exams:
+                CustomSQL customSQL = new CustomSQL(this);
+                customSQL.deleteExams();
+                customSQL.close();
+
+                showExams(getFragmentManager(), false);
 
                 return true;
 
@@ -85,7 +84,6 @@ public class ExamActivity extends AppCompatActivity implements ExamItemFragment.
 
     @Override
     public void onListFragmentInteraction(Exam exam) {
-        Log.e("hi", "hi");
         editExam(getFragmentManager(), exam);
     }
 

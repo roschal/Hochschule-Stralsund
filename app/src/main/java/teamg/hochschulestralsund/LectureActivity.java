@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
 import teamg.hochschulestralsund.sql.Lecture;
 
@@ -45,11 +46,8 @@ public class LectureActivity extends AppCompatActivity implements LectureItemFra
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.lecture, menu);
 
-        menu.getItem(1).setVisible(false);
-        menu.getItem(2).setVisible(false);
-
         /* set the icon color for 3 menu icons */
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 2; i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             drawable.mutate();
             drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
@@ -70,12 +68,13 @@ public class LectureActivity extends AppCompatActivity implements LectureItemFra
                 addLecture(getFragmentManager());
 
                 return true;
-            case R.id.action_edit_lecture:
-                editLecture(null, null);
 
-                return true;
-            case R.id.action_delete_lecture:
-                deleteLecture();
+            case R.id.action_delete_lectures:
+                CustomSQL customSQL = new CustomSQL(this);
+                customSQL.deleteLectures();
+                customSQL.close();
+
+                showLectures(getFragmentManager(), false);
 
                 return true;
 
@@ -86,7 +85,6 @@ public class LectureActivity extends AppCompatActivity implements LectureItemFra
 
     @Override
     public void onListFragmentInteraction(Lecture lecture) {
-        Log.e("hi", "hi");
         editLecture(getFragmentManager(), lecture);
     }
 

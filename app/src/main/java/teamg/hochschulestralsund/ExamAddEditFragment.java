@@ -1,6 +1,8 @@
 package teamg.hochschulestralsund;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -8,6 +10,9 @@ import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -53,6 +58,81 @@ public class ExamAddEditFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+
+    @Override
+    /**creates the menu
+     *
+     * @return boolean
+     */
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if (getArguments() != null) {
+            int code = getArguments().getInt(ExamActivity.CODE_EXAM, ExamActivity.CODE_EXAM_ADD);
+
+            switch (code) {
+                case ExamActivity.CODE_EXAM_ADD:
+                    inflater.inflate(R.menu.exam_add, menu);
+
+                    break;
+
+
+                case ExamActivity.CODE_EXAM_EDIT:
+                    inflater.inflate(R.menu.exam_edit, menu);
+
+                    break;
+            }
+
+            //* set the icon color for 2 menu icons
+            for (int i = 0; i < 2; i++) {
+                Drawable drawable = menu.getItem(i).getIcon();
+                drawable.mutate();
+                drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
+            }
+        }
+    }
+
+    @Override
+    /**overrides the click handler on menu
+     *
+     * @return boolean
+     */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            /* show activity to add a new lecture */
+            case R.id.action_save_edited_exam:
+                submit();
+
+                return true;
+
+            case R.id.action_delete_exam:
+                CustomSQL customSQL = new CustomSQL(getActivity());
+
+                // TODO
+                // customSQL.deleteExam(Exam exam);
+                customSQL.close();
+                goBack();
+
+                return true;
+
+            case R.id.action_abort_edit_exam:
+                goBack();
+
+                return true;
+
+            case R.id.action_save_new_exam:
+                submit();
+
+                return true;
+
+            case R.id.action_abort_add_exam:
+                goBack();
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -203,7 +283,13 @@ public class ExamAddEditFragment extends Fragment {
         customSQL.addExam(exam);
         customSQL.close();
 
-        //* go back to all meetings
+        goBack();
+    }
+
+    /**go back to the list with exams
+     *
+     */
+    private void goBack() {
         ExamActivity.showExams(getFragmentManager(), false);
     }
 

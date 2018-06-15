@@ -46,7 +46,7 @@ public class ExamActivity extends AppCompatActivity implements ExamItemFragment.
         inflater.inflate(R.menu.exam, menu);
 
         /* set the icon color for 2 menu icons */
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 2; i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             drawable.mutate();
             drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);

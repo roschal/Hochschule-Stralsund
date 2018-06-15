@@ -2,17 +2,20 @@ package teamg.hochschulestralsund;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.SearchManager;
+import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import teamg.hochschulestralsund.sql.Person;
 
-public class ContactActivity extends AppCompatActivity implements ContactItemFragment.OnListFragmentInteractionListener{
+public class ContactActivity extends AppCompatActivity implements ContactItemFragment.OnListFragmentInteractionListener {
     public static final String CODE_CONTACT = "CODE_CONTACT";
     public static final int CODE_CONTACT_ADD = 0;
     public static final int CODE_CONTACT_EDIT = 1;
@@ -46,6 +49,13 @@ public class ContactActivity extends AppCompatActivity implements ContactItemFra
             drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
         }
 
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.action_search_contact).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
         return true;
     }
 
@@ -70,7 +80,7 @@ public class ContactActivity extends AppCompatActivity implements ContactItemFra
     }
 
     private void parseBundle() {
-        if(getIntent().hasExtra(CODE_CONTACT)) {
+        if (getIntent().hasExtra(CODE_CONTACT)) {
             int code = getIntent().getIntExtra(CODE_CONTACT, CODE_CONTACT_SHOW_ALL);
 
             switch (code) {
@@ -82,8 +92,8 @@ public class ContactActivity extends AppCompatActivity implements ContactItemFra
         }
     }
 
-    /**show all Contacts
-     *
+    /**
+     * show all Contacts
      */
     public static void showContacts(FragmentManager manager, boolean firstTime) {
         ContactItemFragment contactItemFragment = new ContactItemFragment();

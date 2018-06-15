@@ -101,7 +101,7 @@ public class MeetingActivity extends AppCompatActivity implements MeetingItemFra
     /**show all Meetings
      *
      */
-    public static void showMeetings(FragmentManager manager, boolean firstTime, ) {
+    public static void showMeetings(FragmentManager manager, boolean firstTime) {
         MeetingItemFragment meetingItemFragment = new MeetingItemFragment();
         FragmentTransaction transaction;
 

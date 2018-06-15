@@ -513,16 +513,114 @@ public class CustomSQL extends SQLiteOpenHelper {
         return false;
     }
 
-    public void deleteLecture(Lecture lecture) {
-        try {
-            Log.d("Deleting Lecture", "...");
-            Log.d("Lecture id", String.valueOf(lecture.event_id));
+    public int deleteExam(Exam exam) {
+        int count = 0;
 
-            int count = db.delete(Tables.LECTURE.TABLE_NAME, Tables.LECTURE._ID + "=?", new String[] {Long.toString(lecture.event_id)});
+        try {
+            db = getWritableDatabase();
+
+            Log.d("Deleting exam", "...");
+            Log.d("Exam id is", String.valueOf(exam.exam_id));
+
+            count = db.delete(Tables.EXAM.TABLE_NAME, Tables.EXAM._ID + "=?", new String[] {Long.toString(exam.exam_id)});
+
             Log.d("Deleted", Integer.toString(count) + " times");
         } catch (Exception e) {
             e.printStackTrace();
+            Log.d("Deleting exam", "FAIL");
         }
+
+        db.close();
+
+        return count;
+    }
+
+    public int deleteLecture(Lecture lecture) {
+        int count = 0;
+
+        try {
+            db = getWritableDatabase();
+
+            Log.d("Deleting lecture", "...");
+            Log.d("Lecture id is", String.valueOf(lecture.event_id));
+
+            count = db.delete(Tables.LECTURE.TABLE_NAME, Tables.LECTURE._ID + "=?", new String[] {Long.toString(lecture.event_id)});
+
+            Log.d("Deleted", Integer.toString(count) + " times");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("Deleting lecture", "FAIL");
+        }
+
+        db.close();
+
+        return count;
+    }
+
+    public int deleteLecturer(Person person) {
+        int count = 0;
+
+        try {
+            db = getWritableDatabase();
+
+            Log.d("Deleting person", "...");
+            Log.d("Person id is", String.valueOf(person.id));
+
+            count = db.delete(Tables.LECTURER.TABLE_NAME, Tables.LECTURER._ID + "=?", new String[] {Long.toString(person.id)});
+
+            Log.d("Deleted", Integer.toString(count) + " times");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("Deleting person", "FAIL");
+        }
+
+        db.close();
+
+        return count;
+    }
+
+    public int deleteLocation(Location location) {
+        int count = 0;
+
+        try {
+            db = getWritableDatabase();
+
+            Log.d("Deleting location", "...");
+            Log.d("Location id is", String.valueOf(location.id));
+
+            count = db.delete(Tables.LOCATION.TABLE_NAME, Tables.LOCATION._ID + "=?", new String[] {Long.toString(location.id)});
+
+            Log.d("Deleted", Integer.toString(count) + " times");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("Deleting location", "FAIL");
+        }
+
+        db.close();
+
+        return count;
+    }
+
+    public int deleteMeeting(Meeting meeting) {
+        int count = 0;
+
+        try {
+            db = getWritableDatabase();
+
+            Log.d("Deleting meeting", "...");
+            Log.d("Meeting id is", String.valueOf(meeting.meeting_id));
+
+            count = db.delete(Tables.MEETING.TABLE_NAME, Tables.MEETING._ID + "=?", new String[] {Long.toString(meeting.meeting_id)});
+
+            Log.d("Deleted", Integer.toString(count) + " times");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("Deleting meeting", "FAIL");
+        }
+
+        db.close();
+
+        return count;
     }
 
     public void deleteTablesIfExist() {

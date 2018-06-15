@@ -112,10 +112,9 @@ public class LectureAddEditFragment extends Fragment {
 
             case R.id.action_delete_lecture:
                 CustomSQL customSQL = new CustomSQL(getActivity());
-
-                // TODO
-                // customSQL.deleteLecture(Lecture lecture);
+                customSQL.deleteLecture(lecture);
                 customSQL.close();
+
                 goBack();
 
                 return true;

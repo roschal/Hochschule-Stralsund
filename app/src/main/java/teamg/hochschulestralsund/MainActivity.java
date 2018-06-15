@@ -21,14 +21,14 @@ import teamg.hochschulestralsund.connect.Parser;
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
 
-public class MainActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements MainItemFragment.OnListFragmentInteractionListener {
 
     public static String CODE_SHOW_DAY = "CODE_SHOW_DAY";
 
     private Calendar calendar;
     private FragmentManager manager;
     private FragmentTransaction transaction;
-    private ItemFragment fragment;
+    private MainItemFragment fragment;
     private Intent intent;
     private Bundle bundle;
 
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
     public void showDay(String direction) {
         Bundle bundle = new Bundle();
         bundle.putLong(CODE_SHOW_DAY, calendar.getTimeInMillis());
-        fragment = new ItemFragment();
+        fragment = new MainItemFragment();
         fragment.setArguments(bundle);
 
         transaction = manager.beginTransaction();

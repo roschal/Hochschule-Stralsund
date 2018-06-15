@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import teamg.hochschulestralsund.ItemFragment;
-import teamg.hochschulestralsund.ItemFragment.OnListFragmentInteractionListener;
+import teamg.hochschulestralsund.MainItemFragment;
+import teamg.hochschulestralsund.MainItemFragment.OnListFragmentInteractionListener;
 import teamg.hochschulestralsund.R;
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
@@ -18,12 +18,12 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     private final ArrayList<Lecture> lectures;
     private final OnListFragmentInteractionListener mListener;
-    private final ItemFragment itemFragment;
+    private final MainItemFragment mainItemFragment;
 
-    public MyItemRecyclerViewAdapter(ArrayList<Lecture> lectures, OnListFragmentInteractionListener listener, ItemFragment itemFragment) {
+    public MyItemRecyclerViewAdapter(ArrayList<Lecture> lectures, OnListFragmentInteractionListener listener, MainItemFragment mainItemFragment) {
         this.lectures = lectures;
         mListener = listener;
-        this.itemFragment = itemFragment;
+        this.mainItemFragment = mainItemFragment;
     }
 
     @Override
@@ -45,10 +45,10 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Intent intent = new Intent(itemFragment.getActivity().getApplicationContext(), );
+                // Intent intent = new Intent(mainItemFragment.getActivity().getApplicationContext(), );
                 // intent.putExtra("ID", holder.lecture.event_id);
 
-                // itemFragment.startActivityForResult(intent, 0);
+                // mainItemFragment.startActivityForResult(intent, 0);
             }
         });
     }

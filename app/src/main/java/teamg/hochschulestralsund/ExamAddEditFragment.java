@@ -107,10 +107,9 @@ public class ExamAddEditFragment extends Fragment {
 
             case R.id.action_delete_exam:
                 CustomSQL customSQL = new CustomSQL(getActivity());
-
-                // TODO
-                // customSQL.deleteExam(Exam exam);
+                customSQL.deleteExam(exam);
                 customSQL.close();
+
                 goBack();
 
                 return true;

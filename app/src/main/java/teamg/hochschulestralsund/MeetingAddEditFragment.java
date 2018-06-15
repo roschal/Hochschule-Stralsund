@@ -99,10 +99,9 @@ public class MeetingAddEditFragment extends Fragment {
 
             case R.id.action_delete_meeting:
                 CustomSQL customSQL = new CustomSQL(getActivity());
-
-                // TODO
-                // customSQL.deleteMeeting(Meeting meeting);
+                customSQL.deleteMeeting(meeting);
                 customSQL.close();
+
                 goBack();
 
                 return true;

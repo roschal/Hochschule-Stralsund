@@ -9,7 +9,16 @@ import java.util.Calendar;
  * Created by ghostgate on 11.05.18.
  */
 
-public class Lecture extends Event implements Parcelable {
+public class Lecture implements Parcelable {
+    public long event_id;
+
+    public String event_title;
+    public Calendar event_begin = Calendar.getInstance();
+    public Calendar event_end = Calendar.getInstance();
+
+    public Location event_location;
+    public Person event_person;
+
     public String lecture_type; /* lecture type */
     public int lecture_repeat = 7;      /* 7 oder 14 days */
 

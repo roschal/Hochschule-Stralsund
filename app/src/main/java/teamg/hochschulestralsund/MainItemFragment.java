@@ -22,7 +22,7 @@ import teamg.hochschulestralsund.adapter.MyItemRecyclerViewAdapter;
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
 
-public class ItemFragment extends Fragment {
+public class MainItemFragment extends Fragment {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
@@ -36,7 +36,7 @@ public class ItemFragment extends Fragment {
     private TextView center;
     private TextView right;
 
-    public ItemFragment() {
+    public MainItemFragment() {
     }
 
     @Override
@@ -105,8 +105,8 @@ public class ItemFragment extends Fragment {
     /* update the list with lectures when lecture was edited or deleted*/
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(this).attach(this).commit();
+        //FragmentTransaction ft = getFragmentManager().beginTransaction();
+        //ft.detach(this).attach(this).commit();
     }
 
     private void setDays() {

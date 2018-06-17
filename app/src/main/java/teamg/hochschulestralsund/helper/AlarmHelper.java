@@ -5,6 +5,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import java.util.Calendar;
+
 import teamg.hochschulestralsund.AlarmActivity;
 
 public class AlarmHelper {
@@ -16,9 +18,9 @@ public class AlarmHelper {
         this.alarmManager = alarmManager;
     }
 
-    public void createAlarm(int time, String alarmText) {
+    public void createAlarm(Calendar calendar, String alarmText) {
         PendingIntent alarmIntent = createAlarmIntent(alarmText);
-        this.alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, alarmIntent);
+        this.alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
     }
 
     /**

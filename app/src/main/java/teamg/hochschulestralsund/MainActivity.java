@@ -145,7 +145,8 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
             case R.id.action_alarm:
                 AlarmHelper alarmHelper = new AlarmHelper(getApplicationContext(),
                         (AlarmManager) getSystemService(Context.ALARM_SERVICE));
-                alarmHelper.createAlarm(15000, "Erinnerung Prüfung");
+                Calendar calendar = Calendar.getInstance();
+                alarmHelper.createAlarm(calendar, "Erinnerung Prüfung");
                 return true;
 
             default:

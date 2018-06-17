@@ -1,6 +1,8 @@
 package teamg.hochschulestralsund;
 
+import android.app.AlarmManager;
 import android.app.Fragment;
+import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 
+import teamg.hochschulestralsund.helper.AlarmHelper;
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Meeting;
 
@@ -38,10 +41,13 @@ public class MeetingAddEditFragment extends Fragment {
     private DatePicker datePicker_meeting;
     private TimePicker timePicker_meeting;
     private Button button_meeting_submit;
+    private Button button_meeting_setReminder;
 
     private OnFragmentInteractionListener mListener;
     private Meeting meeting = new Meeting();
     private int code = -1;
+
+    private AlarmHelper alarmHelper;
 
     public MeetingAddEditFragment() {
     }
@@ -168,6 +174,9 @@ public class MeetingAddEditFragment extends Fragment {
         timePicker_meeting = getView().findViewById(R.id.timePicker_exam);
         datePicker_meeting = getView().findViewById(R.id.datePicker_exam);
         button_meeting_submit = getView().findViewById(R.id.button_meeting_submit);
+        button_meeting_setReminder = getView().findViewById(R.id.button_meeting_setReminder);
+
+        alarmHelper = new AlarmHelper(getActivity(), (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE));
 
         setAdapter();
         parseBundle();
@@ -216,6 +225,14 @@ public class MeetingAddEditFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 submit();
+            }
+        });
+
+        button_meeting_setReminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar alarmDate = getDateAndTime();
+                alarmHelper.createAlarm(alarmDate, meeting.meeting_title);
             }
         });
 

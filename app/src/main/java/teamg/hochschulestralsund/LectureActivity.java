@@ -76,52 +76,6 @@ public class LectureActivity extends AppCompatActivity implements LectureItemFra
     }
 
     @Override
-    /**create the menu
-     *
-     * @return boolean
-     */
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.lecture, menu);
-
-        /* set the icon color for 3 menu icons */
-        for (int i = 0; i < 2; i++) {
-            Drawable drawable = menu.getItem(i).getIcon();
-            drawable.mutate();
-            drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
-        }
-
-        return true;
-    }
-
-    @Override
-    /**override click handler on menu
-     *
-     * @return boolean
-     */
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            /* show activity to add a new lecture */
-            case R.id.action_add_lecture:
-                addLecture(getFragmentManager());
-
-                return true;
-
-            case R.id.action_delete_lectures:
-                CustomSQL customSQL = new CustomSQL(this);
-                customSQL.deleteLectures();
-                customSQL.close();
-
-                showLectures(getFragmentManager(), false);
-
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
     public void onListFragmentInteraction(Lecture lecture) {
         editLecture(getFragmentManager(), lecture);
     }

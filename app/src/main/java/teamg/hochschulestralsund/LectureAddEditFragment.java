@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -58,8 +59,10 @@ public class LectureAddEditFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
 
@@ -71,9 +74,10 @@ public class LectureAddEditFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (getArguments() != null) {
             int code = getArguments().getInt(LectureActivity.CODE_LECTURE, LectureActivity.CODE_LECTURE_ADD);
-
+            Log.e("ok", "Ok");
             switch (code) {
                 case LectureActivity.CODE_LECTURE_ADD:
+
                     inflater.inflate(R.menu.lecture_add, menu);
 
                     break;
@@ -85,13 +89,15 @@ public class LectureAddEditFragment extends Fragment {
                     break;
             }
 
-            //* set the icon color for 2 menu icons
-            for (int i = 0; i < 2; i++) {
+            //* set the icon color for 3 menu icons
+            for (int i = 0; i < 3; i++) {
                 Drawable drawable = menu.getItem(i).getIcon();
                 drawable.mutate();
                 drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
             }
         }
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override

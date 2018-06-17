@@ -4,11 +4,16 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -35,10 +40,55 @@ public class LectureItemFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = this.getArguments();
+        setHasOptionsMenu(true);
 
         getPersons();
         parseBundle();
+    }
+
+    @Override
+    /**create the menu
+     *
+     * @return boolean
+     */
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.lecture, menu);
+
+        /* set the icon color for 3 menu icons */
+        for (int i = 0; i < 2; i++) {
+            Drawable drawable = menu.getItem(i).getIcon();
+            drawable.mutate();
+            drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
+        }
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    /**override click handler on menu
+     *
+     * @return boolean
+     */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            /* show activity to add a new lecture */
+            case R.id.action_add_lecture:
+                LectureActivity.addLecture(getFragmentManager());
+
+                return false;
+
+            case R.id.action_delete_lectures:
+                CustomSQL customSQL = new CustomSQL(getActivity());
+                customSQL.deleteLectures();
+                customSQL.close();
+
+                LectureActivity.showLectures(getFragmentManager(), false);
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

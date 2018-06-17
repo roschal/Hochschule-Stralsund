@@ -13,10 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import teamg.hochschulestralsund.adapter.LectureMyItemRecyclerViewAdapter;
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
+import teamg.hochschulestralsund.sql.Person;
 
 public class LectureItemFragment extends Fragment {
 
@@ -34,23 +37,14 @@ public class LectureItemFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
 
-        /* get the day to show */
-        if (bundle != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
+        getPersons();
+        parseBundle();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.lecture_fragment_item_list, container, false);
-
-        /* set the adapter */
-        lectures = new ArrayList<>();
-        CustomSQL customSQL = new CustomSQL(getActivity());
-
-        lectures = customSQL.getLectures();
-        customSQL.close();
 
         if (view instanceof RecyclerView) {
             RecyclerView recyclerView = (RecyclerView) view;
@@ -90,6 +84,32 @@ public class LectureItemFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    /**parse the bundle
+     *
+     */
+    private void parseBundle() {
+        if (getArguments() != null) {
+            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+        }
+    }
+
+    private void getPersons() {
+        //* get the persons from sql
+        lectures = new ArrayList<>();
+        CustomSQL customSQL = new CustomSQL(getActivity());
+
+        lectures = customSQL.getLectures();
+        customSQL.close();
+
+        //* sort
+        Collections.sort(lectures, new Comparator<Lecture>() {
+            @Override
+            public int compare(Lecture lecture1, Lecture lecture2) {
+                return lecture1.event_title.compareTo(lecture2.event_title);
+            }
+        });
     }
 
     public interface OnListFragmentInteractionListener {

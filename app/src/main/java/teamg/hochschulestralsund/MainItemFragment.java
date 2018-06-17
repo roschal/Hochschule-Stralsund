@@ -1,7 +1,6 @@
 package teamg.hochschulestralsund;
 
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -120,7 +119,7 @@ public class MainItemFragment extends Fragment {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_WEEK, day);
 
-        return calendar.getDisplayName( Calendar.DAY_OF_WEEK ,Calendar.SHORT, Locale.getDefault());
+        return calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault());
     }
 
     /* convert day of week and Date from int to String */
@@ -128,13 +127,13 @@ public class MainItemFragment extends Fragment {
         String display = "";
         Calendar calendarToday = Calendar.getInstance();
 
-        if(calendar.get(Calendar.DATE) == calendarToday.get(Calendar.DATE)) {
+        if (calendar.get(Calendar.DATE) == calendarToday.get(Calendar.DATE)) {
             display += "(" + getString(R.string.today) + ") ";
         }
 
-        display += calendar.getDisplayName( Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()) +
-                         ", " +
-                         MainActivity.parseDate(calendar);
+        display += calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()) +
+                ", " +
+                MainActivity.parseDate(calendar);
 
         return display;
     }

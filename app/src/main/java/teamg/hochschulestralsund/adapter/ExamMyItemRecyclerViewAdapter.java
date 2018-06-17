@@ -1,22 +1,20 @@
 package teamg.hochschulestralsund.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import teamg.hochschulestralsund.ExamActivity;
-import teamg.hochschulestralsund.ExamItemFragment;
-import teamg.hochschulestralsund.LectureActivity;
-import teamg.hochschulestralsund.MainActivity;
-import teamg.hochschulestralsund.ExamItemFragment.OnListFragmentInteractionListener;
-import teamg.hochschulestralsund.R;
-import teamg.hochschulestralsund.sql.Exam;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import teamg.hochschulestralsund.ExamActivity;
+import teamg.hochschulestralsund.ExamItemFragment;
+import teamg.hochschulestralsund.ExamItemFragment.OnListFragmentInteractionListener;
+import teamg.hochschulestralsund.MainActivity;
+import teamg.hochschulestralsund.R;
+import teamg.hochschulestralsund.sql.Exam;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Meeting} and makes a call to the

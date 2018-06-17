@@ -1,30 +1,68 @@
 package teamg.hochschulestralsund;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import teamg.hochschulestralsund.sql.CustomSQL;
-import teamg.hochschulestralsund.sql.Lecture;
 import teamg.hochschulestralsund.sql.Meeting;
 
-public class MeetingActivity extends AppCompatActivity implements MeetingItemFragment.OnListFragmentInteractionListener{
+public class MeetingActivity extends AppCompatActivity implements MeetingItemFragment.OnListFragmentInteractionListener {
     public static final String CODE_MEETING = "CODE_MEETING";
     public static final int CODE_MEETING_ADD = 0;
     public static final int CODE_MEETING_EDIT = 1;
     public static final int CODE_MEETING_DELETE = 2;
     public static final int CODE_MEETING_SHOW_ALL = 3;
     public static final String CODE_MEETING_PARCELABLE = "CODE_MEETING_PARCELABLE";
+
+    /**
+     * show all Meetings
+     */
+    public static void showMeetings(FragmentManager manager, boolean firstTime) {
+        MeetingItemFragment meetingItemFragment = new MeetingItemFragment();
+        FragmentTransaction transaction;
+
+        transaction = manager.beginTransaction();
+
+        if (firstTime)
+            transaction.add(R.id.meeting_container, meetingItemFragment, null);
+        else
+            transaction.replace(R.id.meeting_container, meetingItemFragment, null);
+
+        transaction.commit();
+    }
+
+    public static void addMeeting(FragmentManager manager) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(CODE_MEETING, CODE_MEETING_ADD);
+        MeetingAddEditFragment fragment = new MeetingAddEditFragment();
+        fragment.setArguments(bundle);
+
+        FragmentTransaction transaction;
+        transaction = manager.beginTransaction();
+        transaction.replace(R.id.meeting_container, fragment, null);
+        transaction.commit();
+    }
+
+    public static void editMeeting(FragmentManager manager, Meeting meeting) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(CODE_MEETING, CODE_MEETING_EDIT);
+        bundle.putParcelable(CODE_MEETING_PARCELABLE, meeting);
+
+        MeetingAddEditFragment fragment = new MeetingAddEditFragment();
+        fragment.setArguments(bundle);
+
+        FragmentTransaction transaction;
+        transaction = manager.beginTransaction();
+        transaction.replace(R.id.meeting_container, fragment, null);
+        transaction.commit();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +124,7 @@ public class MeetingActivity extends AppCompatActivity implements MeetingItemFra
     }
 
     private void parseBundle() {
-        if(getIntent().hasExtra(CODE_MEETING)) {
+        if (getIntent().hasExtra(CODE_MEETING)) {
             int code = getIntent().getIntExtra(CODE_MEETING, CODE_MEETING_SHOW_ALL);
 
             switch (code) {
@@ -96,49 +134,6 @@ public class MeetingActivity extends AppCompatActivity implements MeetingItemFra
             }
 
         }
-    }
-
-    /**show all Meetings
-     *
-     */
-    public static void showMeetings(FragmentManager manager, boolean firstTime) {
-        MeetingItemFragment meetingItemFragment = new MeetingItemFragment();
-        FragmentTransaction transaction;
-
-        transaction = manager.beginTransaction();
-
-        if (firstTime)
-            transaction.add(R.id.meeting_container, meetingItemFragment, null);
-        else
-            transaction.replace(R.id.meeting_container, meetingItemFragment, null);
-
-        transaction.commit();
-    }
-
-    public static void addMeeting(FragmentManager manager) {
-        Bundle bundle = new Bundle();
-        bundle.putInt(CODE_MEETING, CODE_MEETING_ADD);
-        MeetingAddEditFragment fragment = new MeetingAddEditFragment();
-        fragment.setArguments(bundle);
-
-        FragmentTransaction transaction;
-        transaction = manager.beginTransaction();
-        transaction.replace(R.id.meeting_container, fragment, null);
-        transaction.commit();
-    }
-
-    public static void editMeeting(FragmentManager manager, Meeting meeting) {
-        Bundle bundle = new Bundle();
-        bundle.putInt(CODE_MEETING, CODE_MEETING_EDIT);
-        bundle.putParcelable(CODE_MEETING_PARCELABLE, meeting);
-
-        MeetingAddEditFragment fragment = new MeetingAddEditFragment();
-        fragment.setArguments(bundle);
-
-        FragmentTransaction transaction;
-        transaction = manager.beginTransaction();
-        transaction.replace(R.id.meeting_container, fragment, null);
-        transaction.commit();
     }
 
     private void deleteMeeting() {

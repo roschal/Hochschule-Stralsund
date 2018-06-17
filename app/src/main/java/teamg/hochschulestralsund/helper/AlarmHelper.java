@@ -11,14 +11,14 @@ public class AlarmHelper {
     private Context context;
     private AlarmManager alarmManager;
 
-    public AlarmHelper(Context context, AlarmManager alarmManager){
+    public AlarmHelper(Context context, AlarmManager alarmManager) {
         this.context = context;
         this.alarmManager = alarmManager;
     }
 
-    public void createAlarm(int time, String alarmText){
+    public void createAlarm(int time, String alarmText) {
         PendingIntent alarmIntent = createAlarmIntent(alarmText);
-        this.alarmManager.setExact(AlarmManager.RTC_WAKEUP,System.currentTimeMillis() + time,alarmIntent);
+        this.alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, alarmIntent);
     }
 
     /**

@@ -1,11 +1,10 @@
 package teamg.hochschulestralsund;
 
-import android.content.Context;
+import android.app.Fragment;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,11 +18,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TimePicker;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,7 +31,6 @@ import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
 import teamg.hochschulestralsund.sql.LectureTime;
 import teamg.hochschulestralsund.sql.Location;
-import teamg.hochschulestralsund.sql.Meeting;
 import teamg.hochschulestralsund.sql.Person;
 
 
@@ -55,6 +51,7 @@ public class LectureAddEditFragment extends Fragment {
     public Spinner spinner_type;
     public Button button_lecture_submit;
 
+    private int code = -1;
     private Lecture lecture = new Lecture();
 
     public LectureAddEditFragment() {
@@ -145,7 +142,8 @@ public class LectureAddEditFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_lecture_add, container, false);
     }
 
-    /**init the view elements
+    /**
+     * init the view elements
      *
      * @param view
      * @param savedInstanceState
@@ -164,8 +162,8 @@ public class LectureAddEditFragment extends Fragment {
         parseBundle();
     }
 
-    /**set the adapters
-     *
+    /**
+     * set the adapters
      */
     public void setAdapter() {
         CustomSQL customSQL = new CustomSQL(getActivity());
@@ -281,12 +279,12 @@ public class LectureAddEditFragment extends Fragment {
         customSQL.close();
     }
 
-    /**determine if add or edit meeting
-     *
+    /**
+     * determine if add or edit meeting
      */
     private void parseBundle() {
         if (getArguments() != null) {
-            int code = getArguments().getInt(LectureActivity.CODE_LECTURE, LectureActivity.CODE_LECTURE_ADD);
+            code = getArguments().getInt(LectureActivity.CODE_LECTURE, LectureActivity.CODE_LECTURE_ADD);
 
             switch (code) {
                 case LectureActivity.CODE_LECTURE_ADD:
@@ -308,6 +306,7 @@ public class LectureAddEditFragment extends Fragment {
                     }
 
                     setDay();
+                    setButtonText();
 
                     break;
 
@@ -319,9 +318,9 @@ public class LectureAddEditFragment extends Fragment {
     }
 
     //private method of your class
-    private int getIndex(Spinner spinner, String myString){
-        for (int i=0;i<spinner.getCount();i++){
-            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+    private int getIndex(Spinner spinner, String myString) {
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)) {
                 return i;
             }
         }
@@ -329,8 +328,8 @@ public class LectureAddEditFragment extends Fragment {
         return 0;
     }
 
-    /**sets the day on the radioGroup
-     *
+    /**
+     * sets the day on the radioGroup
      */
     public void setDay() {
         switch (lecture.event_begin.get(Calendar.DAY_OF_WEEK)) {
@@ -355,20 +354,50 @@ public class LectureAddEditFragment extends Fragment {
         }
     }
 
+    private void setButtonText() {
+        switch (code) {
+            case LectureActivity.CODE_LECTURE_EDIT:
+                button_lecture_submit.setText(R.string.lecture_save_edited);
+                break;
+
+            default:
+                button_lecture_submit.setText(R.string.lecture_save_new);
+
+                break;
+        }
+    }
+
     public void submit() {
         CustomSQL customSQL = new CustomSQL(getActivity());
-        customSQL.addLecture(lecture);
-        customSQL.close();
 
+        switch (code) {
+            case LectureActivity.CODE_LECTURE_ADD:
+                customSQL.addLecture(lecture);
+
+                break;
+
+            case LectureActivity.CODE_LECTURE_EDIT:
+                customSQL.deleteLecture(lecture);
+                customSQL.addLecture(lecture);
+
+                break;
+
+            default:
+
+                break;
+        }
+
+        customSQL.close();
         goBack();
     }
 
-    /**go back to activity
-     *
+    /**
+     * go back to activity
      */
     private void goBack() {
         LectureActivity.showLectures(getFragmentManager(), false);
     }
+
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }

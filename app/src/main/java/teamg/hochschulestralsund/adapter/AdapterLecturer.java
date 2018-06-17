@@ -88,11 +88,9 @@ public class AdapterLecturer extends ArrayAdapter<Person> {
                     /* search for surname and forename and full name */
                     if (lecturer.forename.toLowerCase().startsWith(searchStrLowerCase)) {
                         matchValues.add(lecturer);
-                    }
-                    else if (lecturer.surname.toLowerCase().startsWith(searchStrLowerCase)) {
+                    } else if (lecturer.surname.toLowerCase().startsWith(searchStrLowerCase)) {
                         matchValues.add(lecturer);
-                    }
-                    else if (lecturer.toString().toLowerCase().startsWith(searchStrLowerCase)) {
+                    } else if (lecturer.toString().toLowerCase().startsWith(searchStrLowerCase)) {
                         matchValues.add(lecturer);
                     }
                 }
@@ -107,7 +105,7 @@ public class AdapterLecturer extends ArrayAdapter<Person> {
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             if (results.values != null) {
-                lecturers = (ArrayList<Person>)results.values;
+                lecturers = (ArrayList<Person>) results.values;
             } else {
                 lecturers = null;
             }

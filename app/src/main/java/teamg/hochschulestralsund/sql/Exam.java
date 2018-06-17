@@ -7,17 +7,25 @@ import java.util.Calendar;
 
 public class Exam implements Parcelable {
 
-    public long exam_id;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Exam> CREATOR = new Parcelable.Creator<Exam>() {
+        @Override
+        public Exam createFromParcel(Parcel in) {
+            return new Exam(in);
+        }
 
+        @Override
+        public Exam[] newArray(int size) {
+            return new Exam[size];
+        }
+    };
+    public long exam_id;
     public String exam_title;
     public Calendar exam_begin = Calendar.getInstance();
     public Calendar exam_end = Calendar.getInstance();
-
     public Location exam_location;
     public Person exam_person;
-
     public String exam_type = "Prüfung";
-
     public int exam_default_location = 1;
     public int exam_default_person = 1;
 
@@ -54,17 +62,4 @@ public class Exam implements Parcelable {
         dest.writeInt(exam_default_location);
         dest.writeInt(exam_default_person);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Exam> CREATOR = new Parcelable.Creator<Exam>() {
-        @Override
-        public Exam createFromParcel(Parcel in) {
-            return new Exam(in);
-        }
-
-        @Override
-        public Exam[] newArray(int size) {
-            return new Exam[size];
-        }
-    };
 }

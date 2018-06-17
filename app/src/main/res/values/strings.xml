@@ -22,6 +22,10 @@
     <string name="delete_meeting">Termin löschen</string>
     <string name="edit_meeting">Termin bearbeiten</string>
 
+    <!-- lecture add / edit activity -->
+    <string name="lecture_save_new">Vorlesung hinzufügen</string>
+    <string name="lecture_save_edited">Vorlesung aktualisieren</string>
+
     <!-- exam -->
     <string name="exam_title">Name</string>
     <string name="exam_person">Prüfer</string>
@@ -35,7 +39,7 @@
     <string name="today">Heute</string>
     <string name="tomorrow">Morgen</string>
     <string name="title_activity_settings">Settings</string>
-    
+
     <!-- alarm -->
     <string name="stopp_alarm">Alarm beenden</string>
 

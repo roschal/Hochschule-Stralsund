@@ -7,15 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import teamg.hochschulestralsund.LectureActivity;
 import teamg.hochschulestralsund.LectureItemFragment;
 import teamg.hochschulestralsund.LectureItemFragment.OnListFragmentInteractionListener;
-import teamg.hochschulestralsund.MeetingActivity;
 import teamg.hochschulestralsund.R;
 import teamg.hochschulestralsund.sql.Lecture;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Meeting} and makes a call to the
@@ -43,10 +42,10 @@ public class LectureMyItemRecyclerViewAdapter extends RecyclerView.Adapter<Lectu
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.lecture = mValues.get(position);
-        holder.textView_lecture_title.setText(mValues.get(position).event_title);
-        holder.textView_lecture_location.setText(mValues.get(position).event_location.toString());
-        holder.textView_lecture_person.setText(mValues.get(position).event_person.toString());
-        holder.textView_lecture_time.setText(mValues.get(position).lecture_time.toString());
+        holder.textView_lecture_title.setText(holder.lecture.event_title + " - " + holder.lecture.lecture_type);
+        holder.textView_lecture_location.setText(holder.lecture.event_location.toString());
+        holder.textView_lecture_person.setText(holder.lecture.event_person.toString());
+        holder.textView_lecture_time.setText(holder.lecture.lecture_time.toString());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

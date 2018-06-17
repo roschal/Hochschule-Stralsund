@@ -35,6 +35,36 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
     private Intent intent;
     private Bundle bundle;
 
+    public static Calendar getNextDay(Calendar calendar) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(calendar.getTime());
+        c.add(Calendar.DATE, 1);
+
+        return c;
+    }
+
+    public static Calendar getPreviosDay(Calendar calendar) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(calendar.getTime());
+        c.add(Calendar.DATE, -1);
+
+        return c;
+    }
+
+    public static String parseDate(Calendar calendar) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        String formatted = simpleDateFormat.format(calendar.getTime());
+
+        return formatted;
+    }
+
+    public static String parseTime(Calendar calendar) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
+        String formatted = simpleDateFormat.format(calendar.getTime());
+
+        return formatted;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
                 startActivityForResult(intent, 0);
 
                 return true;
-                
+
             case R.id.action_meetings:
                 intent = new Intent(this, MeetingActivity.class);
                 bundle = new Bundle();
@@ -114,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
 
             case R.id.action_alarm:
                 AlarmHelper alarmHelper = new AlarmHelper(getApplicationContext(),
-                        (AlarmManager)getSystemService(Context.ALARM_SERVICE));
+                        (AlarmManager) getSystemService(Context.ALARM_SERVICE));
                 alarmHelper.createAlarm(15000, "Erinnerung Prüfung");
                 return true;
 
@@ -200,35 +230,5 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
     public void showNextDay() {
         calendar = getNextDay(calendar);
         showDay("right");
-    }
-
-    public static Calendar getNextDay(Calendar calendar) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(calendar.getTime());
-        c.add(Calendar.DATE, 1);
-
-        return c;
-    }
-
-    public static Calendar getPreviosDay(Calendar calendar) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(calendar.getTime());
-        c.add(Calendar.DATE, -1);
-
-        return c;
-    }
-
-    public static String parseDate(Calendar calendar) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        String formatted = simpleDateFormat.format(calendar.getTime());
-
-        return formatted;
-    }
-
-    public static String parseTime(Calendar calendar) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
-        String formatted = simpleDateFormat.format(calendar.getTime());
-
-        return formatted;
     }
 }

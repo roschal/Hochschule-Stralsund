@@ -1,11 +1,9 @@
 package teamg.hochschulestralsund;
 
-import android.content.Context;
+import android.app.Fragment;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -150,7 +148,8 @@ public class MeetingAddEditFragment extends Fragment {
         mListener = null;
     }
 
-    /**init the view elements
+    /**
+     * init the view elements
      *
      * @param view
      * @param savedInstanceState
@@ -167,8 +166,8 @@ public class MeetingAddEditFragment extends Fragment {
         parseBundle();
     }
 
-    /**set the adapters
-     *
+    /**
+     * set the adapters
      */
     public void setAdapter() {
         //*  override the click handler */
@@ -215,8 +214,8 @@ public class MeetingAddEditFragment extends Fragment {
 
     }
 
-    /**determine if add or edit meeting
-     *
+    /**
+     * determine if add or edit meeting
      */
     private void parseBundle() {
         if (getArguments() != null) {
@@ -241,15 +240,14 @@ public class MeetingAddEditFragment extends Fragment {
     }
 
     /**
-     *
      * @return Calendar
      */
-    private Calendar getDateAndTime(){
+    private Calendar getDateAndTime() {
         int minute = timePicker_meeting.getCurrentMinute();
         int hour = timePicker_meeting.getCurrentHour();
         int day = datePicker_meeting.getDayOfMonth();
         int month = datePicker_meeting.getMonth();
-        int year =  datePicker_meeting.getYear();
+        int year = datePicker_meeting.getYear();
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day, hour, minute);
@@ -257,8 +255,8 @@ public class MeetingAddEditFragment extends Fragment {
         return calendar;
     }
 
-    /**add or edit the meeting
-     *
+    /**
+     * add or edit the meeting
      */
     private void submit() {
         meeting.meeting_calendar = getDateAndTime();
@@ -270,8 +268,8 @@ public class MeetingAddEditFragment extends Fragment {
         goBack();
     }
 
-    /**go back to activity
-     *
+    /**
+     * go back to activity
      */
     private void goBack() {
         MeetingActivity.showMeetings(getFragmentManager(), false);

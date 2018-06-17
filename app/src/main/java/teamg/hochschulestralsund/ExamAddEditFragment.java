@@ -1,11 +1,10 @@
 package teamg.hochschulestralsund;
 
-import android.content.Context;
+import android.app.Fragment;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,7 +28,6 @@ import teamg.hochschulestralsund.adapter.AdapterRoom;
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Exam;
 import teamg.hochschulestralsund.sql.Location;
-import teamg.hochschulestralsund.sql.Meeting;
 import teamg.hochschulestralsund.sql.Person;
 
 
@@ -157,7 +155,8 @@ public class ExamAddEditFragment extends Fragment {
         mListener = null;
     }
 
-    /**init the view elements
+    /**
+     * init the view elements
      *
      * @param view
      * @param savedInstanceState
@@ -175,8 +174,8 @@ public class ExamAddEditFragment extends Fragment {
         parseBundle();
     }
 
-    /**set the adapters
-     *
+    /**
+     * set the adapters
      */
     public void setAdapter() {
         //*  override the click handler */
@@ -229,8 +228,8 @@ public class ExamAddEditFragment extends Fragment {
 
     }
 
-    /**determine if add or edit meeting
-     *
+    /**
+     * determine if add or edit meeting
      */
     private void parseBundle() {
         if (getArguments() != null) {
@@ -256,15 +255,14 @@ public class ExamAddEditFragment extends Fragment {
     }
 
     /**
-     *
      * @return Calendar
      */
-    private Calendar getDateAndTime(){
+    private Calendar getDateAndTime() {
         int minute = timePicker_exam.getCurrentMinute();
         int hour = timePicker_exam.getCurrentHour();
         int day = datePicker_exam.getDayOfMonth();
         int month = datePicker_exam.getMonth();
-        int year =  datePicker_exam.getYear();
+        int year = datePicker_exam.getYear();
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day, hour, minute);
@@ -272,8 +270,8 @@ public class ExamAddEditFragment extends Fragment {
         return calendar;
     }
 
-    /**add or edit the meeting
-     *
+    /**
+     * add or edit the meeting
      */
     private void submit() {
         exam.exam_begin = getDateAndTime();
@@ -285,8 +283,8 @@ public class ExamAddEditFragment extends Fragment {
         goBack();
     }
 
-    /**go back to the list with exams
-     *
+    /**
+     * go back to the list with exams
      */
     private void goBack() {
         ExamActivity.showExams(getFragmentManager(), false);

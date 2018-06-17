@@ -32,15 +32,15 @@ public class Location {
     public String toString() {
         String text = "";
 
-        if(!house.isEmpty()) {
+        if (!house.isEmpty()) {
             text += house;
         }
 
-        if(!room.isEmpty()){
+        if (!room.isEmpty()) {
             text += "/" + room;
         }
 
-        if(!name.isEmpty()){
+        if (!name.isEmpty()) {
             text += " - " + name;
         }
 

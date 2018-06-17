@@ -1,8 +1,8 @@
 package teamg.hochschulestralsund;
 
 import android.media.MediaPlayer;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,10 +17,10 @@ public class AlarmActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
 
-        if(b != null){
-            String alarmText =  (String) b.get("ALARM_TEXT");
+        if (b != null) {
+            String alarmText = (String) b.get("ALARM_TEXT");
             setTitle(alarmText);
-            TextView textView =  findViewById(R.id.textView_alarm_alarmText);
+            TextView textView = findViewById(R.id.textView_alarm_alarmText);
             textView.setText(alarmText);
         }
 
@@ -31,7 +31,7 @@ public class AlarmActivity extends AppCompatActivity {
         player.start();
     }
 
-    public void onStopAlarmBtnClicked(View view){
+    public void onStopAlarmBtnClicked(View view) {
         player.stop();
         finish();
     }

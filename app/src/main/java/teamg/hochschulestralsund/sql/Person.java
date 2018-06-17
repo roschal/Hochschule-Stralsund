@@ -5,17 +5,14 @@ package teamg.hochschulestralsund.sql;
  */
 
 public class Person {
-    public long id;
+    public long id = -1;
 
-    public String forename;
-    public String surname;
-    public String academic_title;
-    public String telephone;
-    public String mail;
-
-    public String person_picture1_path = "";
-    public String person_picture2_path = "";
-    public String person_picture3_path = "";
+    public String forename = "";
+    public String surname = "";
+    public String academic_title = "";
+    public String telephone = "";
+    public String mail = "";
+    public String person_picture_path = "";
 
     public Person() {
 
@@ -39,18 +36,17 @@ public class Person {
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         String text = "";
 
-        if(!academic_title.isEmpty()) {
+        if (academic_title != null && !academic_title.isEmpty()) {
             text += academic_title + " ";
         }
 
-        if(!forename.isEmpty())
+        if (!forename.isEmpty())
             text += forename + " ";
 
-        if(!surname.isEmpty())
+        if (!surname.isEmpty())
             text += surname;
 
         return text;

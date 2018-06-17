@@ -26,13 +26,12 @@ public class Tables {
         public static final String COLUMN_ACADEMIC_TITLE = "academic_title";
         public static final String COLUMN_TELEPHONE = "telephone";
         public static final String COLUMN_MAIL = "mail";
-        public static final String COLUMN_PICTURE1_PATH = "picture1_path";
-        public static final String COLUMN_PICTURE2_PATH = "picture2_path";
-        public static final String COLUMN_PICTURE3_PATH = "picture3_path";
+        public static final String COLUMN_PICTURE_PATH = "picture_path";
     }
 
-    public static class LECTURE implements BaseColumns {
+    public static class LECTURE {
         public static final String TABLE_NAME = "Lecture";
+        public static final String COLUMN_ID = "lecture_id";
         public static final String COLUMN_TITLE = "lecture_title";
         public static final String COLUMN_TYPE = "lecture_type";
         public static final String COLUMN_REPEAT = "lecture_repeat";

@@ -13,10 +13,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import teamg.hochschulestralsund.ContactActivity;
 import teamg.hochschulestralsund.ContactItemFragment;
 import teamg.hochschulestralsund.ContactItemFragment.OnListFragmentInteractionListener;
-import teamg.hochschulestralsund.MainActivity;
 import teamg.hochschulestralsund.R;
 import teamg.hochschulestralsund.sql.Person;
 
@@ -50,11 +48,15 @@ public class ContactMyItemRecyclerViewAdapter extends RecyclerView.Adapter<Conta
         holder.textView_contact_email.setText(mValues.get(position).mail);
         holder.textView_contact_phone.setText(mValues.get(position).telephone);
 
-        File imgFile = new File("/sdcard/" + mValues.get(position).person_picture1_path);
+        try {
+            File imgFile = new File("/sdcard/" + mValues.get(position).person_picture_path);
 
-        if(imgFile.exists()){
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            holder.imageView_contact_1.setImageBitmap(myBitmap);
+            if (imgFile.exists()) {
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                holder.imageView_contact_1.setImageBitmap(myBitmap);
+
+            }
+        } catch (Exception e) {
 
         }
 

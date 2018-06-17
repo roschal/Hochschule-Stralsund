@@ -1,21 +1,16 @@
 package teamg.hochschulestralsund.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import teamg.hochschulestralsund.R;
-import teamg.hochschulestralsund.sql.Lecture;
 import teamg.hochschulestralsund.sql.Location;
 
 public class AdapterRoom extends ArrayAdapter<Location> {
@@ -93,8 +88,7 @@ public class AdapterRoom extends ArrayAdapter<Location> {
                     Location room = locations.get(i);
                     if (room.room.toLowerCase().startsWith(searchStrLowerCase)) {
                         matchValues.add(room);
-                    }
-                    else if (room.toString().toLowerCase().startsWith(searchStrLowerCase)) {
+                    } else if (room.toString().toLowerCase().startsWith(searchStrLowerCase)) {
                         matchValues.add(room);
                     }
                 }
@@ -109,7 +103,7 @@ public class AdapterRoom extends ArrayAdapter<Location> {
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             if (results.values != null) {
-                locations = (ArrayList<Location>)results.values;
+                locations = (ArrayList<Location>) results.values;
             } else {
                 locations = null;
             }

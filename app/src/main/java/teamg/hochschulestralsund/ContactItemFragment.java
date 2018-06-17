@@ -11,9 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
-import java.util.function.Predicate;
 
 import teamg.hochschulestralsund.adapter.ContactMyItemRecyclerViewAdapter;
 import teamg.hochschulestralsund.sql.CustomSQL;
@@ -32,6 +32,7 @@ public class ContactItemFragment extends Fragment {
 
     private ArrayList persons;
     private CustomSQL customSQL;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -92,7 +93,7 @@ public class ContactItemFragment extends Fragment {
             if (getArguments().containsKey(ContactActivity.CODE_CONTACT_SEARCH_QUERY)) {
                 String query = getArguments().getString(ContactActivity.CODE_CONTACT_SEARCH_QUERY, "");
 
-                for (Iterator<Person> it = persons.iterator(); it.hasNext();) {
+                for (Iterator<Person> it = persons.iterator(); it.hasNext(); ) {
                     if (!it.next().toString().contains(query))
                         it.remove();
                 }
@@ -107,6 +108,14 @@ public class ContactItemFragment extends Fragment {
 
         persons = customSQL.getLecturers();
         customSQL.close();
+
+        //* sort
+        Collections.sort(persons, new Comparator<Person>() {
+            @Override
+            public int compare(Person person1, Person person2) {
+                return person1.surname.compareTo(person2.surname);
+            }
+        });
     }
 
     public interface OnListFragmentInteractionListener {

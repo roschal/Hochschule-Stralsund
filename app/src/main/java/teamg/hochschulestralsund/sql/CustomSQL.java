@@ -2,7 +2,6 @@ package teamg.hochschulestralsund.sql;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -39,7 +38,7 @@ public class CustomSQL extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_TABLE_LECTURE =
             "CREATE TABLE IF NOT EXISTS " + Tables.LECTURE.TABLE_NAME + " (" +
-                    Tables.LECTURE._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                    Tables.LECTURE.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                     Tables.LECTURE.COLUMN_TITLE + " TEXT," +
                     Tables.LECTURE.COLUMN_TYPE + " TEXT," +
                     Tables.LECTURE.COLUMN_REPEAT + " INTEGER," +
@@ -60,9 +59,7 @@ public class CustomSQL extends SQLiteOpenHelper {
                     Tables.LECTURER.COLUMN_ACADEMIC_TITLE + " TEXT," +
                     Tables.LECTURER.COLUMN_TELEPHONE + " TEXT," +
                     Tables.LECTURER.COLUMN_MAIL + " TEXT," +
-                    Tables.LECTURER.COLUMN_PICTURE1_PATH + " TEXT," +
-                    Tables.LECTURER.COLUMN_PICTURE2_PATH + " TEXT," +
-                    Tables.LECTURER.COLUMN_PICTURE3_PATH + " TEXT)";
+                    Tables.LECTURER.COLUMN_PICTURE_PATH + " TEXT)";
 
     private static final String SQL_CREATE_TABLE_LECTURE_TIME =
             "CREATE TABLE IF NOT EXISTS " + Tables.LECTURE_TIME.TABLE_NAME + " (" +
@@ -85,12 +82,12 @@ public class CustomSQL extends SQLiteOpenHelper {
                     Tables.MEETING.COLUMN_CALENDAR + " BIGINT)";
 
     //* sql delete all from table statements
-    private static final String SQL_DELETE_EXAMS = "DELETE * FROM " + Tables.EXAM.TABLE_NAME;
-    private static final String SQL_DELETE_LECTURES = "DELETE * FROM " + Tables.LECTURE.TABLE_NAME;
-    private static final String SQL_DELETE_LECTURERS = "DELETE * FROM " + Tables.LECTURER.TABLE_NAME;
-    private static final String SQL_DELETE_LECTURE_TIMES = "DELETE * FROM " + Tables.LECTURE_TIME.TABLE_NAME;
-    private static final String SQL_DELETE_LOCATIONS = "DELETE * FROM " + Tables.LOCATION.TABLE_NAME;
-    private static final String SQL_DELETE_MEETINGS = "DELETE * FROM " + Tables.MEETING.TABLE_NAME;
+    private static final String SQL_DELETE_EXAMS = "DELETE FROM " + Tables.EXAM.TABLE_NAME;
+    private static final String SQL_DELETE_LECTURES = "DELETE FROM " + Tables.LECTURE.TABLE_NAME;
+    private static final String SQL_DELETE_LECTURERS = "DELETE FROM " + Tables.LECTURER.TABLE_NAME;
+    private static final String SQL_DELETE_LECTURE_TIMES = "DELETE FROM " + Tables.LECTURE_TIME.TABLE_NAME;
+    private static final String SQL_DELETE_LOCATIONS = "DELETE FROM " + Tables.LOCATION.TABLE_NAME;
+    private static final String SQL_DELETE_MEETINGS = "DELETE FROM " + Tables.MEETING.TABLE_NAME;
 
     //* SQL delete tables statements
     private static final String SQL_DELETE_TABLE_EXAM =
@@ -175,7 +172,8 @@ public class CustomSQL extends SQLiteOpenHelper {
     /////////////////////////////////////////////////////////////////////////////////////////
     /* add */
 
-    /**Adds a Exam object to the database
+    /**
+     * Adds a Exam object to the database
      *
      * @param exam
      * @return id
@@ -184,8 +182,6 @@ public class CustomSQL extends SQLiteOpenHelper {
         long id = -1;
 
         try {
-            db = getWritableDatabase();
-
             ContentValues values = new ContentValues();
             values.put(Tables.EXAM.COLUMN_TITLE, exam.exam_title);
             values.put(Tables.EXAM.COLUMN_BEGIN, exam.exam_begin.getTimeInMillis());
@@ -210,7 +206,7 @@ public class CustomSQL extends SQLiteOpenHelper {
             id = db.insert(Tables.EXAM.TABLE_NAME, null, values);
 
             /* if everything is fine */
-            if(id > 0)
+            if (id > 0)
                 Log.d("Adding new exam", "OK - id " + String.valueOf(id));
             else
                 Log.e("Adding new exam", "FAIL");
@@ -221,7 +217,8 @@ public class CustomSQL extends SQLiteOpenHelper {
         return id;
     }
 
-    /**Adds a Lecture object to the database
+    /**
+     * Adds a Lecture object to the database
      *
      * @param lecture
      * @return id
@@ -230,8 +227,6 @@ public class CustomSQL extends SQLiteOpenHelper {
         long id = -1;
 
         try {
-            db = getWritableDatabase();
-
             ContentValues values = new ContentValues();
             values.put(Tables.LECTURE.COLUMN_TITLE, lecture.event_title);
             values.put(Tables.LECTURE.COLUMN_TYPE, lecture.lecture_type);
@@ -266,7 +261,7 @@ public class CustomSQL extends SQLiteOpenHelper {
             id = db.insert(Tables.LECTURE.TABLE_NAME, null, values);
 
             /* if everything is fine */
-            if(id > 0)
+            if (id > 0)
                 Log.d("Adding new lecture", "OK - id " + String.valueOf(id));
             else
                 Log.e("Adding new lecture", "FAIL");
@@ -279,23 +274,25 @@ public class CustomSQL extends SQLiteOpenHelper {
 
     /* add a lecture object to sql database without checking if it is already existing */
     public long addLecturer(Person lecturer) {
-       try {
-           ContentValues values = new ContentValues();
-           values.put(Tables.LECTURER.COLUMN_FORENAME, lecturer.forename);
-           values.put(Tables.LECTURER.COLUMN_SURNAME, lecturer.surname);
-           values.put(Tables.LECTURER.COLUMN_ACADEMIC_TITLE, lecturer.academic_title);
-           values.put(Tables.LECTURER.COLUMN_MAIL, lecturer.mail);
-           values.put(Tables.LECTURER.COLUMN_TELEPHONE, lecturer.telephone);
-           values.put(Tables.LECTURER.COLUMN_PICTURE1_PATH, lecturer.person_picture1_path);
-           values.put(Tables.LECTURER.COLUMN_PICTURE2_PATH, lecturer.person_picture2_path);
-           values.put(Tables.LECTURER.COLUMN_PICTURE3_PATH, lecturer.person_picture3_path);
+        Log.e("addLecturer", lecturer.person_picture_path);
 
-           return db.insert(Tables.LECTURER.TABLE_NAME, null, values);
+        long id = -1;
+
+        try {
+            ContentValues values = new ContentValues();
+            values.put(Tables.LECTURER.COLUMN_FORENAME, lecturer.forename);
+            values.put(Tables.LECTURER.COLUMN_SURNAME, lecturer.surname);
+            values.put(Tables.LECTURER.COLUMN_ACADEMIC_TITLE, lecturer.academic_title);
+            values.put(Tables.LECTURER.COLUMN_MAIL, lecturer.mail);
+            values.put(Tables.LECTURER.COLUMN_TELEPHONE, lecturer.telephone);
+            values.put(Tables.LECTURER.COLUMN_PICTURE_PATH, lecturer.person_picture_path);
+
+            id = db.insert(Tables.LECTURER.TABLE_NAME, null, values);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            return id;
         }
-
-        return -1;
     }
 
     /* add a lecture object to sql database but only if it is not already existing */
@@ -364,7 +361,8 @@ public class CustomSQL extends SQLiteOpenHelper {
         }
     }
 
-    /**Adds a Lecture object to the database
+    /**
+     * Adds a Lecture object to the database
      *
      * @param meeting
      * @return id
@@ -373,8 +371,6 @@ public class CustomSQL extends SQLiteOpenHelper {
         long id = -1;
 
         try {
-            db = getWritableDatabase();
-
             ContentValues values = new ContentValues();
             values.put(Tables.MEETING.COLUMN_TITLE, meeting.meeting_title);
             values.put(Tables.MEETING.COLUMN_DESCRIPTION, meeting.meeting_description);
@@ -389,7 +385,7 @@ public class CustomSQL extends SQLiteOpenHelper {
             id = db.insert(Tables.MEETING.TABLE_NAME, null, values);
 
             /* if everything is fine */
-            if(id > 0)
+            if (id > 0)
                 Log.d("Adding new Meeting", "OK - id " + String.valueOf(id));
             else
                 Log.e("Adding new Meeting", "FAIL");
@@ -423,7 +419,6 @@ public class CustomSQL extends SQLiteOpenHelper {
         try {
             Log.d("Deleting all exams", "...");
 
-            db = getWritableDatabase();
             db.execSQL(SQL_DELETE_EXAMS);
 
             Log.d("Deleting all exams", "OK");
@@ -433,7 +428,6 @@ public class CustomSQL extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
-        db.close();
         Log.e("Deleting all exams", "FAIL");
 
         return false;
@@ -443,7 +437,6 @@ public class CustomSQL extends SQLiteOpenHelper {
         try {
             Log.d("Deleting all lectures", "...");
 
-            db = getWritableDatabase();
             db.execSQL(SQL_DELETE_LECTURES);
 
             Log.d("Deleting all lectures", "OK");
@@ -453,7 +446,6 @@ public class CustomSQL extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
-        db.close();
         Log.e("Deleting all lectures", "FAIL");
 
         return false;
@@ -463,7 +455,6 @@ public class CustomSQL extends SQLiteOpenHelper {
         try {
             Log.d("Deleting all lecturers", "...");
 
-            db = getWritableDatabase();
             db.execSQL(SQL_DELETE_LECTURERS);
 
             Log.d("Deleting all lecturers", "OK");
@@ -473,7 +464,6 @@ public class CustomSQL extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
-        db.close();
         Log.e("Deleting all lecturers", "FAIL");
 
         return false;
@@ -483,7 +473,6 @@ public class CustomSQL extends SQLiteOpenHelper {
         try {
             Log.d("Deleting all locations", "...");
 
-            db = getWritableDatabase();
             db.execSQL(SQL_DELETE_LOCATIONS);
 
             Log.d("Deleting all locations", "OK");
@@ -493,7 +482,6 @@ public class CustomSQL extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
-        db.close();
         Log.e("Deleting all locations", "FAIL");
 
         return false;
@@ -503,7 +491,6 @@ public class CustomSQL extends SQLiteOpenHelper {
         try {
             Log.d("Deleting all meetings", "...");
 
-            db = getWritableDatabase();
             db.execSQL(SQL_DELETE_MEETINGS);
 
             Log.d("Deleting all meetings", "OK");
@@ -513,7 +500,6 @@ public class CustomSQL extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
-        db.close();
         Log.e("Deleting all meetings", "FAIL");
 
         return false;
@@ -523,20 +509,16 @@ public class CustomSQL extends SQLiteOpenHelper {
         int count = 0;
 
         try {
-            db = getWritableDatabase();
-
             Log.d("Deleting exam", "...");
             Log.d("Exam id is", String.valueOf(exam.exam_id));
 
-            count = db.delete(Tables.EXAM.TABLE_NAME, Tables.EXAM._ID + "=?", new String[] {Long.toString(exam.exam_id)});
+            count = db.delete(Tables.EXAM.TABLE_NAME, Tables.EXAM._ID + "=?", new String[]{Long.toString(exam.exam_id)});
 
             Log.d("Deleted", Integer.toString(count) + " times");
         } catch (Exception e) {
             e.printStackTrace();
             Log.d("Deleting exam", "FAIL");
         }
-
-        db.close();
 
         return count;
     }
@@ -545,20 +527,16 @@ public class CustomSQL extends SQLiteOpenHelper {
         int count = 0;
 
         try {
-            db = getWritableDatabase();
-
             Log.d("Deleting lecture", "...");
-            Log.d("Lecture id is", String.valueOf(lecture.event_id));
+            Log.d("Lecture id is", Long.toString(lecture.event_id));
 
-            count = db.delete(Tables.LECTURE.TABLE_NAME, Tables.LECTURE._ID + "=?", new String[] {Long.toString(lecture.event_id)});
+            count = db.delete(Tables.LECTURE.TABLE_NAME, Tables.LECTURE.COLUMN_ID + " =? ", new String[]{Long.toString(lecture.event_id)});
 
             Log.d("Deleted", Integer.toString(count) + " times");
         } catch (Exception e) {
             e.printStackTrace();
             Log.d("Deleting lecture", "FAIL");
         }
-
-        db.close();
 
         return count;
     }
@@ -567,20 +545,16 @@ public class CustomSQL extends SQLiteOpenHelper {
         int count = 0;
 
         try {
-            db = getWritableDatabase();
-
             Log.d("Deleting person", "...");
             Log.d("Person id is", String.valueOf(person.id));
 
-            count = db.delete(Tables.LECTURER.TABLE_NAME, Tables.LECTURER._ID + "=?", new String[] {Long.toString(person.id)});
+            count = db.delete(Tables.LECTURER.TABLE_NAME, Tables.LECTURER._ID + "=?", new String[]{Long.toString(person.id)});
 
             Log.d("Deleted", Integer.toString(count) + " times");
         } catch (Exception e) {
             e.printStackTrace();
             Log.d("Deleting person", "FAIL");
         }
-
-        db.close();
 
         return count;
     }
@@ -589,20 +563,16 @@ public class CustomSQL extends SQLiteOpenHelper {
         int count = 0;
 
         try {
-            db = getWritableDatabase();
-
             Log.d("Deleting location", "...");
             Log.d("Location id is", String.valueOf(location.id));
 
-            count = db.delete(Tables.LOCATION.TABLE_NAME, Tables.LOCATION._ID + "=?", new String[] {Long.toString(location.id)});
+            count = db.delete(Tables.LOCATION.TABLE_NAME, Tables.LOCATION._ID + "=?", new String[]{Long.toString(location.id)});
 
             Log.d("Deleted", Integer.toString(count) + " times");
         } catch (Exception e) {
             e.printStackTrace();
             Log.d("Deleting location", "FAIL");
         }
-
-        db.close();
 
         return count;
     }
@@ -611,20 +581,16 @@ public class CustomSQL extends SQLiteOpenHelper {
         int count = 0;
 
         try {
-            db = getWritableDatabase();
-
             Log.d("Deleting meeting", "...");
             Log.d("Meeting id is", String.valueOf(meeting.meeting_id));
 
-            count = db.delete(Tables.MEETING.TABLE_NAME, Tables.MEETING._ID + "=?", new String[] {Long.toString(meeting.meeting_id)});
+            count = db.delete(Tables.MEETING.TABLE_NAME, Tables.MEETING._ID + "=?", new String[]{Long.toString(meeting.meeting_id)});
 
             Log.d("Deleted", Integer.toString(count) + " times");
         } catch (Exception e) {
             e.printStackTrace();
             Log.d("Deleting meeting", "FAIL");
         }
-
-        db.close();
 
         return count;
     }
@@ -696,7 +662,7 @@ public class CustomSQL extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
-        for(int i = 0; i < exams.size(); i++)
+        for (int i = 0; i < exams.size(); i++)
             Log.e("BLA", exams.get(i).exam_title);
 
         return exams;
@@ -713,9 +679,9 @@ public class CustomSQL extends SQLiteOpenHelper {
 
         lecturesOld = getLectures();
 
-        for(int i = 0; i < lecturesOld.size(); i++) {
-            if(lecturesOld.get(i).event_begin.get(Calendar.DAY_OF_WEEK) == day) {
-               lecturesNew.add(lecturesOld.get(i));
+        for (int i = 0; i < lecturesOld.size(); i++) {
+            if (lecturesOld.get(i).event_begin.get(Calendar.DAY_OF_WEEK) == day) {
+                lecturesNew.add(lecturesOld.get(i));
             }
         }
 
@@ -737,9 +703,11 @@ public class CustomSQL extends SQLiteOpenHelper {
 
             while (cursor.moveToNext()) {
                 Lecture lecture = new Lecture();
-                Person person = new Person();
 
-                lecture.event_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE._ID));
+                lecture.event_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_ID));
+
+                Log.e("IDS", Long.toString(lecture.event_id));
+
                 lecture.event_title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_TITLE));
                 lecture.lecture_type = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_TYPE));
                 lecture.lecture_repeat = cursor.getInt(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_REPEAT));
@@ -764,9 +732,7 @@ public class CustomSQL extends SQLiteOpenHelper {
                 lecture.event_person.academic_title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_ACADEMIC_TITLE));
                 lecture.event_person.mail = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_MAIL));
                 lecture.event_person.telephone = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_TELEPHONE));
-                lecture.event_person.person_picture1_path = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_PICTURE1_PATH));
-                lecture.event_person.person_picture2_path = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_PICTURE2_PATH));
-                lecture.event_person.person_picture3_path = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_PICTURE3_PATH));
+                lecture.event_person.person_picture_path = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_PICTURE_PATH));
 
                 /* lecture_time */
                 long lecture_time_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.LECTURE.COLUMN_LECTURE_TIME_ID));
@@ -785,8 +751,6 @@ public class CustomSQL extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
-        for(int i = 0; i < lectures.size(); i++)
-            Log.e("BLA", lectures.get(i).event_title);
         return lectures;
     }
 
@@ -838,9 +802,7 @@ public class CustomSQL extends SQLiteOpenHelper {
                     Tables.LECTURER.COLUMN_ACADEMIC_TITLE,
                     Tables.LECTURER.COLUMN_MAIL,
                     Tables.LECTURER.COLUMN_TELEPHONE,
-                    Tables.LECTURER.COLUMN_PICTURE1_PATH,
-                    Tables.LECTURER.COLUMN_PICTURE2_PATH,
-                    Tables.LECTURER.COLUMN_PICTURE3_PATH
+                    Tables.LECTURER.COLUMN_PICTURE_PATH
             };
 
             String sortOrder = Tables.LECTURER.COLUMN_SURNAME + " DESC";
@@ -864,9 +826,7 @@ public class CustomSQL extends SQLiteOpenHelper {
                 person.academic_title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_ACADEMIC_TITLE));
                 person.mail = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_MAIL));
                 person.telephone = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_TELEPHONE));
-                person.person_picture1_path = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_PICTURE1_PATH));
-                person.person_picture2_path = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_PICTURE2_PATH));
-                person.person_picture3_path = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_PICTURE3_PATH));
+                person.person_picture_path = cursor.getString(cursor.getColumnIndexOrThrow(Tables.LECTURER.COLUMN_PICTURE_PATH));
 
                 lecturers.add(person);
             }
@@ -905,7 +865,7 @@ public class CustomSQL extends SQLiteOpenHelper {
             int result = cursor.getCount();
             cursor.close();
 
-            if(result > 0)
+            if (result > 0)
                 return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -1030,8 +990,8 @@ public class CustomSQL extends SQLiteOpenHelper {
         return locations;
     }
 
-    /**get a list with all saved meetings
-     *
+    /**
+     * get a list with all saved meetings
      *
      * @return
      */
@@ -1064,6 +1024,9 @@ public class CustomSQL extends SQLiteOpenHelper {
                 Meeting meeting = new Meeting();
 
                 meeting.meeting_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.MEETING._ID));
+
+                Log.e("IDS", Long.toString(meeting.meeting_id));
+
                 meeting.meeting_title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.MEETING.COLUMN_TITLE));
                 meeting.meeting_description = cursor.getString(cursor.getColumnIndexOrThrow(Tables.MEETING.COLUMN_DESCRIPTION));
                 meeting.meeting_calendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndexOrThrow(Tables.MEETING.COLUMN_CALENDAR)));

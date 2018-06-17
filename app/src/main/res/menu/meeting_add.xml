@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" tools:context=".MeetingActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MeetingActivity">
 
     <item
         android:id="@+id/action_save_new_meeting"
         android:icon="@drawable/ic_delete_black_24dp"
-        android:title=""
         android:tint="@android:color/white"
+        android:title=""
         app:showAsAction="always" />
 
     <item

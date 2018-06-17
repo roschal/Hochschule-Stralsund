@@ -10,22 +10,29 @@ import java.util.Calendar;
  */
 
 public class Lecture implements Parcelable {
-    public long event_id;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Lecture> CREATOR = new Parcelable.Creator<Lecture>() {
+        @Override
+        public Lecture createFromParcel(Parcel in) {
+            return new Lecture(in);
+        }
 
+        @Override
+        public Lecture[] newArray(int size) {
+            return new Lecture[size];
+        }
+    };
+    public long event_id = -1;
     public String event_title;
     public Calendar event_begin = Calendar.getInstance();
     public Calendar event_end = Calendar.getInstance();
-
     public Location event_location = new Location();
     public Person event_person = new Person();
-
     public String lecture_type; /* lecture type */
     public int lecture_repeat = 7;      /* 7 oder 14 days */
-
     public int lecture_default_location = 1;
     public int lecture_default_person = 1;
     public int lecture_default_time = 1;
-
     public LectureTime lecture_time;
 
     public Lecture() {
@@ -82,17 +89,4 @@ public class Lecture implements Parcelable {
         dest.writeInt(lecture_default_time);
         dest.writeValue(lecture_time);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Lecture> CREATOR = new Parcelable.Creator<Lecture>() {
-        @Override
-        public Lecture createFromParcel(Parcel in) {
-            return new Lecture(in);
-        }
-
-        @Override
-        public Lecture[] newArray(int size) {
-            return new Lecture[size];
-        }
-    };
 }

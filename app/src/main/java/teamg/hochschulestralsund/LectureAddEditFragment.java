@@ -74,23 +74,25 @@ public class LectureAddEditFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (getArguments() != null) {
             int code = getArguments().getInt(LectureActivity.CODE_LECTURE, LectureActivity.CODE_LECTURE_ADD);
-            Log.e("ok", "Ok");
+            int itemCount = 0;
+
             switch (code) {
                 case LectureActivity.CODE_LECTURE_ADD:
-
                     inflater.inflate(R.menu.lecture_add, menu);
+                    itemCount = 2;
 
                     break;
 
 
                 case LectureActivity.CODE_LECTURE_EDIT:
                     inflater.inflate(R.menu.lecture_edit, menu);
+                    itemCount = 3;
 
                     break;
             }
 
-            //* set the icon color for 3 menu icons
-            for (int i = 0; i < 3; i++) {
+            //* set the icon color for menu icons
+            for (int i = 0; i < itemCount; i++) {
                 Drawable drawable = menu.getItem(i).getIcon();
                 drawable.mutate();
                 drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);

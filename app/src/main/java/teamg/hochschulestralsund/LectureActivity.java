@@ -32,9 +32,11 @@ public class LectureActivity extends AppCompatActivity implements LectureItemFra
         FragmentTransaction transaction;
 
         transaction = manager.beginTransaction();
+        manager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-        if (firstTime)
+        if (firstTime) {
             transaction.add(R.id.lecture_container, lectureItemFragment, null);
+        }
         else
             transaction.replace(R.id.lecture_container, lectureItemFragment, null);
 
@@ -49,6 +51,8 @@ public class LectureActivity extends AppCompatActivity implements LectureItemFra
 
         FragmentTransaction transaction;
         transaction = manager.beginTransaction();
+        //* add to the back stack
+        transaction.addToBackStack(null);
         transaction.replace(R.id.lecture_container, fragment, null);
         transaction.commit();
     }
@@ -63,6 +67,8 @@ public class LectureActivity extends AppCompatActivity implements LectureItemFra
 
         FragmentTransaction transaction;
         transaction = manager.beginTransaction();
+        //* add to the back stack
+        transaction.addToBackStack(null);
         transaction.replace(R.id.lecture_container, fragment, null);
         transaction.commit();
     }

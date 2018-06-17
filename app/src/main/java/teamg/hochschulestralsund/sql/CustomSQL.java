@@ -26,7 +26,7 @@ public class CustomSQL extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_TABLE_EXAM =
             "CREATE TABLE IF NOT EXISTS " + Tables.EXAM.TABLE_NAME + " (" +
-                    Tables.EXAM._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                    Tables.EXAM.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                     Tables.EXAM.COLUMN_TITLE + " TEXT," +
                     Tables.EXAM.COLUMN_BEGIN + " BIGINT," +
                     Tables.EXAM.COLUMN_END + " BIGINT," +
@@ -512,7 +512,7 @@ public class CustomSQL extends SQLiteOpenHelper {
             Log.d("Deleting exam", "...");
             Log.d("Exam id is", String.valueOf(exam.exam_id));
 
-            count = db.delete(Tables.EXAM.TABLE_NAME, Tables.EXAM._ID + "=?", new String[]{Long.toString(exam.exam_id)});
+            count = db.delete(Tables.EXAM.TABLE_NAME, Tables.EXAM.COLUMN_ID + "=?", new String[]{Long.toString(exam.exam_id)});
 
             Log.d("Deleted", Integer.toString(count) + " times");
         } catch (Exception e) {
@@ -626,7 +626,7 @@ public class CustomSQL extends SQLiteOpenHelper {
             while (cursor.moveToNext()) {
                 Exam exam = new Exam();
 
-                exam.exam_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.EXAM._ID));
+                exam.exam_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.EXAM.COLUMN_ID));
                 exam.exam_title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.EXAM.COLUMN_TITLE));
                 exam.exam_begin.setTimeInMillis(cursor.getLong(cursor.getColumnIndexOrThrow(Tables.EXAM.COLUMN_BEGIN)));
                 exam.exam_end.setTimeInMillis(cursor.getLong(cursor.getColumnIndexOrThrow(Tables.EXAM.COLUMN_END)));

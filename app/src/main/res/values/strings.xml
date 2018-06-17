@@ -22,9 +22,18 @@
     <string name="delete_meeting">Termin löschen</string>
     <string name="edit_meeting">Termin bearbeiten</string>
 
+    <!-- exam add / edit activity -->
+    <string name="exam_save_new">Prüfung hinzufügen</string>
+    <string name="exam_save_edited">Prüfung aktualisieren</string>
+
+
     <!-- lecture add / edit activity -->
     <string name="lecture_save_new">Vorlesung hinzufügen</string>
     <string name="lecture_save_edited">Vorlesung aktualisieren</string>
+
+    <!-- meeting add / edit activity -->
+    <string name="meeting_save_new">Termin hinzufügen</string>
+    <string name="meeting_save_edited">Termin aktualisieren</string>
 
     <!-- exam -->
     <string name="exam_title">Name</string>

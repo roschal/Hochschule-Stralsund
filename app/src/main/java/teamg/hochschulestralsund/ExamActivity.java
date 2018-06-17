@@ -2,15 +2,9 @@ package teamg.hochschulestralsund;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
-import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Exam;
 
 public class ExamActivity extends AppCompatActivity implements ExamItemFragment.OnListFragmentInteractionListener {
@@ -21,8 +15,6 @@ public class ExamActivity extends AppCompatActivity implements ExamItemFragment.
     public static final int CODE_EXAM_SHOW_ALL = 3;
     public static final String CODE_EXAM_PARCELABLE = "CODE_EXAM_PARCELABLE";
 
-    private ExamItemFragment itemFragment;
-
     /**
      * show all Exams
      */
@@ -31,6 +23,7 @@ public class ExamActivity extends AppCompatActivity implements ExamItemFragment.
         FragmentTransaction transaction;
 
         transaction = manager.beginTransaction();
+        manager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         if (firstTime)
             transaction.add(R.id.exam_container, examItemFragment, null);
@@ -48,6 +41,8 @@ public class ExamActivity extends AppCompatActivity implements ExamItemFragment.
 
         FragmentTransaction transaction;
         transaction = manager.beginTransaction();
+        //* add to the back stack
+        transaction.addToBackStack(null);
         transaction.replace(R.id.exam_container, fragment, null);
         transaction.commit();
     }
@@ -62,6 +57,8 @@ public class ExamActivity extends AppCompatActivity implements ExamItemFragment.
 
         FragmentTransaction transaction;
         transaction = manager.beginTransaction();
+        //* add to the back stack
+        transaction.addToBackStack(null);
         transaction.replace(R.id.exam_container, fragment, null);
         transaction.commit();
     }
@@ -72,52 +69,6 @@ public class ExamActivity extends AppCompatActivity implements ExamItemFragment.
         setContentView(R.layout.activity_exam);
 
         parseBundle();
-    }
-
-    @Override
-    /**create the menu
-     *
-     * @return boolean
-     */
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.exam, menu);
-
-        /* set the icon color for 2 menu icons */
-        for (int i = 0; i < 2; i++) {
-            Drawable drawable = menu.getItem(i).getIcon();
-            drawable.mutate();
-            drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
-        }
-
-        return true;
-    }
-
-    @Override
-    /**override click handler on menu
-     *
-     * @return boolean
-     */
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            /* show activity to add a new lecture */
-            case R.id.action_add_exam:
-                addExam(getFragmentManager());
-
-                return true;
-
-            case R.id.action_delete_exams:
-                CustomSQL customSQL = new CustomSQL(this);
-                customSQL.deleteExams();
-                customSQL.close();
-
-                showExams(getFragmentManager(), false);
-
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override
@@ -137,9 +88,5 @@ public class ExamActivity extends AppCompatActivity implements ExamItemFragment.
             }
 
         }
-    }
-
-    private void deleteExam() {
-
     }
 }

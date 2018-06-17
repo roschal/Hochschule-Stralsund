@@ -41,6 +41,7 @@ public class MeetingAddEditFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private Meeting meeting = new Meeting();
+    private int code = -1;
 
     public MeetingAddEditFragment() {
     }
@@ -48,6 +49,7 @@ public class MeetingAddEditFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
 
@@ -59,27 +61,32 @@ public class MeetingAddEditFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (getArguments() != null) {
             int code = getArguments().getInt(MeetingActivity.CODE_MEETING, MeetingActivity.CODE_MEETING_ADD);
+            int itemCount = 0;
 
             switch (code) {
                 case MeetingActivity.CODE_MEETING_ADD:
                     inflater.inflate(R.menu.meeting_add, menu);
+                    itemCount = 2;
 
                     break;
 
 
                 case MeetingActivity.CODE_MEETING_EDIT:
                     inflater.inflate(R.menu.meeting_edit, menu);
+                    itemCount = 3;
 
                     break;
             }
 
             //* set the icon color for 2 menu icons
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < itemCount; i++) {
                 Drawable drawable = menu.getItem(i).getIcon();
                 drawable.mutate();
                 drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
             }
         }
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -219,7 +226,7 @@ public class MeetingAddEditFragment extends Fragment {
      */
     private void parseBundle() {
         if (getArguments() != null) {
-            int code = getArguments().getInt(MeetingActivity.CODE_MEETING, MeetingActivity.CODE_MEETING_ADD);
+            code = getArguments().getInt(MeetingActivity.CODE_MEETING, MeetingActivity.CODE_MEETING_ADD);
 
             switch (code) {
                 case MeetingActivity.CODE_MEETING_ADD:
@@ -233,6 +240,8 @@ public class MeetingAddEditFragment extends Fragment {
                     datePicker_meeting.updateDate(meeting.meeting_calendar.get(Calendar.YEAR), meeting.meeting_calendar.get(Calendar.MONTH), meeting.meeting_calendar.get(Calendar.DAY_OF_MONTH));
                     timePicker_meeting.setCurrentHour(meeting.meeting_calendar.get(Calendar.HOUR));
                     timePicker_meeting.setCurrentMinute(meeting.meeting_calendar.get(Calendar.MINUTE));
+
+                    setButtonText();
 
                     break;
             }
@@ -255,16 +264,44 @@ public class MeetingAddEditFragment extends Fragment {
         return calendar;
     }
 
+    private void setButtonText() {
+        switch (code) {
+            case LectureActivity.CODE_LECTURE_EDIT:
+                button_meeting_submit.setText(R.string.lecture_save_edited);
+                break;
+
+            default:
+                button_meeting_submit.setText(R.string.lecture_save_new);
+
+                break;
+        }
+    }
+
     /**
      * add or edit the meeting
      */
     private void submit() {
         meeting.meeting_calendar = getDateAndTime();
-
         CustomSQL customSQL = new CustomSQL(getActivity());
-        customSQL.addMeeting(meeting);
-        customSQL.close();
 
+        switch (code) {
+            case MeetingActivity.CODE_MEETING_ADD:
+                customSQL.addMeeting(meeting);
+
+                break;
+
+            case MeetingActivity.CODE_MEETING_EDIT:
+                customSQL.deleteMeeting(meeting);
+                customSQL.addMeeting(meeting);
+
+                break;
+
+            default:
+
+                break;
+        }
+
+        customSQL.close();
         goBack();
     }
 

@@ -7,8 +7,9 @@ import android.provider.BaseColumns;
  */
 
 public class Tables {
-    public static class EXAM implements BaseColumns {
+    public static class EXAM {
         public static final String TABLE_NAME = "Exam";
+        public static final String COLUMN_ID = "exam_id";
         public static final String COLUMN_TITLE = "exam_title";
         public static final String COLUMN_BEGIN = "exam_begin";
         public static final String COLUMN_END = "exam_end";

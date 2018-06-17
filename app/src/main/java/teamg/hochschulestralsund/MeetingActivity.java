@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,6 +30,7 @@ public class MeetingActivity extends AppCompatActivity implements MeetingItemFra
         FragmentTransaction transaction;
 
         transaction = manager.beginTransaction();
+        manager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         if (firstTime)
             transaction.add(R.id.meeting_container, meetingItemFragment, null);
@@ -46,6 +48,8 @@ public class MeetingActivity extends AppCompatActivity implements MeetingItemFra
 
         FragmentTransaction transaction;
         transaction = manager.beginTransaction();
+        //* add to the back stack
+        transaction.addToBackStack(null);
         transaction.replace(R.id.meeting_container, fragment, null);
         transaction.commit();
     }
@@ -60,6 +64,8 @@ public class MeetingActivity extends AppCompatActivity implements MeetingItemFra
 
         FragmentTransaction transaction;
         transaction = manager.beginTransaction();
+        //* add to the back stack
+        transaction.addToBackStack(null);
         transaction.replace(R.id.meeting_container, fragment, null);
         transaction.commit();
     }
@@ -70,52 +76,6 @@ public class MeetingActivity extends AppCompatActivity implements MeetingItemFra
         setContentView(R.layout.activity_meeting);
 
         parseBundle();
-    }
-
-    @Override
-    /**create the menu
-     *
-     * @return boolean
-     */
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.meeting, menu);
-
-        //* set the icon color for 2 menu icons
-        for (int i = 0; i < 2; i++) {
-            Drawable drawable = menu.getItem(i).getIcon();
-            drawable.mutate();
-            drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
-        }
-
-        return true;
-    }
-
-    @Override
-    /**override click handler on menu
-     *
-     * @return boolean
-     */
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            /* show activity to add a new lecture */
-            case R.id.action_add_meeting:
-                addMeeting(getFragmentManager());
-
-                return true;
-
-            case R.id.action_delete_meetings:
-                CustomSQL customSQL = new CustomSQL(this);
-                customSQL.deleteMeetings();
-                customSQL.close();
-
-                showMeetings(getFragmentManager(), false);
-
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override

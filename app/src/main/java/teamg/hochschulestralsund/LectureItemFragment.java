@@ -54,7 +54,7 @@ public class LectureItemFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.lecture, menu);
 
-        /* set the icon color for 3 menu icons */
+        /* set the icon color for 2 menu icons */
         for (int i = 0; i < 2; i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             drawable.mutate();

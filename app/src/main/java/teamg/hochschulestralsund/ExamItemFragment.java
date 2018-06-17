@@ -2,11 +2,16 @@ package teamg.hochschulestralsund;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -49,9 +54,54 @@ public class ExamItemFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+        }
+    }
+
+    @Override
+    /**create the menu
+     *
+     * @return boolean
+     */
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.exam, menu);
+
+        /* set the icon color for 2 menu icons */
+        for (int i = 0; i < 2; i++) {
+            Drawable drawable = menu.getItem(i).getIcon();
+            drawable.mutate();
+            drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
+        }
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    /**override click handler on menu
+     *
+     * @return boolean
+     */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add_exam:
+                ExamActivity.addExam(getFragmentManager());
+
+                return true;
+
+            case R.id.action_delete_exams:
+                CustomSQL customSQL = new CustomSQL(getActivity());
+                customSQL.deleteExams();
+                customSQL.close();
+
+                ExamActivity.showExams(getFragmentManager(), false);
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

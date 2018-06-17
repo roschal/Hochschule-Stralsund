@@ -47,7 +47,7 @@ public class ExamAddEditFragment extends Fragment {
     private TimePicker timePicker_exam;
     private Button button_exam_submit;
 
-    private OnFragmentInteractionListener mListener;
+    private int code = -1;
     private Exam exam = new Exam();
 
     public ExamAddEditFragment() {
@@ -56,6 +56,7 @@ public class ExamAddEditFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
 
@@ -67,22 +68,25 @@ public class ExamAddEditFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (getArguments() != null) {
             int code = getArguments().getInt(ExamActivity.CODE_EXAM, ExamActivity.CODE_EXAM_ADD);
+            int itemCount = 0;
 
             switch (code) {
                 case ExamActivity.CODE_EXAM_ADD:
                     inflater.inflate(R.menu.exam_add, menu);
+                    itemCount = 2;
 
                     break;
 
 
                 case ExamActivity.CODE_EXAM_EDIT:
                     inflater.inflate(R.menu.exam_edit, menu);
+                    itemCount = 3;
 
                     break;
             }
 
-            //* set the icon color for 2 menu icons
-            for (int i = 0; i < 2; i++) {
+            //* set the icon color for menu icons
+            for (int i = 0; i < itemCount; i++) {
                 Drawable drawable = menu.getItem(i).getIcon();
                 drawable.mutate();
                 drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
@@ -148,12 +152,6 @@ public class ExamAddEditFragment extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }*/
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     /**
      * init the view elements
@@ -233,7 +231,7 @@ public class ExamAddEditFragment extends Fragment {
      */
     private void parseBundle() {
         if (getArguments() != null) {
-            int code = getArguments().getInt(ExamActivity.CODE_EXAM, ExamActivity.CODE_EXAM_ADD);
+            code = getArguments().getInt(ExamActivity.CODE_EXAM, ExamActivity.CODE_EXAM_ADD);
 
             switch (code) {
                 case ExamActivity.CODE_EXAM_ADD:
@@ -275,11 +273,26 @@ public class ExamAddEditFragment extends Fragment {
      */
     private void submit() {
         exam.exam_begin = getDateAndTime();
-
         CustomSQL customSQL = new CustomSQL(getActivity());
-        customSQL.addExam(exam);
-        customSQL.close();
 
+        switch (code) {
+            case ExamActivity.CODE_EXAM_ADD:
+                customSQL.addExam(exam);
+
+                break;
+
+            case ExamActivity.CODE_EXAM_EDIT:
+                customSQL.deleteExam(exam);
+                customSQL.addExam(exam);
+
+                break;
+
+            default:
+
+                break;
+        }
+
+        customSQL.close();
         goBack();
     }
 

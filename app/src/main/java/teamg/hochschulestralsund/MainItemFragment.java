@@ -101,13 +101,6 @@ public class MainItemFragment extends Fragment {
         return view;
     }
 
-    /* update the list with lectures when lecture was edited or deleted*/
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //FragmentTransaction ft = getFragmentManager().beginTransaction();
-        //ft.detach(this).attach(this).commit();
-    }
-
     private void setDays() {
         left.setText(getDayAndDate(MainActivity.getPreviosDay(calendar)));
         center.setText(getDayAndDate(calendar));

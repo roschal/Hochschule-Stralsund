@@ -64,5 +64,6 @@ public class Tables {
         public static final String COLUMN_TITLE = "meeting_title";
         public static final String COLUMN_DESCRIPTION = "meeting_description";
         public static final String COLUMN_CALENDAR = "meeting_calendar";
+        public static final String COLUMN_IS_ALARM_SET = "meeting_is_alarm_set";
     }
 }

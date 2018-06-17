@@ -5,6 +5,6 @@
         android:dialogTitle="Sprache einstellen"
         android:entries="@array/languages"
         android:entryValues="@array/languages"
-        android:key="pref_syncConnectionType"
+        android:key="pref_language"
         android:title="Sprache" />
 </PreferenceScreen>

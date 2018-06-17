@@ -7,4 +7,12 @@
         android:entryValues="@array/languages"
         android:key="pref_language"
         android:title="Sprache" />
+    <ListPreference
+        android:defaultValue="Zum Terminzeitpunkt"
+        android:dialogTitle="Erinnerungszeitpunkt wählen"
+        android:entries="@array/meeting_reminder_moment"
+        android:entryValues="@array/meeting_reminder_moment"
+        android:key="meeting_reminder_moment"
+        android:title="Erinnerungszeitpunkt"
+        />
 </PreferenceScreen>

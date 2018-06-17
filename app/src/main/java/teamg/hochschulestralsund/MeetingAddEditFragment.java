@@ -3,9 +3,11 @@ package teamg.hochschulestralsund;
 import android.app.AlarmManager;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,6 +21,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -176,6 +179,8 @@ public class MeetingAddEditFragment extends Fragment {
         button_meeting_submit = getView().findViewById(R.id.button_meeting_submit);
         button_meeting_setReminder = getView().findViewById(R.id.button_meeting_setReminder);
 
+        timePicker_meeting.setIs24HourView(true);
+
         alarmHelper = new AlarmHelper(getActivity(), (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE));
 
         setAdapter();
@@ -224,15 +229,23 @@ public class MeetingAddEditFragment extends Fragment {
         button_meeting_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                submit();
+                if(isMeetingInFuture()){
+                    submit();
+                } else {
+                    Toast.makeText(getActivity(),"Termin liegt in der Verangenheit", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
         button_meeting_setReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar alarmDate = getDateAndTime();
-                alarmHelper.createAlarm(alarmDate, meeting.meeting_title);
+                if(isMeetingInFuture()){
+                    Calendar alarmDate = getAlarmDateAndTime();
+                    alarmHelper.createAlarm(alarmDate, meeting.meeting_title);
+                } else {
+                    Toast.makeText(getActivity(),"Termin liegt in der Verangenheit", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -279,6 +292,47 @@ public class MeetingAddEditFragment extends Fragment {
         calendar.set(year, month, day, hour, minute);
 
         return calendar;
+    }
+
+    private Calendar getAlarmDateAndTime() {
+        int minute = timePicker_meeting.getCurrentMinute();
+        int hour = timePicker_meeting.getCurrentHour();
+        int day = datePicker_meeting.getDayOfMonth();
+        int month = datePicker_meeting.getMonth();
+        int year = datePicker_meeting.getYear();
+        Calendar calendar = Calendar.getInstance();
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String reminderMoment = preferences.getString("meeting_reminder_moment", "");
+
+        switch (reminderMoment) {
+            case "Zum Terminzeitpunkt":
+                break;
+            case "1 Stunde vorher":
+                hour = hour - 1;
+                break;
+            case "1 Tag vorher":
+                if(day == 1){
+                    month = month - 1;
+                    calendar.set(Calendar.MONTH, month);
+                    day = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+                } else {
+                    day = day - 1;
+                }
+                break;
+            default:
+                break;
+        }
+
+        calendar.set(year, month, day, hour, minute);
+        return calendar;
+    }
+
+    private boolean isMeetingInFuture(){
+        Calendar selectedDate = getDateAndTime();
+        Calendar currentDate = Calendar.getInstance();
+
+        return !currentDate.after(selectedDate);
     }
 
     private void setButtonText() {

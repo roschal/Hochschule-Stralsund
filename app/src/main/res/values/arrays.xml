@@ -33,4 +33,10 @@
         <item>Deutsch</item>
         <item>English</item>
     </string-array>
+    
+    <string-array name="meeting_reminder_moment">
+        <item>Zum Terminzeitpunkt</item>
+        <item>1 Stunde vorher</item>
+        <item>1 Tag vorher</item>
+    </string-array>
 </resources>

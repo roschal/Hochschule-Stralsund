@@ -55,7 +55,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText_exam_location"></DatePicker>
+            app:layout_constraintTop_toBottomOf="@+id/editText_exam_location"/>
 
         <TimePicker
             android:id="@+id/timePicker_exam"
@@ -66,9 +66,10 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
+            android:timePickerMode="spinner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/datePicker_exam"></TimePicker>
+            app:layout_constraintTop_toBottomOf="@+id/datePicker_exam"/>
 
         <Button
             android:id="@+id/button_meeting_submit"

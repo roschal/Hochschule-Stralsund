@@ -28,8 +28,7 @@
     <string name="meeting_save_edited">Update meeting</string>
     <string name="meeting_title">Title</string>
     <string name="meeting_description">Description</string>
-    <string name="meeting_add_reminder">Set reminder</string>
-    <string name="meeting_remove_reminder">Delete reminder</string>
+    <string name="meeting_reminder_alarm">Reminderalaram</string>
     <string name="yesterday">Yesterday</string>
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>

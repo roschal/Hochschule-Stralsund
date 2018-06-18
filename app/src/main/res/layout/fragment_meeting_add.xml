@@ -71,34 +71,41 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/datePicker_exam"/>
 
-        <Button
-            android:id="@+id/button_meeting_submit"
+        <Switch
+            android:id="@+id/switch_meeting_reminder_alarm"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:text="@string/meeting_save_new"
+            android:text="@string/meeting_reminder_alarm"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/button_meeting_submit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/timePicker_exam" />
 
         <Button
-            android:id="@+id/button_meeting_setReminder"
+            android:id="@+id/button_meeting_submit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="12dp"
-            android:text="@string/meeting_add_reminder"
+            android:layout_marginTop="16dp"
+            android:text="@string/meeting_save_new"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_meeting_submit" />
+            app:layout_constraintTop_toBottomOf="@+id/switch_meeting_reminder_alarm" />
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

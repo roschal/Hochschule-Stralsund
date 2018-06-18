@@ -33,4 +33,9 @@ public class AlarmHelper {
         intent.putExtra("ALARM_TEXT", alarmText);
         return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
+
+    public void cancelAlarm(String alarmText){
+        PendingIntent alarmIntent = createAlarmIntent(alarmText);
+        this.alarmManager.cancel(alarmIntent);
+    }
 }

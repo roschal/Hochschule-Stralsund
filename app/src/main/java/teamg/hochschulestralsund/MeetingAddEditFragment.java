@@ -18,8 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -43,8 +45,8 @@ public class MeetingAddEditFragment extends Fragment {
     private EditText editText_meeting_description;
     private DatePicker datePicker_meeting;
     private TimePicker timePicker_meeting;
+    private Switch switch_meeting_reminder_alarm;
     private Button button_meeting_submit;
-    private Button button_meeting_setReminder;
 
     private OnFragmentInteractionListener mListener;
     private Meeting meeting = new Meeting();
@@ -147,17 +149,6 @@ public class MeetingAddEditFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_meeting_add, container, false);
     }
 
-    /*@Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }*/
-
     @Override
     public void onDetach() {
         super.onDetach();
@@ -176,15 +167,28 @@ public class MeetingAddEditFragment extends Fragment {
         editText_meeting_description = getView().findViewById(R.id.editText_exam_location);
         timePicker_meeting = getView().findViewById(R.id.timePicker_exam);
         datePicker_meeting = getView().findViewById(R.id.datePicker_exam);
+        switch_meeting_reminder_alarm = getView().findViewById(R.id.switch_meeting_reminder_alarm);
         button_meeting_submit = getView().findViewById(R.id.button_meeting_submit);
-        button_meeting_setReminder = getView().findViewById(R.id.button_meeting_setReminder);
 
-        timePicker_meeting.setIs24HourView(true);
+        //timePicker_meeting.setIs24HourView(true);
 
         alarmHelper = new AlarmHelper(getActivity(), (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE));
-
         setAdapter();
         parseBundle();
+    }
+
+    private void setSwitchsStates() {
+        if (meeting.meeting_is_alarm_set == 1) {
+            switch_meeting_reminder_alarm.setChecked(true);
+        }
+
+        if(meeting.meeting_is_alarm_set == 0) {
+            switch_meeting_reminder_alarm.setChecked(false);
+        }
+
+        if(!isMeetingInFuture()){
+            switch_meeting_reminder_alarm.setEnabled(false);
+        }
     }
 
     /**
@@ -226,25 +230,34 @@ public class MeetingAddEditFragment extends Fragment {
             }
         });
 
-        button_meeting_submit.setOnClickListener(new View.OnClickListener() {
+        switch_meeting_reminder_alarm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                if(isMeetingInFuture()){
-                    submit();
-                } else {
-                    Toast.makeText(getActivity(),"Termin liegt in der Verangenheit", Toast.LENGTH_LONG).show();
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked && meeting.meeting_is_alarm_set == 0) {
+                    if (isMeetingInFuture()) {
+                        Calendar alarmDate = getAlarmDateAndTime();
+                        alarmHelper.createAlarm(alarmDate, meeting.meeting_title);
+                        meeting.meeting_is_alarm_set = 1;
+                    } else {
+                        Toast.makeText(getActivity(), "Termin liegt in der Verangenheit", Toast.LENGTH_LONG).show();
+                    }
+                }
+                if (!isChecked && meeting.meeting_is_alarm_set == 1) {
+                    if(isMeetingInFuture()){
+                        alarmHelper.cancelAlarm(meeting.meeting_title);
+                        meeting.meeting_is_alarm_set = 0;
+                    }
                 }
             }
         });
 
-        button_meeting_setReminder.setOnClickListener(new View.OnClickListener() {
+        button_meeting_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isMeetingInFuture()){
-                    Calendar alarmDate = getAlarmDateAndTime();
-                    alarmHelper.createAlarm(alarmDate, meeting.meeting_title);
+                if (isMeetingInFuture()) {
+                    submit();
                 } else {
-                    Toast.makeText(getActivity(),"Termin liegt in der Verangenheit", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Termin liegt in der Verangenheit", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -270,6 +283,7 @@ public class MeetingAddEditFragment extends Fragment {
                     datePicker_meeting.updateDate(meeting.meeting_calendar.get(Calendar.YEAR), meeting.meeting_calendar.get(Calendar.MONTH), meeting.meeting_calendar.get(Calendar.DAY_OF_MONTH));
                     timePicker_meeting.setCurrentHour(meeting.meeting_calendar.get(Calendar.HOUR));
                     timePicker_meeting.setCurrentMinute(meeting.meeting_calendar.get(Calendar.MINUTE));
+                    setSwitchsStates();
 
                     setButtonText();
 
@@ -312,7 +326,7 @@ public class MeetingAddEditFragment extends Fragment {
                 hour = hour - 1;
                 break;
             case "1 Tag vorher":
-                if(day == 1){
+                if (day == 1) {
                     month = month - 1;
                     calendar.set(Calendar.MONTH, month);
                     day = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -328,7 +342,7 @@ public class MeetingAddEditFragment extends Fragment {
         return calendar;
     }
 
-    private boolean isMeetingInFuture(){
+    private boolean isMeetingInFuture() {
         Calendar selectedDate = getDateAndTime();
         Calendar currentDate = Calendar.getInstance();
 

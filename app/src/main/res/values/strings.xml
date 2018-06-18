@@ -41,8 +41,7 @@
     <!-- meeting -->
     <string name="meeting_title">Name</string>
     <string name="meeting_description">Beschreibung</string>
-    <string name="meeting_add_reminder">Erinnerung setzen</string>
-    <string name="meeting_remove_reminder">Erinnerung löschen</string>
+    <string name="meeting_reminder_alarm">Erinnerungsalarm</string>
 
     <string name="yesterday">Gestern</string>
     <string name="today">Heute</string>

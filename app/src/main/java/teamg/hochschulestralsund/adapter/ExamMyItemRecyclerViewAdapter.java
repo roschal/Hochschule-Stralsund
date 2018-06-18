@@ -79,10 +79,10 @@ public class ExamMyItemRecyclerViewAdapter extends RecyclerView.Adapter<ExamMyIt
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            textView_exam_title = view.findViewById(R.id.textView_lecture_title);
+            textView_exam_title = view.findViewById(R.id.textView_mensa_ingredients);
             textView_exam_person = view.findViewById(R.id.textView_exam_person);
             textView_exam_location = view.findViewById(R.id.textView_lecture_location);
-            textView_exam_date = view.findViewById(R.id.textView_exam_date);
+            textView_exam_date = view.findViewById(R.id.textView_mensa_price_guest);
             textView_exam_time = view.findViewById(R.id.textView_lecture_time);
         }
     }

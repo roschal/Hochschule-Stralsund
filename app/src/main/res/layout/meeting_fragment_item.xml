@@ -20,12 +20,12 @@
         android:textColor="@color/colorPrimary"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/textView_exam_date"
+        app:layout_constraintEnd_toEndOf="@+id/textView_mensa_price_guest"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_exam_date" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_mensa_price_guest" />
 
     <TextView
-        android:id="@+id/textView_exam_date"
+        android:id="@+id/textView_mensa_price_guest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -37,7 +37,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView_lecture_title"
+        android:id="@+id/textView_mensa_ingredients"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -47,7 +47,7 @@
         android:gravity="left|start"
         android:hint="@string/meeting_title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_exam_date"
+        app:layout_constraintStart_toEndOf="@+id/textView_mensa_price_guest"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -63,7 +63,7 @@
         android:hint="@string/meeting_description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_exam_date"
-        app:layout_constraintTop_toBottomOf="@+id/textView_lecture_title" />
+        app:layout_constraintStart_toEndOf="@+id/textView_mensa_price_guest"
+        app:layout_constraintTop_toBottomOf="@+id/textView_mensa_ingredients" />
 
 </android.support.constraint.ConstraintLayout>

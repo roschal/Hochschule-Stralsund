@@ -43,31 +43,9 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
     public void setLanguage() {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         String language = SP.getString("pref_language", "Deutsch");
-        Locale locale;
-        Log.e("sprache", language);
 
-        switch (language) {
-            case "Deutsch":
-                locale = new Locale("de");
-
-                break;
-
-            case "English":
-                locale = new Locale("en-rGB");
-                Log.e("fgh", "sdf");
-                break;
-
-            default:
-                locale = new Locale("de");
-                Log.e("Language", "error while setting the language");
-
-                break;
-        }
-
-        Configuration config = getBaseContext().getResources().getConfiguration();
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-    }
+        CustomLocale.setNewLocale(this, language);
+   }
 
     public static Calendar getNextDay(Calendar calendar) {
         Calendar c = Calendar.getInstance();
@@ -101,10 +79,12 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //* first set the language
+        setLanguage();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setLanguage();
         init();
         setAdapter();
         parse();
@@ -122,8 +102,8 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
 
-        /* set the icon color for 3 menu icons */
-        for (int i = 0; i < 3; i++) {
+        /* set the icon color for 4 menu icons */
+        for (int i = 0; i < 4; i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             drawable.mutate();
             drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
@@ -141,6 +121,12 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
                 bundle = new Bundle();
                 bundle.putInt(ContactActivity.CODE_CONTACT, ContactActivity.CODE_CONTACT_SHOW_ALL);
                 intent.putExtras(bundle);
+                startActivityForResult(intent, 0);
+
+                return true;
+
+            case R.id.action_show_mensa:
+                intent = new Intent(this, MensaActivity.class);
                 startActivityForResult(intent, 0);
 
                 return true;
@@ -175,13 +161,6 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
                 intent = new Intent(this, SettingsActivity.class);
                 startActivityForResult(intent, 0);
 
-                return true;
-
-            case R.id.action_alarm:
-                AlarmHelper alarmHelper = new AlarmHelper(getApplicationContext(),
-                        (AlarmManager) getSystemService(Context.ALARM_SERVICE));
-                Calendar calendar = Calendar.getInstance();
-                alarmHelper.createAlarm(calendar, "Erinnerung Prüfung");
                 return true;
 
             default:

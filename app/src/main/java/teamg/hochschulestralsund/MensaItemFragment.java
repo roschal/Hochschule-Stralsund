@@ -6,10 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,111 +21,61 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 
 import teamg.hochschulestralsund.adapter.MeetingMyItemRecyclerViewAdapter;
+import teamg.hochschulestralsund.adapter.MensaMyItemRecyclerViewAdapter;
+import teamg.hochschulestralsund.connect.ParserMensa;
 import teamg.hochschulestralsund.sql.CustomSQL;
-import teamg.hochschulestralsund.sql.Lecture;
+import teamg.hochschulestralsund.sql.Meal;
 import teamg.hochschulestralsund.sql.Meeting;
 
-public class MeetingItemFragment extends Fragment {
+public class MensaItemFragment extends Fragment {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
-    private ArrayList<Meeting> meetings;
+    private ArrayList<Meal> meals = new ArrayList<>();
+    private Calendar calendar = Calendar.getInstance();;
 
-    public MeetingItemFragment() {
+    public MensaItemFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        
+
         Bundle bundle = this.getArguments();
 
         /* get the day to show */
         if (bundle != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
-    }
-
-    @Override
-    /**create the menu
-     *
-     * @return boolean
-     */
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.meeting, menu);
-
-        /* set the icon color for 2 menu icons */
-        for (int i = 0; i < 2; i++) {
-            Drawable drawable = menu.getItem(i).getIcon();
-            drawable.mutate();
-            drawable.setColorFilter(getResources().getColor(R.color.colorText), PorterDuff.Mode.SRC_IN);
-        }
-
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    /**override click handler on menu
-     *
-     * @return boolean
-     */
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            /* show activity to add a new meeting */
-            case R.id.action_add_meeting:
-                MeetingActivity.addMeeting(getFragmentManager());
-
-                return true;
-
-            case R.id.action_delete_meetings:
-                CustomSQL customSQL = new CustomSQL(getActivity());
-                customSQL.deleteMeetings();
-                customSQL.close();
-
-                MeetingActivity.showMeetings(getFragmentManager(), false);
-
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+            calendar.setTimeInMillis(bundle.getLong(MensaActivity.CODE_SHOW_MENSA, Calendar.getInstance().getTimeInMillis()));
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.meeting_fragment_item_list, container, false);
+        final View view = inflater.inflate(R.layout.mensa_fragment_item_list, container, false);
 
-        /* set the adapter */
-        meetings = new ArrayList<>();
-        CustomSQL customSQL = new CustomSQL(getActivity());
+        try {
+            Log.e("starting", "starting");
 
-        meetings = customSQL.getMeetings();
-        customSQL.close();
+            ParserMensa parserMensa = new ParserMensa(getActivity(), calendar);
+            parserMensa.execute();
 
-        //* sort
-        Collections.sort(meetings, new Comparator<Meeting>() {
-            @Override
-            public int compare(Meeting meeting1, Meeting meeting2) {
-                long time1 = meeting1.meeting_calendar.getTimeInMillis();
-                long time2 = meeting2.meeting_calendar.getTimeInMillis();
+            meals = parserMensa.get();
 
-                if(time1 > time2)
-                    return -1;
-                else if (time1 == time2)
-                    return 0;
-
-                return 1;
-            }
-        });
-
+            for (int i = 0; i < meals.size(); i++ )
+                Log.e("sdfdsf", meals.get(i).meal_title);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (view instanceof RecyclerView) {
             RecyclerView recyclerView = (RecyclerView) view;
@@ -134,7 +87,7 @@ public class MeetingItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MeetingMyItemRecyclerViewAdapter(meetings, mListener, this));
+            recyclerView.setAdapter(new MensaMyItemRecyclerViewAdapter(meals, mListener, this));
         }
 
         return view;
@@ -165,7 +118,7 @@ public class MeetingItemFragment extends Fragment {
     }
 
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(Meeting meeting);
+        void onListFragmentInteraction(Meal meal);
     }
 
 }

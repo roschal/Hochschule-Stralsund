@@ -1,7 +1,6 @@
 package teamg.hochschulestralsund.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,7 +76,7 @@ public class LectureMyItemRecyclerViewAdapter extends RecyclerView.Adapter<Lectu
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            textView_lecture_title = view.findViewById(R.id.textView_lecture_title);
+            textView_lecture_title = view.findViewById(R.id.textView_mensa_ingredients);
             textView_lecture_location = view.findViewById(R.id.textView_lecture_location);
             textView_lecture_person = view.findViewById(R.id.textView_lecture_person);
             textView_lecture_time = view.findViewById(R.id.textView_lecture_time);

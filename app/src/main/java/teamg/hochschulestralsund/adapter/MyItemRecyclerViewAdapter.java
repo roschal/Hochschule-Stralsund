@@ -37,7 +37,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.lecture = lectures.get(position);
         holder.textView_time.setText(lectures.get(position).lecture_time.toString());
-        holder.textView_title.setText(lectures.get(position).lecture_type + " - " + lectures.get(position).event_title);
+        holder.textView_title.setText(lectures.get(position).event_title + " - " + lectures.get(position).lecture_type);
         holder.textView_room.setText(lectures.get(position).event_location.toString());
         holder.textView_lecturer.setText(lectures.get(position).event_person.toString());
 
@@ -72,7 +72,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             super(view);
             this.view = view;
             textView_time = view.findViewById(R.id.textView_lecture_time);
-            textView_title = view.findViewById(R.id.textView_lecture_title);
+            textView_title = view.findViewById(R.id.textView_mensa_ingredients);
             textView_room = view.findViewById(R.id.textView_lecture_location);
             textView_lecturer = view.findViewById(R.id.timetable_textView_Lecturer);
             customSQL = new CustomSQL(view.getContext());

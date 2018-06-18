@@ -15,11 +15,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 
 import teamg.hochschulestralsund.adapter.MyItemRecyclerViewAdapter;
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
+import teamg.hochschulestralsund.sql.Person;
 
 public class MainItemFragment extends Fragment {
 
@@ -63,6 +66,22 @@ public class MainItemFragment extends Fragment {
 
         lectures = customSQL.getLectures(calendar.get(Calendar.DAY_OF_WEEK));
         customSQL.close();
+
+        //* sort
+        Collections.sort(lectures, new Comparator<Lecture>() {
+            @Override
+            public int compare(Lecture lecture1, Lecture lecture2) {
+                long time1 = lecture1.event_begin.getTimeInMillis();
+                long time2 = lecture2.event_begin.getTimeInMillis();
+
+                if(time1 > time2)
+                    return -1;
+                else if (time1 == time2)
+                    return 0;
+
+                return 1;
+            }
+        });
 
         if (view instanceof ConstraintLayout) {
             /* left and right navigation */

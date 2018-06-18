@@ -1,7 +1,6 @@
 package teamg.hochschulestralsund.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,9 +72,9 @@ public class MeetingMyItemRecyclerViewAdapter extends RecyclerView.Adapter<Meeti
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            textView_meeting_title = view.findViewById(R.id.textView_lecture_title);
+            textView_meeting_title = view.findViewById(R.id.textView_mensa_ingredients);
             textView_meeting_description = view.findViewById(R.id.textView_lecture_location);
-            textView_meeting_date = view.findViewById(R.id.textView_exam_date);
+            textView_meeting_date = view.findViewById(R.id.textView_mensa_price_guest);
             textView_meeting_time = view.findViewById(R.id.textView_lecture_time);
         }
     }

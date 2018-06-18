@@ -7,7 +7,14 @@
     <item
         android:id="@+id/action_show_contacts"
         android:icon="@drawable/ic_contacts_black_24dp"
-        android:title="Einstellungen"
+        android:title="Kontakte"
+        app:showAsAction="always" />
+
+
+    <item
+        android:id="@+id/action_show_mensa"
+        android:icon="@drawable/ic_restaurant_menu_black_24dp"
+        android:title="Mensa"
         app:showAsAction="always" />
 
     <item
@@ -29,9 +36,6 @@
                 android:id="@+id/action_meetings"
                 android:title="@string/menu_main_meeting"
                 app:showAsAction="never"></item>
-            <item
-                android:id="@+id/action_alarm"
-                android:title="Alarm" />
         </menu>
     </item>
 

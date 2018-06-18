@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hochschule Stralsund</string>
+    <string name="menu_main_meeting">Meetings</string>
+    <string name="menu_main_lecture">Lectures</string>
+    <string name="menu_main_exam">Exams</string>
+    <string name="add_lecture">Add lecture</string>
+    <string name="add_exam">Add exam</string>
+    <string name="add_meeting">Add meeting</string>
+    <string name="delete_lecture">Delete lecture</string>
+    <string name="edit_lecture">Edit lecture</string>
+    <string name="delete_exam">Delete exam</string>
+    <string name="edit_exam">Edit exam</string>
+    <string name="meeting_add">Add meeting</string>
+    <string name="delete_meeting">Delete meeting</string>
+    <string name="edit_meeting">Edit meeting</string>
+    <string name="exam_title">Title</string>
+    <string name="exam_person">Examiner</string>
+    <string name="exam_location">Exam location</string>
+    <string name="exam_save_new">Add exam</string>
+    <string name="exam_save_edited">Update exam</string>
+    <string name="lecture_title">Lecture</string>
+    <string name="lecture_location">Location</string>
+    <string name="lecture_person">Lecturer</string>
+    <string name="lecture_save_new">Add lecture</string>
+    <string name="lecture_save_edited">Update lecture</string>
+    <string name="meeting_save_new">Add meeting</string>
+    <string name="meeting_save_edited">Update meeting</string>
+    <string name="meeting_title">Title</string>
+    <string name="meeting_description">Description</string>
+    <string name="meeting_add_reminder">Set reminder</string>
+    <string name="meeting_remove_reminder">Delete reminder</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="stopp_alarm">Cancel alarm</string>
+</resources>

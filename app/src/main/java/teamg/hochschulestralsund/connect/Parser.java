@@ -1,8 +1,10 @@
 package teamg.hochschulestralsund.connect;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -14,7 +16,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 
+import teamg.hochschulestralsund.sql.Meal;
 import teamg.hochschulestralsund.sql.Person;
 import teamg.hochschulestralsund.sql.CustomSQL;
 
@@ -24,6 +28,7 @@ import teamg.hochschulestralsund.sql.CustomSQL;
 
 public class Parser extends AsyncTask<Void, Integer, Boolean> {
     private static final String URL = "https://www.hochschule-stralsund.de/host/im-portrait/mitarbeitende/";
+
     public CustomSQL customSQL;
     private Context myContext;
 
@@ -35,7 +40,7 @@ public class Parser extends AsyncTask<Void, Integer, Boolean> {
     @Override
     protected Boolean doInBackground(Void... voids) {
         try {
-            this.updateLecturers();
+            updateLecturers();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -43,10 +48,10 @@ public class Parser extends AsyncTask<Void, Integer, Boolean> {
         return true;
     }
 
-    // get source code of lecturers website
-    public String getURL() {
+    //* get source code
+    public String getURL(String url) {
         try {
-            URL urlLecturers = new URL(URL);
+            URL urlLecturers = new URL(url);
             URLConnection urlConnLecturers = urlLecturers.openConnection();
 
             BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -69,7 +74,7 @@ public class Parser extends AsyncTask<Void, Integer, Boolean> {
     }
 
     public Boolean updateLecturers() throws Exception {
-        String srcLecturers = getURL();
+        String srcLecturers = getURL(URL);
 
         // delete all tabs
         while (srcLecturers.indexOf("\t") != -1) {
@@ -102,10 +107,11 @@ public class Parser extends AsyncTask<Void, Integer, Boolean> {
             if (pictures_given) {
                 String picture_url = tmpStr.substring(tmpStr.indexOf("<source srcset=\"") + "<source srcset=\"".length());
                 picture_url = picture_url.substring(0, picture_url.indexOf("\" media=\""));
-                savePicture(picture_url, "picture" + Integer.toString(count));
-                tmpStr = tmpStr.substring(tmpStr.indexOf("<source srcset=\""));
+                String dir = myContext.getApplicationInfo().dataDir;
+                person.person_picture_path = dir + "/picture" + Integer.toString(count);
 
-                person.person_picture_path = "picture" + Integer.toString(count);
+                savePicture(picture_url, person.person_picture_path);
+                tmpStr = tmpStr.substring(tmpStr.indexOf("<source srcset=\""));
             }
 
             // get Name
@@ -187,12 +193,11 @@ public class Parser extends AsyncTask<Void, Integer, Boolean> {
         return true;
     }
 
-    private void savePicture(String picture_url, String picture_name) {
+    private void savePicture(String picture_url, String picture_path) {
         try {
             URL url = new URL("https://www.hochschule-stralsund.de" + picture_url);
             InputStream input = url.openStream();
-            File storagePath = Environment.getExternalStorageDirectory();
-            OutputStream output = new FileOutputStream("/sdcard/" + picture_name);
+            OutputStream output = new FileOutputStream(picture_path);
             try {
                 byte[] buffer = new byte[10000];
                 int bytesRead = 0;

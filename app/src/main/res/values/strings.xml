@@ -1,13 +1,11 @@
 <resources>
     <string name="app_name">Hochschule Stralsund</string>
-    <string name="timetable_title_hint">Vorlesung</string>
-    <string name="timetable_room_hint">Raum</string>
-    <string name="timetable_lecturer_hint">Dozent</string>
 
     <!-- menu main activity -->
     <string name="menu_main_lecture">Vorlesungen</string>
     <string name="menu_main_exam">Prüfungen</string>
     <string name="menu_main_meeting">Termine</string>
+    <string name="menu_main_mensa">Mensa</string>
 
     <!-- menu -->
     <string name="add_lecture">Vorlesung hinzufügen</string>
@@ -23,22 +21,22 @@
     <string name="edit_meeting">Termin bearbeiten</string>
 
     <!-- exam add / edit activity -->
+    <string name="exam_title">Name</string>
+    <string name="exam_person">Prüfer</string>
+    <string name="exam_location">Prüfungsort</string>
     <string name="exam_save_new">Prüfung hinzufügen</string>
     <string name="exam_save_edited">Prüfung aktualisieren</string>
 
-
     <!-- lecture add / edit activity -->
+    <string name="lecture_title">Vorlesung</string>
+    <string name="lecture_location">Raum</string>
+    <string name="lecture_person">Dozent</string>
     <string name="lecture_save_new">Vorlesung hinzufügen</string>
     <string name="lecture_save_edited">Vorlesung aktualisieren</string>
 
     <!-- meeting add / edit activity -->
     <string name="meeting_save_new">Termin hinzufügen</string>
     <string name="meeting_save_edited">Termin aktualisieren</string>
-
-    <!-- exam -->
-    <string name="exam_title">Name</string>
-    <string name="exam_person">Prüfer</string>
-    <string name="exam_location">Prüfungsort</string>
 
     <!-- meeting -->
     <string name="meeting_title">Name</string>
@@ -49,9 +47,13 @@
     <string name="yesterday">Gestern</string>
     <string name="today">Heute</string>
     <string name="tomorrow">Morgen</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_settings">Einstellungen</string>
 
     <!-- alarm -->
     <string name="stopp_alarm">Alarm beenden</string>
 
+    <!-- preference activity -->
+    <string name="pref_storage_path">Speicherort</string>
+    <string name="pref_storage_path_int">Interner Speicher</string>
+    <string name="pref_storage_path_ext">Externer Speicher</string>
 </resources>

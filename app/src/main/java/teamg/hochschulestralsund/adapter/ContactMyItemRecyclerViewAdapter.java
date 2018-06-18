@@ -49,12 +49,11 @@ public class ContactMyItemRecyclerViewAdapter extends RecyclerView.Adapter<Conta
         holder.textView_contact_phone.setText(mValues.get(position).telephone);
 
         try {
-            File imgFile = new File("/sdcard/" + mValues.get(position).person_picture_path);
+            File imgFile = new File(holder.person.person_picture_path);
 
             if (imgFile.exists()) {
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 holder.imageView_contact_1.setImageBitmap(myBitmap);
-
             }
         } catch (Exception e) {
 

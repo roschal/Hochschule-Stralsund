@@ -11,6 +11,8 @@ import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import teamg.hochschulestralsund.sql.Meal;
 
@@ -111,10 +113,18 @@ public class ParserMensa extends AsyncTask<Void, Void, ArrayList<Meal>> {
                 }
 
                 //* meal ingredients
-                while (meal.meal_title.contains("<sup>")) {
-                    meal.meal_title += meal.meal_title.substring(meal.meal_title.indexOf("<sup>")+"<sup>".length(), meal.meal_title.indexOf("</sup"));
-                    meal.meal_title = meal.meal_title.replace("<sup>.*</sup>;", "");
+                String full_title = meal.meal_title;
+
+                Pattern p = Pattern.compile("\\<sup>(.*?)\\</sup>");
+                Matcher m = p.matcher(full_title);
+
+                while(m.find())
+                {
+                    meal.meal_ingredients += m.group(1);
                 }
+
+                //* meal title
+                meal.meal_title = parseMealTitle(meal.meal_title);
 
                 Log.e("meal_title", meal.meal_title);
                 //* meal price
@@ -143,6 +153,19 @@ public class ParserMensa extends AsyncTask<Void, Void, ArrayList<Meal>> {
             Log.e("sdfdsf", meals.get(i).meal_title);
 
         return meals;
+    }
+
+    private String parseMealTitle(String meal_title) {
+        meal_title = meal_title.replaceAll("<sup>.*?</sup>", "");
+
+        meal_title = meal_title.replaceAll("&quot;", "");
+
+        //* remove spaces
+        while (meal_title.contains("  ")) {
+            meal_title = meal_title.replaceAll("  ", " ");
+        }
+
+        return meal_title;
     }
 
     private void setURL() {

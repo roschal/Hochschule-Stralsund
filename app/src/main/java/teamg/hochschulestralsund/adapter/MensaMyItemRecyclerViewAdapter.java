@@ -43,7 +43,8 @@ public class MensaMyItemRecyclerViewAdapter extends RecyclerView.Adapter<MensaMy
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.meal = mValues.get(position);
         holder.textView_mensa_title.setText(holder.meal.meal_title);
-        holder.textView_mensa_title.setText("Zusatzstoffe - " + holder.meal.meal_ingredients);
+        holder.textView_mensa_category.setText("Kategorie - " + holder.meal.meal_category);
+        holder.textView_mensa_ingredients.setText("Zusatzstoffe - " + holder.meal.meal_ingredients);
         holder.textView_mensa_price_student.setText("S: " + getPrice(holder.meal.meal_price_student));
         holder.textView_mensa_price_worker.setText("M: " + getPrice(holder.meal.meal_price_worker));
         holder.textView_mensa_price_guest.setText("G: " + getPrice(holder.meal.meal_price_guest));
@@ -57,6 +58,7 @@ public class MensaMyItemRecyclerViewAdapter extends RecyclerView.Adapter<MensaMy
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView textView_mensa_title;
+        public final TextView textView_mensa_category;
         public final TextView textView_mensa_ingredients;
         public final TextView textView_mensa_price_student;
         public final TextView textView_mensa_price_worker;
@@ -68,6 +70,7 @@ public class MensaMyItemRecyclerViewAdapter extends RecyclerView.Adapter<MensaMy
             super(view);
             mView = view;
             textView_mensa_title = view.findViewById(R.id.textView_mensa_title);
+            textView_mensa_category = view.findViewById(R.id.textView_mensa_category);
             textView_mensa_ingredients = view.findViewById(R.id.textView_mensa_ingredients);
             textView_mensa_price_student = view.findViewById(R.id.textView_mensa_price_student);
             textView_mensa_price_worker = view.findViewById(R.id.textView_mensa_price_worker);

@@ -168,6 +168,8 @@ public class ExamAddEditFragment extends Fragment {
         datePicker_exam = getView().findViewById(R.id.datePicker_exam);
         button_exam_submit = getView().findViewById(R.id.button_exam_submit);
 
+        timePicker_exam.setIs24HourView(true);
+
         setAdapter();
         parseBundle();
     }

@@ -170,7 +170,7 @@ public class MeetingAddEditFragment extends Fragment {
         switch_meeting_reminder_alarm = getView().findViewById(R.id.switch_meeting_reminder_alarm);
         button_meeting_submit = getView().findViewById(R.id.button_meeting_submit);
 
-        //timePicker_meeting.setIs24HourView(true);
+        timePicker_meeting.setIs24HourView(true);
 
         alarmHelper = new AlarmHelper(getActivity(), (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE));
         setAdapter();

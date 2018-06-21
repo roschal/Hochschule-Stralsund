@@ -65,16 +65,15 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
 
     public static String parseDate(Calendar calendar) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        String formatted = simpleDateFormat.format(calendar.getTime());
 
-        return formatted;
+        return simpleDateFormat.format(calendar.getTime());
+
     }
 
     public static String parseTime(Calendar calendar) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
-        String formatted = simpleDateFormat.format(calendar.getTime());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
 
-        return formatted;
+        return simpleDateFormat.format(calendar.getTime());
     }
 
     @Override

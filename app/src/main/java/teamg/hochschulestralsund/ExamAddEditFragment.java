@@ -246,7 +246,7 @@ public class ExamAddEditFragment extends Fragment {
                     editText_exam_person.setText(exam.exam_person.toString());
                     editText_exam_location.setText(exam.exam_location.toString());
                     datePicker_exam.updateDate(exam.exam_begin.get(Calendar.YEAR), exam.exam_begin.get(Calendar.MONTH), exam.exam_begin.get(Calendar.DAY_OF_MONTH));
-                    timePicker_exam.setCurrentHour(exam.exam_begin.get(Calendar.HOUR));
+                    timePicker_exam.setCurrentHour(exam.exam_begin.get(Calendar.HOUR_OF_DAY));
                     timePicker_exam.setCurrentMinute(exam.exam_begin.get(Calendar.MINUTE));
 
                     break;

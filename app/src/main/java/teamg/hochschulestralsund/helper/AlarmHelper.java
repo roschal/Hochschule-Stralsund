@@ -18,9 +18,9 @@ public class AlarmHelper {
         this.alarmManager = alarmManager;
     }
 
-    public void createAlarm(Calendar calendar, String alarmText) {
-        PendingIntent alarmIntent = createAlarmIntent(alarmText);
-        this.alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+    public void createAlarm(long timeInMills, String alarmText) {
+        PendingIntent alarmIntent = createAlarmIntent(alarmText, timeInMills);
+        this.alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMills, alarmIntent);
     }
 
     /**
@@ -28,14 +28,15 @@ public class AlarmHelper {
      *
      * @return {PendingIntent}
      */
-    private PendingIntent createAlarmIntent(String alarmText) {
+    private PendingIntent createAlarmIntent(String alarmText, long timeInMills) {
+        int uuid = (int) timeInMills;
         Intent intent = new Intent(context, AlarmActivity.class);
         intent.putExtra("ALARM_TEXT", alarmText);
-        return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getActivity(context, uuid, intent, 0);
     }
 
-    public void cancelAlarm(String alarmText){
-        PendingIntent alarmIntent = createAlarmIntent(alarmText);
+    public void cancelAlarm(String alarmText, long timeInMills){
+        PendingIntent alarmIntent = createAlarmIntent(alarmText, timeInMills);
         this.alarmManager.cancel(alarmIntent);
     }
 }

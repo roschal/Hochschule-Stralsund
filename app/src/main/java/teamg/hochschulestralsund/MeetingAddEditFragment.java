@@ -114,10 +114,7 @@ public class MeetingAddEditFragment extends Fragment {
                 return true;
 
             case R.id.action_delete_meeting:
-                CustomSQL customSQL = new CustomSQL(getActivity());
-                customSQL.deleteMeeting(meeting);
-                customSQL.close();
-
+                this.deleteMeeting();
                 goBack();
 
                 return true;
@@ -182,13 +179,13 @@ public class MeetingAddEditFragment extends Fragment {
             switch_meeting_reminder_alarm.setChecked(true);
         }
 
-        if(meeting.meeting_is_alarm_set == 0) {
+        if (meeting.meeting_is_alarm_set == 0) {
             switch_meeting_reminder_alarm.setChecked(false);
         }
 
-        if(!isMeetingInFuture()){
+        /*if (!isMeetingInFuture()) {
             switch_meeting_reminder_alarm.setEnabled(false);
-        }
+        }*/
     }
 
     /**
@@ -230,39 +227,15 @@ public class MeetingAddEditFragment extends Fragment {
             }
         });
 
-        switch_meeting_reminder_alarm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked && meeting.meeting_is_alarm_set == 0) {
-                    if (isMeetingInFuture()) {
-                        Calendar alarmDate = getAlarmDateAndTime();
-                        alarmHelper.createAlarm(alarmDate, meeting.meeting_title);
-                        meeting.meeting_is_alarm_set = 1;
-                    } else {
-                        Toast.makeText(getActivity(), "Termin liegt in der Verangenheit", Toast.LENGTH_LONG).show();
-                    }
-                }
-                if (!isChecked && meeting.meeting_is_alarm_set == 1) {
-                    if(isMeetingInFuture()){
-                        alarmHelper.cancelAlarm(meeting.meeting_title);
-                        meeting.meeting_is_alarm_set = 0;
-                    }
-                }
-            }
-        });
-
         button_meeting_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isMeetingInFuture()) {
-                    submit();
-                } else {
-                    Toast.makeText(getActivity(), "Termin liegt in der Verangenheit", Toast.LENGTH_LONG).show();
-                }
+                submit();
             }
         });
 
     }
+
 
     /**
      * determine if add or edit meeting
@@ -281,7 +254,7 @@ public class MeetingAddEditFragment extends Fragment {
                     editText_meeting_title.setText(meeting.meeting_title);
                     editText_meeting_description.setText(meeting.meeting_description);
                     datePicker_meeting.updateDate(meeting.meeting_calendar.get(Calendar.YEAR), meeting.meeting_calendar.get(Calendar.MONTH), meeting.meeting_calendar.get(Calendar.DAY_OF_MONTH));
-                    timePicker_meeting.setCurrentHour(meeting.meeting_calendar.get(Calendar.HOUR));
+                    timePicker_meeting.setCurrentHour(meeting.meeting_calendar.get(Calendar.HOUR_OF_DAY));
                     timePicker_meeting.setCurrentMinute(meeting.meeting_calendar.get(Calendar.MINUTE));
                     setSwitchsStates();
 
@@ -303,7 +276,7 @@ public class MeetingAddEditFragment extends Fragment {
         int year = datePicker_meeting.getYear();
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day, hour, minute);
+        calendar.set(year, month, day, hour, minute,0);
 
         return calendar;
     }
@@ -338,7 +311,7 @@ public class MeetingAddEditFragment extends Fragment {
                 break;
         }
 
-        calendar.set(year, month, day, hour, minute);
+        calendar.set(year, month, day, hour, minute,0);
         return calendar;
     }
 
@@ -362,32 +335,64 @@ public class MeetingAddEditFragment extends Fragment {
         }
     }
 
+    private void setOrDeleteReminderAlarm() {
+        Calendar alarmDate = getAlarmDateAndTime();
+        if (switch_meeting_reminder_alarm.isChecked() && meeting.meeting_is_alarm_set == 0) {
+            alarmHelper.createAlarm(alarmDate.getTimeInMillis(), meeting.meeting_title);
+            meeting.meeting_is_alarm_set = 1;
+        }
+        if (!switch_meeting_reminder_alarm.isChecked() && meeting.meeting_is_alarm_set == 1) {
+            if (isMeetingInFuture()) {
+                alarmHelper.cancelAlarm(meeting.meeting_title, alarmDate.getTimeInMillis());
+                meeting.meeting_is_alarm_set = 0;
+            }
+        }
+
+    }
+
     /**
      * add or edit the meeting
      */
     private void submit() {
-        meeting.meeting_calendar = getDateAndTime();
-        CustomSQL customSQL = new CustomSQL(getActivity());
+        if (isMeetingInFuture()) {
+            meeting.meeting_calendar = getDateAndTime();
+            this.setOrDeleteReminderAlarm();
+            CustomSQL customSQL = new CustomSQL(getActivity());
 
-        switch (code) {
-            case MeetingActivity.CODE_MEETING_ADD:
-                customSQL.addMeeting(meeting);
+            switch (code) {
+                case MeetingActivity.CODE_MEETING_ADD:
+                    customSQL.addMeeting(meeting);
 
-                break;
+                    break;
 
-            case MeetingActivity.CODE_MEETING_EDIT:
-                customSQL.deleteMeeting(meeting);
-                customSQL.addMeeting(meeting);
+                case MeetingActivity.CODE_MEETING_EDIT:
+                    customSQL.deleteMeeting(meeting);
+                    customSQL.addMeeting(meeting);
 
-                break;
+                    break;
 
-            default:
+                default:
 
-                break;
+                    break;
+            }
+
+            customSQL.close();
+            goBack();
+        } else {
+            Toast.makeText(getActivity(), "Termin liegt in der Vergangenheit", Toast.LENGTH_LONG).show();
         }
+    }
 
+    private void deleteMeeting(){
+        if (!switch_meeting_reminder_alarm.isChecked() && meeting.meeting_is_alarm_set == 1) {
+            if (isMeetingInFuture()) {
+                alarmHelper.cancelAlarm(meeting.meeting_title, getAlarmDateAndTime().getTimeInMillis());
+                meeting.meeting_is_alarm_set = 0;
+            }
+        }
+        CustomSQL customSQL = new CustomSQL(getActivity());
+        customSQL.deleteMeeting(meeting);
         customSQL.close();
-        goBack();
     }
 
     /**

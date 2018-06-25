@@ -5,13 +5,15 @@ import android.os.Parcelable;
 
 import java.util.Calendar;
 
+import teamg.hochschulestralsund.helper.AlarmHelper;
+
 public class Meeting implements Parcelable {
     public long meeting_id = -1;
     public String meeting_title = "";
     public String meeting_description = "";
     public Calendar meeting_calendar = Calendar.getInstance();
     public int meeting_is_alarm_set = 0;
-    public int meeting_alarm_id = -1;
+    public int meeting_alarm_id = AlarmHelper.createAlarmId();
 
     public Meeting() {
 

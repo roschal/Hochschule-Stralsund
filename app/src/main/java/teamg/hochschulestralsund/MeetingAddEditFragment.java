@@ -338,12 +338,12 @@ public class MeetingAddEditFragment extends Fragment {
     private void setOrDeleteReminderAlarm() {
         Calendar alarmDate = getAlarmDateAndTime();
         if (switch_meeting_reminder_alarm.isChecked() && meeting.meeting_is_alarm_set == 0) {
-            alarmHelper.createAlarm(alarmDate.getTimeInMillis(), meeting.meeting_title);
+            alarmHelper.createAlarm(alarmDate.getTimeInMillis(), meeting.meeting_title, meeting.meeting_alarm_id);
             meeting.meeting_is_alarm_set = 1;
         }
         if (!switch_meeting_reminder_alarm.isChecked() && meeting.meeting_is_alarm_set == 1) {
             if (isMeetingInFuture()) {
-                alarmHelper.cancelAlarm(meeting.meeting_title, alarmDate.getTimeInMillis());
+                alarmHelper.cancelAlarm(meeting.meeting_title, meeting.meeting_alarm_id);
                 meeting.meeting_is_alarm_set = 0;
             }
         }
@@ -386,7 +386,7 @@ public class MeetingAddEditFragment extends Fragment {
     private void deleteMeeting(){
         if (!switch_meeting_reminder_alarm.isChecked() && meeting.meeting_is_alarm_set == 1) {
             if (isMeetingInFuture()) {
-                alarmHelper.cancelAlarm(meeting.meeting_title, getAlarmDateAndTime().getTimeInMillis());
+                alarmHelper.cancelAlarm(meeting.meeting_title, meeting.meeting_alarm_id);
                 meeting.meeting_is_alarm_set = 0;
             }
         }

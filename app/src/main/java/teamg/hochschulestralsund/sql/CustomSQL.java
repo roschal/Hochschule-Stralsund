@@ -17,7 +17,7 @@ import java.util.Date;
 import teamg.hochschulestralsund.R;
 
 /**
- * Created by Stas Roschal on 12.05.2018.
+ * @author Stas Roschal
  */
 
 public class CustomSQL extends SQLiteOpenHelper {

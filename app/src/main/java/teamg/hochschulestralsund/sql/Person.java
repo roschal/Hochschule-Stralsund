@@ -1,7 +1,9 @@
 package teamg.hochschulestralsund.sql;
 
 /**
- * Created by Stas Roschal on 11.05.18.
+ * @author Stas Roschal
+ *
+ * Klasse für die DB-Objekte der Personen (Mitarbeiter der HOST)
  */
 
 public class Person {

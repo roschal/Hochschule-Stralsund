@@ -1,7 +1,8 @@
 package teamg.hochschulestralsund.sql;
 
-import java.util.Calendar;
-
+/**
+ * Klasse für die DB-Objekte des Mensaessens
+ */
 public class Meal {
     public String meal_category = "";
     public String meal_title = "";

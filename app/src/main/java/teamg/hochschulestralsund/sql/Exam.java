@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 import java.util.Calendar;
 
+/**
+ * Klasse für die DB-Objekte der Prüfungen
+ */
 public class Exam implements Parcelable {
 
     @SuppressWarnings("unused")

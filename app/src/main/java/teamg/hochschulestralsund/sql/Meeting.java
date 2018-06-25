@@ -7,6 +7,9 @@ import java.util.Calendar;
 
 import teamg.hochschulestralsund.helper.AlarmHelper;
 
+/**
+ * Klasse für die DB-objekte der Termine
+ */
 public class Meeting implements Parcelable {
     public long meeting_id = -1;
     public String meeting_title = "";

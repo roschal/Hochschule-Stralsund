@@ -3,7 +3,8 @@ package teamg.hochschulestralsund.sql;
 import android.provider.BaseColumns;
 
 /**
- * Created by Stas Roschal on 12.05.18.
+ * Klasse für die einzelnen DB-Tabellen
+ * @author Stas Roschal
  */
 
 public class Tables {

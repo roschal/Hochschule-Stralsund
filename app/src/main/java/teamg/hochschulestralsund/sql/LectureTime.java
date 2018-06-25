@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.util.Calendar;
 
 /**
- * Created by ghostgate on 11.05.18.
+ * Klasse für die DB-Objekte der Uhrzeiten der Vorlesungen.
  */
 
 public class LectureTime implements Parcelable {

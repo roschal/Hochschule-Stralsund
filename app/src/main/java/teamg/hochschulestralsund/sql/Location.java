@@ -1,7 +1,10 @@
 package teamg.hochschulestralsund.sql;
 
 /**
- * Created by Stas Roschal on 12.05.18.
+ * @author Stas Roschal
+ *
+ * Klasse für die DB-Objekte der Veranstaltungsorte
+ *
  */
 
 public class Location {

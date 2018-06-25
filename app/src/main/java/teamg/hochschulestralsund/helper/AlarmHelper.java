@@ -11,6 +11,7 @@ import teamg.hochschulestralsund.AlarmActivity;
 
 /**
  * Ein Helper zum Erzeugen eines Alarms.
+ *
  * @author Paul Schindler
  *
  */

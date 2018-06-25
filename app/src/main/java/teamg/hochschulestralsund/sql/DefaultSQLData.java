@@ -4,10 +4,6 @@ import android.content.Context;
 
 import java.util.ArrayList;
 
-/**
- * Created by ghostgate on 14.05.18.
- */
-
 public class DefaultSQLData {
     public static ArrayList<Location> locations;
     public CustomSQL customSQL;
@@ -22,6 +18,7 @@ public class DefaultSQLData {
     }
 
     /**
+     * @author Paul Schindler
      * Erzeugt eine Liste mit allen wichtigen Räumen für den Fachbereaich ETI
      */
     public void initLocations() {
@@ -98,6 +95,7 @@ public class DefaultSQLData {
     }
 
     /**
+     * @author Paul Schindler
      * Fügt die Räume aus der Raumliste der Datenbank hinzu, falls sie noch nicht existieren
      */
     public void addDefaultLocations() {

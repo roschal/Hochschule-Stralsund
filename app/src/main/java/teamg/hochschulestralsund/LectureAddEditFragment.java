@@ -36,12 +36,7 @@ import teamg.hochschulestralsund.sql.Person;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MeetingAddEditFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MeetingAddEditFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragement zum Anlegen und Bearbeiten einer Vorlesung.
  */
 public class LectureAddEditFragment extends Fragment {
     public EditText editText_title;
@@ -153,8 +148,8 @@ public class LectureAddEditFragment extends Fragment {
     /**
      * init the view elements
      *
-     * @param view
-     * @param savedInstanceState
+     * @param view {View}
+     * @param savedInstanceState {Bundle}
      */
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -288,7 +283,7 @@ public class LectureAddEditFragment extends Fragment {
     }
 
     /**
-     * determine if add or edit meeting
+     * determine if add or edit lecture
      */
     private void parseBundle() {
         if (getArguments() != null) {
@@ -362,6 +357,9 @@ public class LectureAddEditFragment extends Fragment {
         }
     }
 
+    /**
+     * Setzt den submit-button-text
+     */
     private void setButtonText() {
         switch (code) {
             case LectureActivity.CODE_LECTURE_EDIT:
@@ -375,6 +373,9 @@ public class LectureAddEditFragment extends Fragment {
         }
     }
 
+    /**
+     * Klick auf den Submit-Button
+     */
     public void submit() {
         CustomSQL customSQL = new CustomSQL(getActivity());
 

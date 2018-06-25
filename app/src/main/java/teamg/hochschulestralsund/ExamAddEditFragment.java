@@ -32,12 +32,7 @@ import teamg.hochschulestralsund.sql.Person;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MeetingAddEditFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MeetingAddEditFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragment zum Bearbeiten und Anlegen von Prüfungsterminen
  */
 public class ExamAddEditFragment extends Fragment {
     private EditText editText_exam_title;
@@ -229,7 +224,7 @@ public class ExamAddEditFragment extends Fragment {
     }
 
     /**
-     * determine if add or edit meeting
+     * determine if add or edit exam
      */
     private void parseBundle() {
         if (getArguments() != null) {
@@ -271,7 +266,7 @@ public class ExamAddEditFragment extends Fragment {
     }
 
     /**
-     * add or edit the meeting
+     * add or edit the exam
      */
     private void submit() {
         exam.exam_begin = getDateAndTime();

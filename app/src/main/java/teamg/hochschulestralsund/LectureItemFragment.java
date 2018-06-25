@@ -26,6 +26,9 @@ import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
 import teamg.hochschulestralsund.sql.Person;
 
+/**
+ * FragmentItem zum Anzeigen der Vorlesungen in der Liste der Vorlesungen.
+ */
 public class LectureItemFragment extends Fragment {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -136,8 +139,8 @@ public class LectureItemFragment extends Fragment {
         mListener = null;
     }
 
-    /**parse the bundle
-     *
+    /**
+     * parse the bundle
      */
     private void parseBundle() {
         if (getArguments() != null) {

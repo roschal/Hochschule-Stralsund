@@ -10,8 +10,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+/**
+ * @author Paul Schindler
+ *
+ * AlarmActivty wird aufgerufen wenn ein Alarm auftritt.
+ */
 public class AlarmActivity extends AppCompatActivity {
 
+    //Mediaplayer für den Alarmsound
     MediaPlayer player;
 
     @Override
@@ -22,26 +28,39 @@ public class AlarmActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
 
         if (b != null) {
+            // Holt sich den Alarmtext
             String alarmText = (String) b.get("ALARM_TEXT");
+            //setzt Alarmtext
             setTitle(alarmText);
             TextView textView = findViewById(R.id.textView_alarm_alarmText);
             textView.setText(alarmText);
+            //erzeugt eine Notfication
             createNotification(alarmText);
         }
 
+        //Alarmsound holen und starten
         player = MediaPlayer.create(getApplicationContext(), R.raw.nice_wake_up_call);
-
         player.setLooping(true);
-
         player.start();
 
     }
 
+    /**
+     * Wird beim Klick auf Alarm stoppen aufgerufen.
+     * Stoppt den Alarmsound und schließt die Alarmactivity
+     *
+     * @param view {View}
+     */
     public void onStopAlarmBtnClicked(View view) {
         player.stop();
         finish();
     }
 
+    /**
+     * Erzeugt eine Notifikation mit dem übergebenen Alarmtext
+     *
+     * @param alarmText {String}
+     */
     private void createNotification(String alarmText) {
         String notificationsText = "Erinnerung: " + alarmText;
 

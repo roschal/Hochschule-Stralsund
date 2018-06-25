@@ -22,10 +22,7 @@ import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Exam;
 
 /**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
+ * Fragmentitem zur Anzeige von Prüfungsterminen in der Liste der Prüfungstermine
  */
 public class ExamItemFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";

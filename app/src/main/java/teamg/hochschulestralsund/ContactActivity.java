@@ -16,6 +16,9 @@ import android.view.MenuItem;
 
 import teamg.hochschulestralsund.sql.Person;
 
+/**
+ * Activty für die Liste der Kontaktdaten der Hochschulmitarbeiter
+ */
 public class ContactActivity extends AppCompatActivity implements ContactItemFragment.OnListFragmentInteractionListener {
     public static final String CODE_CONTACT = "CODE_CONTACT";
     public static final int CODE_CONTACT_ADD = 0;
@@ -69,7 +72,8 @@ public class ContactActivity extends AppCompatActivity implements ContactItemFra
     }
 
     @Override
-    /**create the menu
+    /**
+     * create the menu
      *
      * @return boolean
      */

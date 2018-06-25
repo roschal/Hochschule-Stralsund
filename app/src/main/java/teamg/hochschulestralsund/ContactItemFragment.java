@@ -20,10 +20,8 @@ import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Person;
 
 /**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
+ * Fragment mit den Kontaktinformationen zu den Hochschulmitarbeitern.
+ *
  */
 public class ContactItemFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";

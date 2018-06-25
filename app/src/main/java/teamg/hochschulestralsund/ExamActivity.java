@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import teamg.hochschulestralsund.sql.Exam;
 
+/**
+ * Activity mit einer Liste von Prüfungsterminfragmenten.
+ */
 public class ExamActivity extends AppCompatActivity implements ExamItemFragment.OnListFragmentInteractionListener {
     public static final String CODE_EXAM = "CODE_EXAM";
     public static final int CODE_EXAM_ADD = 0;

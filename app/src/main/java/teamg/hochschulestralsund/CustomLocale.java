@@ -7,6 +7,9 @@ import android.os.Build;
 
 import java.util.Locale;
 
+/**
+ * Klasse für das setzen der Sprachresourcen.
+ */
 public class CustomLocale {
     public static void setNewLocale(Context c, String language) {
         updateResources(c, language);

@@ -13,6 +13,9 @@ import android.view.MenuItem;
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
 
+/**
+ * Activity zur Anzeige der Liste der Vorlesungen
+ */
 public class LectureActivity extends AppCompatActivity implements LectureItemFragment.OnListFragmentInteractionListener {
     public static final String CODE_LECTURE = "CODE_LECTURE";
     public static final int CODE_LECTURE_ADD = 0;
@@ -43,6 +46,11 @@ public class LectureActivity extends AppCompatActivity implements LectureItemFra
         transaction.commit();
     }
 
+    /**
+     * Funktion zum Anlegen einer neuen Vorlesung.
+     *
+     * @param manager {FragmentManager}
+     */
     public static void addLecture(FragmentManager manager) {
         Bundle bundle = new Bundle();
         bundle.putInt(CODE_LECTURE, CODE_LECTURE_ADD);
@@ -57,6 +65,12 @@ public class LectureActivity extends AppCompatActivity implements LectureItemFra
         transaction.commit();
     }
 
+    /**
+     * Funktion zum Bearbeiten einer Vorlegsung.
+     *
+     * @param manager {FragmentManager}
+     * @param lecture {Lecture}
+     */
     public static void editLecture(FragmentManager manager, Lecture lecture) {
         Bundle bundle = new Bundle();
         bundle.putInt(CODE_LECTURE, CODE_LECTURE_EDIT);

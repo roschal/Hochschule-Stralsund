@@ -29,6 +29,10 @@ import teamg.hochschulestralsund.helper.AlarmHelper;
 import teamg.hochschulestralsund.sql.CustomSQL;
 import teamg.hochschulestralsund.sql.Lecture;
 
+/**
+ * Kalender-Activty zeigt die Vorlesungen für den jeweiligen Tag an und es kann zwischen den Tagen
+ * gewechselt werden.
+ */
 public class MainActivity extends AppCompatActivity implements MainItemFragment.OnListFragmentInteractionListener {
 
     public static String CODE_SHOW_DAY = "CODE_SHOW_DAY";
@@ -39,7 +43,9 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
     private Intent intent;
     private Bundle bundle;
 
-
+    /**
+     * Setzt die ausgewählt Sprache aus den Einstellungen.
+     */
     public void setLanguage() {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         String language = SP.getString("pref_language", "Deutsch");
@@ -47,6 +53,9 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
         CustomLocale.setNewLocale(this, language);
    }
 
+   /**
+    * Gibt den nächsten Tag zurück
+    */
     public static Calendar getNextDay(Calendar calendar) {
         Calendar c = Calendar.getInstance();
         c.setTime(calendar.getTime());
@@ -55,6 +64,9 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
         return c;
     }
 
+    /**
+     * Gibt den vorherigen Tag zurück
+     */
     public static Calendar getPreviosDay(Calendar calendar) {
         Calendar c = Calendar.getInstance();
         c.setTime(calendar.getTime());
@@ -63,6 +75,13 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
         return c;
     }
 
+    /**
+     * Formatiert das Datum
+     *
+     * @param calendar {Calendar}
+     *
+     * @return Datums-String
+     */
     public static String parseDate(Calendar calendar) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -70,6 +89,13 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
 
     }
 
+    /**
+     * Formatiert die Uhrzeit
+     *
+     * @param calendar {Calendar}
+     *
+     * @return Uhrzeit-String
+     */
     public static String parseTime(Calendar calendar) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
 
@@ -184,8 +210,8 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
         manager = getFragmentManager();
     }
 
-    /**enable left right swipe in MainActivity
-     *
+    /**
+     * enable left right swipe in MainActivity
      */
     public void setAdapter() {
         this.findViewById(android.R.id.content).setOnTouchListener(new OnSwipeTouchListener(this) {
@@ -209,6 +235,13 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
         myParser.execute();
     }
 
+    /**
+     * Zeigt Tag an
+     *
+     * @param manager {FragmentManager}
+     * @param direction {String}
+     * @param firstTime {boolean}
+     */
     public void showDay(FragmentManager manager, String direction, Boolean firstTime) {
         Bundle bundle = new Bundle();
         bundle.putLong(CODE_SHOW_DAY, calendar.getTimeInMillis());
@@ -243,11 +276,21 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
         showDay(fragmentManager, "none", firstTime);
     }
 
+    /**
+     * Zeigt Fragment für vorherigen Tag
+     *
+     * @param fragmentManager {FragmentManager}
+     */
     public void showPreviosDay(FragmentManager fragmentManager) {
         calendar = getPreviosDay(calendar);
         showDay(fragmentManager,"left", false);
     }
 
+    /**
+     * Zeigt Fragment für nächsten Tag
+     *
+     * @param fragmentManager {FragmentManager}
+     */
     public void showNextDay(FragmentManager fragmentManager) {
         calendar = getNextDay(calendar);
         showDay(fragmentManager, "right", false);

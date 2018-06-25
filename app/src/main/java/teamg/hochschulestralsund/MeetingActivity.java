@@ -27,9 +27,7 @@ public class MeetingActivity extends AppCompatActivity implements MeetingItemFra
      */
     public static void showMeetings(FragmentManager manager, boolean firstTime) {
         MeetingItemFragment meetingItemFragment = new MeetingItemFragment();
-        FragmentTransaction transaction;
-
-        transaction = manager.beginTransaction();
+        FragmentTransaction transaction = manager.beginTransaction();
         manager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         if (firstTime)

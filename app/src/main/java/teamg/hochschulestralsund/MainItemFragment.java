@@ -92,14 +92,14 @@ public class MainItemFragment extends Fragment {
             left.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((MainActivity) getActivity()).showPreviosDay();
+                    ((MainActivity) getActivity()).showPreviosDay(getFragmentManager());
                 }
             });
 
             right.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((MainActivity) getActivity()).showNextDay();
+                    ((MainActivity) getActivity()).showNextDay(getFragmentManager());
                 }
             });
 

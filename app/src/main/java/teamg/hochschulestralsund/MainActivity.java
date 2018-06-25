@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
         init();
         setAdapter();
         parse();
-        showCurrentDay();
+        showCurrentDay(getFragmentManager(), true);
     }
 
     @Override
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
     /* update the list with todos when going back to main */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        showCurrentDay();
+        showCurrentDay(getFragmentManager(), false);
         setLanguage();
     }
 
@@ -184,14 +184,17 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
         manager = getFragmentManager();
     }
 
+    /**enable left right swipe in MainActivity
+     *
+     */
     public void setAdapter() {
         this.findViewById(android.R.id.content).setOnTouchListener(new OnSwipeTouchListener(this) {
             public void onSwipeRight() {
-                showPreviosDay();
+                showPreviosDay(getFragmentManager());
             }
 
             public void onSwipeLeft() {
-                showNextDay();
+                showNextDay(getFragmentManager());
             }
 
             public boolean onTouch(View v, MotionEvent event) {
@@ -206,13 +209,13 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
         myParser.execute();
     }
 
-    public void showDay(String direction) {
+    public void showDay(FragmentManager manager, String direction, Boolean firstTime) {
         Bundle bundle = new Bundle();
         bundle.putLong(CODE_SHOW_DAY, calendar.getTimeInMillis());
         MainItemFragment fragment = new MainItemFragment();
         fragment.setArguments(bundle);
 
-        transaction = manager.beginTransaction();
+        FragmentTransaction transaction = manager.beginTransaction();
 
         switch (direction) {
             case "left":
@@ -224,7 +227,10 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
                 transaction.replace(R.id.timetable_container, fragment, null);
                 break;
             default:
-                transaction.add(R.id.timetable_container, fragment, null);
+                if (firstTime)
+                    transaction.add(R.id.timetable_container, fragment, null);
+                else
+                    transaction.replace(R.id.timetable_container, fragment, null);
                 break;
         }
 
@@ -232,17 +238,18 @@ public class MainActivity extends AppCompatActivity implements MainItemFragment.
     }
 
     /* show the fragment for the current day */
-    void showCurrentDay() {
-        showDay("none");
+    public  void showCurrentDay(FragmentManager fragmentManager, Boolean firstTime) {
+        calendar = Calendar.getInstance();
+        showDay(fragmentManager, "none", firstTime);
     }
 
-    public void showPreviosDay() {
+    public void showPreviosDay(FragmentManager fragmentManager) {
         calendar = getPreviosDay(calendar);
-        showDay("left");
+        showDay(fragmentManager,"left", false);
     }
 
-    public void showNextDay() {
+    public void showNextDay(FragmentManager fragmentManager) {
         calendar = getNextDay(calendar);
-        showDay("right");
+        showDay(fragmentManager, "right", false);
     }
 }

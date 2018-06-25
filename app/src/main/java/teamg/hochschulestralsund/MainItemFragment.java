@@ -74,7 +74,7 @@ public class MainItemFragment extends Fragment {
                 long time1 = lecture1.event_begin.getTimeInMillis();
                 long time2 = lecture2.event_begin.getTimeInMillis();
 
-                if(time1 > time2)
+                if(time1 < time2)
                     return -1;
                 else if (time1 == time2)
                     return 0;

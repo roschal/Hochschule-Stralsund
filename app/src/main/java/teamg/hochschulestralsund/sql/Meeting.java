@@ -11,6 +11,7 @@ public class Meeting implements Parcelable {
     public String meeting_description = "";
     public Calendar meeting_calendar = Calendar.getInstance();
     public int meeting_is_alarm_set = 0;
+    public int meeting_alarm_id = -1;
 
     public Meeting() {
 

@@ -93,13 +93,15 @@ public class ParserMensa extends AsyncTask<Void, Void, ArrayList<Meal>> {
 
             //* get category
             if (srcMensa.contains("<th>")) {
-                tmpStr = tmpStr.substring(tmpStr.indexOf("<th>") + "<th>".length());
-                meal_category = tmpStr.substring(0, tmpStr.indexOf("<img src="));
+                tmpStr = tmpStr.replaceAll("<img src.*?>", "");
+                meal_category = tmpStr.substring(tmpStr.indexOf("<th>") + "<th>".length(), tmpStr.indexOf("</th>"));
+                tmpStr = tmpStr.substring(tmpStr.indexOf("</th>") + "</th>".length());
             }
 
-            while (tmpStr.contains("<td style=\"width:70%\">")) {
+            while (tmpStr.contains("<td style=\"width:70%\">") && (!tmpStr.contains("<table class=\"table module-food-table\">") || tmpStr.indexOf("<table class=\"table module-food-table\">") > tmpStr.indexOf("<td style=\"width:70%\">"))) {
                 Meal meal = new Meal();
                 meal.meal_category = meal_category;
+                Log.e("kategorie", meal_category);
 
                 //* meal title
                 tmpStr = tmpStr.substring(tmpStr.indexOf("<td style=\"width:70%\">") + "<td style=\"width:70%\">".length());
@@ -144,9 +146,8 @@ public class ParserMensa extends AsyncTask<Void, Void, ArrayList<Meal>> {
                 meal.meal_price_guest = Double.valueOf(price_guest);
 
                 meals.add(meal);
+                srcMensa = tmpStr;
             }
-
-            srcMensa = tmpStr;
         }
 
         for (int i = 0; i < meals.size(); i++ )

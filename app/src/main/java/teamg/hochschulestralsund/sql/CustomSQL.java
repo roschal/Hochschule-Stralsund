@@ -21,7 +21,7 @@ import teamg.hochschulestralsund.R;
  */
 
 public class CustomSQL extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 8;
+    public static final int DATABASE_VERSION = 9;
     public static final String DATABASE_NAME = "hochschule.db";
 
     private static final String SQL_CREATE_TABLE_EXAM =
@@ -80,7 +80,8 @@ public class CustomSQL extends SQLiteOpenHelper {
                     Tables.MEETING.COLUMN_TITLE + " TEXT," +
                     Tables.MEETING.COLUMN_DESCRIPTION + " TEXT," +
                     Tables.MEETING.COLUMN_CALENDAR + " BIGINT," +
-                    Tables.MEETING.COLUMN_IS_ALARM_SET + " INTEGER)";
+                    Tables.MEETING.COLUMN_IS_ALARM_SET + " INTEGER," +
+                    Tables.MEETING.COLUMN_ALARM_ID + " INTEGER)";
 
     //* sql delete all from table statements
     private static final String SQL_DELETE_EXAMS = "DELETE FROM " + Tables.EXAM.TABLE_NAME;
@@ -377,6 +378,7 @@ public class CustomSQL extends SQLiteOpenHelper {
             values.put(Tables.MEETING.COLUMN_DESCRIPTION, meeting.meeting_description);
             values.put(Tables.MEETING.COLUMN_CALENDAR, meeting.meeting_calendar.getTimeInMillis());
             values.put(Tables.MEETING.COLUMN_IS_ALARM_SET, meeting.meeting_is_alarm_set);
+            values.put(Tables.MEETING.COLUMN_ALARM_ID, meeting.meeting_alarm_id);
 
             Log.d("Adding new Meeting", "...");
 
@@ -384,6 +386,7 @@ public class CustomSQL extends SQLiteOpenHelper {
             Log.i(Tables.MEETING.COLUMN_DESCRIPTION, meeting.meeting_description);
             Log.i(Tables.MEETING.COLUMN_CALENDAR, Long.toString(meeting.meeting_calendar.getTimeInMillis()));
             Log.i(Tables.MEETING.COLUMN_IS_ALARM_SET, Integer.toString(meeting.meeting_is_alarm_set));
+            Log.i(Tables.MEETING.COLUMN_ALARM_ID, Integer.toString(meeting.meeting_alarm_id));
 
             id = db.insert(Tables.MEETING.TABLE_NAME, null, values);
 
@@ -842,6 +845,12 @@ public class CustomSQL extends SQLiteOpenHelper {
         return lecturers;
     }
 
+    /**return if a lectureTime exists
+     *
+     *
+     * @param lectureTime
+     * @return
+     */
     public Boolean existsLectureTime(LectureTime lectureTime) {
         try {
             String[] projection = {
@@ -878,6 +887,10 @@ public class CustomSQL extends SQLiteOpenHelper {
     }
 
 
+    /**get saved lecture times
+     *
+     * @return lectureTimes
+     */
     public ArrayList<LectureTime> getLectureTimes() {
         ArrayList lectureTimes = new ArrayList<LectureTime>();
 
@@ -1007,7 +1020,8 @@ public class CustomSQL extends SQLiteOpenHelper {
                     Tables.MEETING.COLUMN_TITLE,
                     Tables.MEETING.COLUMN_DESCRIPTION,
                     Tables.MEETING.COLUMN_CALENDAR,
-                    Tables.MEETING.COLUMN_IS_ALARM_SET
+                    Tables.MEETING.COLUMN_IS_ALARM_SET,
+                    Tables.MEETING.COLUMN_ALARM_ID
             };
 
             //* get the oldest meeting first
@@ -1028,13 +1042,11 @@ public class CustomSQL extends SQLiteOpenHelper {
                 Meeting meeting = new Meeting();
 
                 meeting.meeting_id = cursor.getLong(cursor.getColumnIndexOrThrow(Tables.MEETING._ID));
-
-                Log.e("IDS", Long.toString(meeting.meeting_id));
-
                 meeting.meeting_title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.MEETING.COLUMN_TITLE));
                 meeting.meeting_description = cursor.getString(cursor.getColumnIndexOrThrow(Tables.MEETING.COLUMN_DESCRIPTION));
                 meeting.meeting_calendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndexOrThrow(Tables.MEETING.COLUMN_CALENDAR)));
                 meeting.meeting_is_alarm_set = cursor.getInt(cursor.getColumnIndexOrThrow(Tables.MEETING.COLUMN_IS_ALARM_SET));
+                meeting.meeting_alarm_id = cursor.getInt(cursor.getColumnIndexOrThrow(Tables.MEETING.COLUMN_ALARM_ID));
 
                 meetings.add(meeting);
             }

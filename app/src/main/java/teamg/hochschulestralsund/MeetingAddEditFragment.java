@@ -289,7 +289,7 @@ public class MeetingAddEditFragment extends Fragment {
         int year = datePicker_meeting.getYear();
         Calendar calendar = Calendar.getInstance();
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String reminderMoment = preferences.getString("meeting_reminder_moment", "");
 
         switch (reminderMoment) {
